@@ -1,0 +1,15 @@
+#-------------------------------------------------------------------------------
+# RT-Thread Secure
+# Copyright (c) Shanghai Real-Thread Electronic Technology Co., Ltd.
+# All rights reserved.
+#-------------------------------------------------------------------------------
+
+menuconfig COMPONENTS_MODBUS_ENABLE
+	bool "Enable Modbus"
+	default n
+	help
+	  Enable Modbus support.
+
+#-------------------------------------------------------------------------------
+# End
+#-------------------------------------------------------------------------------

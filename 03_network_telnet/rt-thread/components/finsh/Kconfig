@@ -1,0 +1,15 @@
+#-------------------------------------------------------------------------------
+# RT-Thread Secure
+# Copyright (c) Shanghai Real-Thread Electronic Technology Co., Ltd.
+# All rights reserved.
+#-------------------------------------------------------------------------------
+
+menuconfig COMPONENTS_FINSH_EXPORT_ENABLE
+	bool "Enable Finsh Export"
+	default n
+	help
+	  Enable Finsh Export.
+
+#-------------------------------------------------------------------------------
+# End
+#-------------------------------------------------------------------------------

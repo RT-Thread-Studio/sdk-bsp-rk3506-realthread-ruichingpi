@@ -1,0 +1,13 @@
+from building import *
+
+cwd = GetCurrentDir()
+path = [cwd + '/include']
+
+src = []
+
+if GetDepend(['AT_USING_SOCKET']):
+    path += [cwd + '/at_socket']
+
+group = DefineGroup('AT', src, depend = ['RT_USING_AT'], CPPPATH = path)
+
+Return('group')

@@ -1,0 +1,22 @@
+from building import *
+
+# get current directory
+cwd = GetCurrentDir()
+
+src = []
+
+path = [cwd + '/src/include',
+    cwd + '/src/include/netif']
+
+if not GetDepend('RT_USING_SAL'):
+    path += [cwd + '/src/include/compat/posix']
+
+if GetDepend(['RT_LWIP_SNMP']):
+    path += [cwd + '/src/apps/snmp']
+
+if GetDepend(['RT_LWIP_PPP']):
+    path += [cwd + '/src/netif/ppp']
+
+group = DefineGroup('lwIP', src, depend = ['RT_USING_LWIP', 'RT_USING_LWIP212'], CPPPATH = path)
+
+Return('group')

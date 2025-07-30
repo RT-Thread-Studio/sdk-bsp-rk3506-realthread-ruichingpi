@@ -1,0 +1,15 @@
+#-------------------------------------------------------------------------------
+# RT-Thread Secure
+# Copyright (c) Shanghai Real-Thread Electronic Technology Co., Ltd.
+# All rights reserved.
+#-------------------------------------------------------------------------------
+
+menuconfig COMPONENTS_ETHERCAT_ENABLE
+	bool "Enable EtherCAT Master"
+	default n
+	help
+	  Enable EtherCAT Master.
+
+#-------------------------------------------------------------------------------
+# End
+#-------------------------------------------------------------------------------

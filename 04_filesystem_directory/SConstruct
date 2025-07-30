@@ -1,0 +1,80 @@
+#-*- encoding: utf-8 -*-
+#-------------------------------------------------------------------------------
+# SConstruct
+# Copyright (c) Shanghai Real-Thread Electronic Technology Co., Ltd.
+#-------------------------------------------------------------------------------
+import sys
+import os
+
+#-------------------------------------------------------------------------------
+# System configuration
+#-------------------------------------------------------------------------------
+RTT_ROOT = 'rt-thread' if os.path.isdir('rt-thread') \
+    else os.path.join(os.getcwd(), '..', '..', '..', '..', '..')
+sys.pycache_prefix = os.path.join(RTT_ROOT, 'scripts', '__pycache__')
+import rtconfig
+sys.path = sys.path + [os.path.abspath(os.path.join(RTT_ROOT, 'scripts'))]
+from building import *
+Export('RTT_ROOT')
+Export('rtconfig')
+
+#-------------------------------------------------------------------------------
+# Scons Environment
+#-------------------------------------------------------------------------------
+TARGET = rtconfig.TARGET
+DefaultEnvironment(tools=[])
+env = Environment(tools = ['mingw'],
+    CPP  = rtconfig.CPP,
+    AS   = rtconfig.AS, ASFLAGS = rtconfig.AFLAGS,
+    CC   = rtconfig.CC, CCFLAGS = rtconfig.CFLAGS,
+    CXX  = rtconfig.CXX, CXXFLAGS = rtconfig.CXXFLAGS,
+    AR   = rtconfig.AR, ARFLAGS = '-rc',
+    LINK = rtconfig.LINK, LINKFLAGS = rtconfig.LFLAGS,
+    LD = rtconfig.LD, DTC = rtconfig.DTC
+)
+
+env.PrependENVPath('PATH', rtconfig.EXEC_PATH)
+
+#-------------------------------------------------------------------------------
+# Prepare building environment
+#-------------------------------------------------------------------------------
+objs = PrepareBuilding(env, RTT_ROOT, has_libcpu = False, app = True)
+env.Replace(LINKFLAGS = rtconfig.LFLAGS)
+
+if GetDepend('RT_USING_FPU'):
+    env['CCFLAGS'] = env['CCFLAGS'].replace('-msoft-float', '-mhard-float')
+    env['ASFLAGS'] = env['ASFLAGS'].replace('-msoft-float', '-mhard-float')
+    env['CXXFLAGS'] = env['CXXFLAGS'].replace('-msoft-float', '-mhard-float')
+    env['LINKFLAGS'] = env['LINKFLAGS'].replace('-msoft-float', '-mhard-float')
+
+#-------------------------------------------------------------------------------
+# Prepare Device Tree
+#-------------------------------------------------------------------------------
+DTCSRC = [os.path.join(GetCurrentDir(), 'board/board.dts')]
+DTCPATH = [
+    os.path.join(GetCurrentDir(), RTT_ROOT + '/components/dtsi'),
+    os.path.join(GetCurrentDir(), RTT_ROOT + '/components/dtsi/rockchip')
+]
+DTCFLAGS  = '-b 0 '
+DTCFLAGS += '-Wno-interrupt_provider '
+DTCFLAGS += '-Wno-unit_address_vs_reg '
+DTCFLAGS += '-Wno-avoid_unnecessary_addr_size '
+DTCFLAGS += '-Wno-alias_paths '
+DTCFLAGS += '-Wno-graph_child_address '
+DTCFLAGS += '-Wno-simple_bus_reg '
+DTCFLAGS += '-Wno-unique_unit_address '
+PrepareDTC(DTCSRC, depend = [], DTCPATH = DTCPATH, DTCFLAGS = DTCFLAGS)
+
+#-------------------------------------------------------------------------------
+# Add RuiChing SDK
+#-------------------------------------------------------------------------------
+if not os.path.isdir('rt-thread'):
+    objs.extend(
+        SConscript(RTT_ROOT + '/SConscript', 
+            variant_dir='build/sdk/', duplicate=0)
+    )
+
+#-------------------------------------------------------------------------------
+# Make a building
+#-------------------------------------------------------------------------------
+DoBuilding(TARGET, objs)

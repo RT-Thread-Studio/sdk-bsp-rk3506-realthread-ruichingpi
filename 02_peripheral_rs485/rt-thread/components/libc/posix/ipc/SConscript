@@ -1,0 +1,14 @@
+from building import *
+
+cwd        = GetCurrentDir()
+src        = []
+inc        = [cwd]
+
+# We have't implement of 'systemv ipc', so hide it firstly.
+# if GetDepend('RT_USING_POSIX_IPC_SYSTEM_V'):
+#     src += Glob('system-v/*.c')
+#     inc += [cwd + '/system-v']
+
+group = DefineGroup('POSIX', src, depend = [''], CPPPATH = inc)
+
+Return('group')
