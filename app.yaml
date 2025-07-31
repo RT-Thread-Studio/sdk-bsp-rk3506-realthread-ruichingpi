@@ -929,7 +929,7 @@ features_zh:
 - 革命性混合架构：RT-Thread+Linux双系统
 pkg_type: Board_Support_Packages
 pkg_vendor: Real-Thread
-pkg_version: V1.0.1
+pkg_version: 1.0.1
 template_projects:
 - builtin_files:
   - files_and_folders:
