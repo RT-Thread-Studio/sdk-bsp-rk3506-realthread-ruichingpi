@@ -1,0 +1,21 @@
+#-------------------------------------------------------------------------------
+# RT-Thread RuiChing
+# 
+# COPYRIGHT (C) 2024-2025 Shanghai Real-Thread Electronic Technology Co., Ltd.
+# All rights reserved.
+# 
+# The license and distribution terms for this file may be
+# found in the file LICENSE in this distribution.
+#-------------------------------------------------------------------------------
+config COMP_USING_NCNN
+    bool "Enable ncnn"
+    default n
+    select RT_USING_CPLUSPLUS 
+    select RT_USING_FPU 
+    help
+        Enable the ncnn deep learning framework.
+        This will automatically enable C++ support.
+
+#-------------------------------------------------------------------------------
+# End
+#-------------------------------------------------------------------------------

@@ -65,19 +65,13 @@ static void can_send(rt_device_t dev, rt_uint32_t ver)
     msg.sync = CAN_SYNC;
     msg.fdf = ver;
     msg.len = 8;
-    for (i = 0; i < msg.len; i++)
-    {
-        msg.data[i] = i;
-    }
+    for (i = 0; i < msg.len; i++) { msg.data[i] = i; }
 
     for (j = 0; j < CAN_TEST_NUM; j++)
     {
         can_send_func(dev, &msg);
 
-        for (i = 0; i < msg.len; i++)
-        {
-            msg.data[i] = i + j;
-        }
+        for (i = 0; i < msg.len; i++) { msg.data[i] = i + j; }
         rt_thread_mdelay(1000);
     }
 }

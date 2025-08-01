@@ -47,8 +47,15 @@ static int modbus_rtu_pt100(void)
     {
         for (i = 0; i < rc; i++)
         {
-            rt_kprintf(
-                "temp %d: %d.%d°C\n", i, tab_reg[i] / 10, tab_reg[i] % 10);
+            if (tab_reg[i] != 0xEC78)
+            {
+                rt_kprintf(
+                    "temp %d: %d.%d°C\n", i, tab_reg[i] / 10, tab_reg[i] % 10);
+            }
+            else
+            {
+                rt_kprintf("temp %d: Not connected\n", i);
+            }
         }
     }
 

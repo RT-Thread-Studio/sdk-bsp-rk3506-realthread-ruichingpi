@@ -5,8 +5,14 @@
 #-------------------------------------------------------------------------------
 import os, sys
 import platform
-RTT_ROOT = 'rt-thread' if os.path.isdir('rt-thread') \
-    else os.path.join(os.getcwd(), '..', '..', '..', '..', '..')
+
+if os.path.isdir('rt-thread'):
+    RTT_ROOT = 'rt-thread'
+elif os.path.isdir('../rt-thread'):
+    RTT_ROOT = '../rt-thread'
+else:
+    RTT_ROOT = os.path.join(os.getcwd(), '..', '..', '..', '..', '..')
+
 sys.path = sys.path + [os.path.abspath(os.path.join(RTT_ROOT, 'scripts'))]
 from cic import cic_gen_parameters
 from cic import cic_add_linked_resource
@@ -17,8 +23,8 @@ from cic import cic_add_linked_resource
 TARGET_NAME         = 'app'
 TARGET_EXT          = 'elf'
 TARGET              = TARGET_NAME + '.' + TARGET_EXT
-BUILD             = 'debug'
-# BUILD               = 'release'
+# BUILD             = 'debug'
+BUILD               = 'release'
 
 #-------------------------------------------------------------------------------
 # Architecture configuration
@@ -53,7 +59,7 @@ DTC                 = 'dtc'
 TARGET_PROCESSOR    = '-march=armv7-a '
 TARGET_PROCESSOR   += '-mtune=cortex-a7 '
 TARGET_PROCESSOR   += '-mfpu=vfpv4 '
-TARGET_PROCESSOR   += '-mfloat-abi=soft '
+TARGET_PROCESSOR   += '-mfloat-abi=hard '
 
 #-------------------------------------------------------------------------------
 # Common parameter
@@ -94,7 +100,10 @@ CXX_FLAGS           = ''
 # Linker parameter
 #-------------------------------------------------------------------------------
 LINKER_GENERAL      = '-Wl,--gc-sections,-cref,-u,system_vectors '
-LINKER_GENERAL     += '-T board/link.lds'
+if not os.path.isdir('rt-thread'):
+    LINKER_GENERAL += '-T ../../../platform/lds/link.lds'
+else:
+    LINKER_GENERAL += '-T platform/lds/link.lds'
 
 LINKER_LIBRARIES    = ''
 LINKER_MISCELLANEOUS = '-Wl,-Map=build/%s.map' % (TARGET_NAME)

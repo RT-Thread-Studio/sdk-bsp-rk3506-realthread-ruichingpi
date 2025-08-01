@@ -10,7 +10,7 @@
 #include <rtthread.h>
 
 #define THREAD_PRIORITY         25
-#define THREAD_STACK_SIZE       512
+#define THREAD_STACK_SIZE       4096
 #define THREAD_TIMESLICE        5
 
 static rt_thread_t tid1 = RT_NULL;

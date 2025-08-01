@@ -69,11 +69,11 @@ int webclient_shard_download_test(int argc, char **argv)
     {
         for (int index = 1; index < argc; index = index + 2)
         {
-            if (strstr(argv[index], "-u"))
+            if (strstr(argv[index], "-u") && argv[index + 1] != RT_NULL)
             {
                 uri = web_strdup(argv[index + 1]);
             }
-            else if (strstr(argv[index], "-l"))
+            else if (strstr(argv[index], "-l") && argv[index + 1] != RT_NULL)
             {
                 size = atoi(argv[index + 1]);
             }

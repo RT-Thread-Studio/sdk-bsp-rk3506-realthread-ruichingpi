@@ -20,10 +20,10 @@ static char mb_str1[] = "I'm a mail!";
 static char mb_str2[] = "this is another mail!";
 static char mb_str3[] = "over";
 
-rt_align(RT_ALIGN_SIZE) static char mb_thread1_stack[1024];
+rt_align(RT_ALIGN_SIZE) static char mb_thread1_stack[4096];
 static struct rt_thread thread1;
 
-rt_align(RT_ALIGN_SIZE) static char mb_thread2_stack[1024];
+rt_align(RT_ALIGN_SIZE) static char mb_thread2_stack[4096];
 static struct rt_thread thread2;
 
 static void thread1_entry(void *parameter)

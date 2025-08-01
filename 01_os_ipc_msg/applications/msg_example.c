@@ -10,11 +10,11 @@
 #include <rtthread.h>
 
 #define THREAD1_PRIORITY   25
-#define THREAD1_STACK_SIZE 512
+#define THREAD1_STACK_SIZE 4096
 #define THREAD1_TIMESLICE  5
 
 #define THREAD2_PRIORITY   25
-#define THREAD2_STACK_SIZE 512
+#define THREAD2_STACK_SIZE 4096
 #define THREAD2_TIMESLICE  5
 
 static struct rt_messagequeue mq;

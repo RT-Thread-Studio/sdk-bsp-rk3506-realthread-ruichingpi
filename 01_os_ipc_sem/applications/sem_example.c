@@ -10,7 +10,7 @@
 #include <rtthread.h>
 
 #define THREAD_PRIORITY   6
-#define THREAD_STACK_SIZE 512
+#define THREAD_STACK_SIZE 4096
 #define THREAD_TIMESLICE  5
 
 #define MAXSEM            5

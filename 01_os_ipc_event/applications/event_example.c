@@ -18,10 +18,10 @@
 
 static struct rt_event event;
 
-rt_align(RT_ALIGN_SIZE) static char ev_thread1_stack[1024];
+rt_align(RT_ALIGN_SIZE) static char ev_thread1_stack[4096];
 static struct rt_thread ev_thread1;
 
-rt_align(RT_ALIGN_SIZE) static char ev_thread2_stack[1024];
+rt_align(RT_ALIGN_SIZE) static char ev_thread2_stack[4096];
 static struct rt_thread ev_thread2;
 
 static void thread1_recv_event(void *param)

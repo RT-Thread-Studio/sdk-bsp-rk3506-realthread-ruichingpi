@@ -13,7 +13,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#ifdef COMPONENTS_ETHERCAT_ENABLE
+#ifdef COMP_USING_ETHERCAT
 #include "cJSON.h"
 #include "ecat_interface.h"
 #include "ecat_master.h"

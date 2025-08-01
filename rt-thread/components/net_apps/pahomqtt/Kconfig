@@ -1,0 +1,51 @@
+#-------------------------------------------------------------------------------
+# RT-Thread RuiChing
+# 
+# COPYRIGHT (C) 2024-2025 Shanghai Real-Thread Electronic Technology Co., Ltd.
+# All rights reserved.
+# 
+# The license and distribution terms for this file may be
+# found in the file LICENSE in this distribution.
+#-------------------------------------------------------------------------------
+menuconfig COMP_USING_PAHOMQTT
+  bool "Enable pahomqtt"
+  default n
+
+if COMP_USING_PAHOMQTT
+	choice
+		prompt "MQTT mode"
+		help
+			Select the MQTT Implementation
+
+		config _PAHOMQTT_PIPE_MODE
+			bool "Pipe mode: high performance and depends on DFS"
+			select RT_USING_DEVICE_IPC
+
+		config _PAHOMQTT_UDP_MODE
+			bool "UDP mode: small footprint, need net supported loopback"
+			select RT_LWIP_NETIF_LOOPBACK
+	endchoice
+
+	config MQTT_USING_TLS
+		bool "Enable support tls protocol"
+		default n
+		select PKG_USING_MBEDTLS
+
+	config MQTT_THREAD_STACK_SIZE
+		int "Set MQTT thread stack size"
+		default 4096
+
+	config PAHOMQTT_SUBSCRIBE_HANDLERS
+		int "Max pahomqtt subscribe topic handlers"
+		default 1
+		help
+			Max pahomqtt subscribe topic handlers
+
+	config MQTT_DEBUG
+		bool "Enable debug log output"
+		default y
+
+endif
+#-------------------------------------------------------------------------------
+# End
+#-------------------------------------------------------------------------------

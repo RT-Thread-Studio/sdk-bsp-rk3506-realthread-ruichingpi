@@ -1,8 +1,0 @@
-#-------------------------------------------------------------------------------
-# RT-Thread Secure
-# Copyright (c) Shanghai Real-Thread Electronic Technology Co., Ltd.
-# All rights reserved.
-#-------------------------------------------------------------------------------
-orsource 'components/Kconfig'
-
-orsource "$PKGS_DIR/Kconfig"

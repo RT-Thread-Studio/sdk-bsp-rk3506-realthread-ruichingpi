@@ -9,4 +9,4 @@
  */
 /dts-v1/;
 #include "rc3506j.dtsi"
-#include "st7102-480x800.dtsi"
+#include "ruiching-lcd-mipi-7-1024x600.dtsi"

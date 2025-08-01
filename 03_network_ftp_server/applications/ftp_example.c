@@ -9,7 +9,7 @@
  */
 #include <rtthread.h>
 #include <rtdevice.h>
-#ifdef PKG_USING_AGILE_FTP
+#ifdef COMP_USING_AGILE_FTP
 #include <ftp.h>
 
 #define FTP_THREAD_STACKSIZE (8 * 1024) /* FTP thread stack size */
@@ -47,4 +47,4 @@ static int ftp_server(void)
     return 0;
 }
 MSH_CMD_EXPORT(ftp_server, start ftp server);
-#endif /* PKG_USING_AGILE_FTP */
+#endif /* COMP_USING_AGILE_FTP */

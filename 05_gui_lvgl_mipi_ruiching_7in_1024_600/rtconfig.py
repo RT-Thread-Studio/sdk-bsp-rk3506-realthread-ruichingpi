@@ -5,8 +5,14 @@
 #-------------------------------------------------------------------------------
 import os, sys
 import platform
-RTT_ROOT = 'rt-thread' if os.path.isdir('rt-thread') \
-    else os.path.join(os.getcwd(), '..', '..', '..', '..', '..')
+
+if os.path.isdir('rt-thread'):
+    RTT_ROOT = 'rt-thread'
+elif os.path.isdir('../rt-thread'):
+    RTT_ROOT = '../rt-thread'
+else:
+    RTT_ROOT = os.path.join(os.getcwd(), '..', '..', '..', '..', '..')
+
 sys.path = sys.path + [os.path.abspath(os.path.join(RTT_ROOT, 'scripts'))]
 from cic import cic_gen_parameters
 from cic import cic_add_linked_resource
@@ -53,7 +59,7 @@ DTC                 = 'dtc'
 TARGET_PROCESSOR    = '-march=armv7-a '
 TARGET_PROCESSOR   += '-mtune=cortex-a7 '
 TARGET_PROCESSOR   += '-mfpu=vfpv4 '
-TARGET_PROCESSOR   += '-mfloat-abi=soft '
+TARGET_PROCESSOR   += '-mfloat-abi=hard '
 
 #-------------------------------------------------------------------------------
 # Common parameter
@@ -61,7 +67,9 @@ TARGET_PROCESSOR   += '-mfloat-abi=soft '
 OPTIMIZATION        = '-ftree-vectorize '
 OPTIMIZATION       += '-ffast-math '
 WARNINGS            = '-Wall'
-DEBUGGINGS          = {'debug': '-O0 -g -gdwarf-2', 'release': '-O2'}[BUILD]
+DEBUGGINGS          = {
+    'debug': '-O0 -g -gdwarf-2',
+    'release': '-O2 -g -gdwarf-2'}[BUILD]
 COMMON_PREPROCESSOR = ''
 
 #-------------------------------------------------------------------------------
@@ -69,7 +77,7 @@ COMMON_PREPROCESSOR = ''
 #-------------------------------------------------------------------------------
 ASM_PREPROCESSOR    = COMMON_PREPROCESSOR + ''
 ASM_INCLUDES        = []
-ASM_FLAGS           = '-c -x assembler-with-cpp -D__ASSEMBLY__ '
+ASM_FLAGS           = '-c -x assembler-with-cpp -D__ASSEMBLY__'
 
 #-------------------------------------------------------------------------------
 # C compiler parameter
@@ -77,6 +85,9 @@ ASM_FLAGS           = '-c -x assembler-with-cpp -D__ASSEMBLY__ '
 C_PREPROCESSOR      = COMMON_PREPROCESSOR + ''
 C_INCLUDES          = []
 C_FLAGS             = ''
+C_FLAGS            += ' -fno-omit-frame-pointer'
+C_FLAGS            += ' -funwind-tables'
+C_FLAGS            += ' -fasynchronous-unwind-tables'
 
 #-------------------------------------------------------------------------------
 # C++ compiler parameter
@@ -89,7 +100,10 @@ CXX_FLAGS           = ''
 # Linker parameter
 #-------------------------------------------------------------------------------
 LINKER_GENERAL      = '-Wl,--gc-sections,-cref,-u,system_vectors '
-LINKER_GENERAL     += '-T board/link.lds'
+if not os.path.isdir('rt-thread'):
+    LINKER_GENERAL += '-T ../../../platform/lds/link.lds'
+else:
+    LINKER_GENERAL += '-T platform/lds/link.lds'
 
 LINKER_LIBRARIES    = ''
 LINKER_MISCELLANEOUS = '-Wl,-Map=build/%s.map' % (TARGET_NAME)
