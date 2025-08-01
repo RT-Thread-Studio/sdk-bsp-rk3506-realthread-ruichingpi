@@ -574,7 +574,7 @@ periperal:
       display:
         zh: SPI0
         en: SPI0
-      status: disable
+      status: enable
       config:
         - interrupt_affinity
       pin:

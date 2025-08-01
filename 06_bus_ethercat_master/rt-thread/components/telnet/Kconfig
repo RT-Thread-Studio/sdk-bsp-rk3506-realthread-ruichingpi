@@ -1,5 +1,0 @@
-
-menuconfig PKG_NETUTILS_TELNET
-    bool "Enable Telnet server"
-    default n
-

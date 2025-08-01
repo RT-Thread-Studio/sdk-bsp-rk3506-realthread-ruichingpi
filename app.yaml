@@ -36,7 +36,6 @@ example_projects:
     - applications
     - board
     - packages
-    - rt-thread
     - .config
     - .cproject
     - .project
@@ -46,6 +45,14 @@ example_projects:
     - SConscript
     - SConstruct
     source_path_offset: 01_os_coredump
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
     target_path_offset: ''
   external_files: []
   project_description: ''
@@ -57,7 +64,6 @@ example_projects:
     - applications
     - board
     - packages
-    - rt-thread
     - .config
     - .cproject
     - .project
@@ -67,6 +73,14 @@ example_projects:
     - SConscript
     - SConstruct
     source_path_offset: 01_os_ipc_event
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
     target_path_offset: ''
   external_files: []
   project_description: ''
@@ -78,7 +92,6 @@ example_projects:
     - applications
     - board
     - packages
-    - rt-thread
     - .config
     - .cproject
     - .project
@@ -88,6 +101,14 @@ example_projects:
     - SConscript
     - SConstruct
     source_path_offset: 01_os_ipc_mailbox
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
     target_path_offset: ''
   external_files: []
   project_description: ''
@@ -99,7 +120,6 @@ example_projects:
     - applications
     - board
     - packages
-    - rt-thread
     - .config
     - .cproject
     - .project
@@ -109,6 +129,14 @@ example_projects:
     - SConscript
     - SConstruct
     source_path_offset: 01_os_ipc_msg
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
     target_path_offset: ''
   external_files: []
   project_description: ''
@@ -120,7 +148,6 @@ example_projects:
     - applications
     - board
     - packages
-    - rt-thread
     - .config
     - .cproject
     - .project
@@ -130,6 +157,14 @@ example_projects:
     - SConscript
     - SConstruct
     source_path_offset: 01_os_ipc_mutex
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
     target_path_offset: ''
   external_files: []
   project_description: ''
@@ -141,7 +176,6 @@ example_projects:
     - applications
     - board
     - packages
-    - rt-thread
     - .config
     - .cproject
     - .project
@@ -151,6 +185,14 @@ example_projects:
     - SConscript
     - SConstruct
     source_path_offset: 01_os_ipc_sem
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
     target_path_offset: ''
   external_files: []
   project_description: ''
@@ -162,7 +204,6 @@ example_projects:
     - applications
     - board
     - packages
-    - rt-thread
     - .config
     - .cproject
     - .project
@@ -172,6 +213,14 @@ example_projects:
     - SConscript
     - SConstruct
     source_path_offset: 01_os_msh
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
     target_path_offset: ''
   external_files: []
   project_description: ''
@@ -183,7 +232,6 @@ example_projects:
     - applications
     - board
     - packages
-    - rt-thread
     - .config
     - .cproject
     - .project
@@ -193,6 +241,14 @@ example_projects:
     - SConscript
     - SConstruct
     source_path_offset: 01_os_thread
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
     target_path_offset: ''
   external_files: []
   project_description: ''
@@ -204,7 +260,6 @@ example_projects:
     - applications
     - board
     - packages
-    - rt-thread
     - .config
     - .cproject
     - .project
@@ -214,6 +269,14 @@ example_projects:
     - SConscript
     - SConstruct
     source_path_offset: 01_os_time
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
     target_path_offset: ''
   external_files: []
   project_description: ''
@@ -225,7 +288,6 @@ example_projects:
     - applications
     - board
     - packages
-    - rt-thread
     - .config
     - .cproject
     - .project
@@ -235,6 +297,14 @@ example_projects:
     - SConscript
     - SConstruct
     source_path_offset: 02_peripheral_can_send
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
     target_path_offset: ''
   external_files: []
   project_description: ''
@@ -246,7 +316,6 @@ example_projects:
     - applications
     - board
     - packages
-    - rt-thread
     - .config
     - .cproject
     - .project
@@ -256,6 +325,14 @@ example_projects:
     - SConscript
     - SConstruct
     source_path_offset: 02_peripheral_gpio_input
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
     target_path_offset: ''
   external_files: []
   project_description: ''
@@ -267,7 +344,6 @@ example_projects:
     - applications
     - board
     - packages
-    - rt-thread
     - .config
     - .cproject
     - .project
@@ -277,6 +353,14 @@ example_projects:
     - SConscript
     - SConstruct
     source_path_offset: 02_peripheral_gpio_input_interrupt
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
     target_path_offset: ''
   external_files: []
   project_description: ''
@@ -288,7 +372,6 @@ example_projects:
     - applications
     - board
     - packages
-    - rt-thread
     - .config
     - .cproject
     - .project
@@ -298,6 +381,14 @@ example_projects:
     - SConscript
     - SConstruct
     source_path_offset: 02_peripheral_gpio_output
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
     target_path_offset: ''
   external_files: []
   project_description: ''
@@ -309,7 +400,6 @@ example_projects:
     - applications
     - board
     - packages
-    - rt-thread
     - .config
     - .cproject
     - .project
@@ -319,6 +409,14 @@ example_projects:
     - SConscript
     - SConstruct
     source_path_offset: 02_peripheral_i2c_at24c32
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
     target_path_offset: ''
   external_files: []
   project_description: ''
@@ -330,7 +428,6 @@ example_projects:
     - applications
     - board
     - packages
-    - rt-thread
     - .config
     - .cproject
     - .project
@@ -340,6 +437,14 @@ example_projects:
     - SConscript
     - SConstruct
     source_path_offset: 02_peripheral_i2c_hym8563
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
     target_path_offset: ''
   external_files: []
   project_description: ''
@@ -351,7 +456,6 @@ example_projects:
     - applications
     - board
     - packages
-    - rt-thread
     - .config
     - .cproject
     - .project
@@ -361,6 +465,14 @@ example_projects:
     - SConscript
     - SConstruct
     source_path_offset: 02_peripheral_mipi_ruiching_7in_1024_600
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
     target_path_offset: ''
   external_files: []
   project_description: ''
@@ -372,7 +484,6 @@ example_projects:
     - applications
     - board
     - packages
-    - rt-thread
     - .config
     - .cproject
     - .project
@@ -382,6 +493,14 @@ example_projects:
     - SConscript
     - SConstruct
     source_path_offset: 02_peripheral_pwm
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
     target_path_offset: ''
   external_files: []
   project_description: ''
@@ -393,7 +512,6 @@ example_projects:
     - applications
     - board
     - packages
-    - rt-thread
     - .config
     - .cproject
     - .project
@@ -403,6 +521,14 @@ example_projects:
     - SConscript
     - SConstruct
     source_path_offset: 02_peripheral_rs485
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
     target_path_offset: ''
   external_files: []
   project_description: ''
@@ -414,7 +540,6 @@ example_projects:
     - applications
     - board
     - packages
-    - rt-thread
     - .config
     - .cproject
     - .project
@@ -424,6 +549,14 @@ example_projects:
     - SConscript
     - SConstruct
     source_path_offset: 02_peripheral_saradc
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
     target_path_offset: ''
   external_files: []
   project_description: ''
@@ -435,7 +568,34 @@ example_projects:
     - applications
     - board
     - packages
+    - .config
+    - .cproject
+    - .project
+    - Kconfig
+    - rtconfig.h
+    - rtconfig.py
+    - SConscript
+    - SConstruct
+    source_path_offset: 02_peripheral_sdmmc
+    target_path_offset: ''
+  - files_and_folders:
     - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
+    target_path_offset: ''
+  external_files: []
+  project_description: ''
+  project_name: 02_peripheral_sdmmc
+  project_type: bare-metal|@notUsed|@notUsed
+- builtin_files:
+  - files_and_folders:
+    - .settings
+    - applications
+    - board
+    - packages
     - .config
     - .cproject
     - .project
@@ -445,6 +605,14 @@ example_projects:
     - SConscript
     - SConstruct
     source_path_offset: 02_peripheral_spi_norflash
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
     target_path_offset: ''
   external_files: []
   project_description: ''
@@ -456,7 +624,34 @@ example_projects:
     - applications
     - board
     - packages
+    - .config
+    - .cproject
+    - .project
+    - Kconfig
+    - rtconfig.h
+    - rtconfig.py
+    - SConscript
+    - SConstruct
+    source_path_offset: 02_peripheral_uvc_capture
+    target_path_offset: ''
+  - files_and_folders:
     - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
+    target_path_offset: ''
+  external_files: []
+  project_description: ''
+  project_name: 02_peripheral_uvc_capture
+  project_type: bare-metal|@notUsed|@notUsed
+- builtin_files:
+  - files_and_folders:
+    - .settings
+    - applications
+    - board
+    - packages
     - .config
     - .cproject
     - .project
@@ -466,6 +661,14 @@ example_projects:
     - SConscript
     - SConstruct
     source_path_offset: 02_peripheral_wdg
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
     target_path_offset: ''
   external_files: []
   project_description: ''
@@ -477,7 +680,34 @@ example_projects:
     - applications
     - board
     - packages
+    - .config
+    - .cproject
+    - .project
+    - Kconfig
+    - rtconfig.h
+    - rtconfig.py
+    - SConscript
+    - SConstruct
+    source_path_offset: 03_network_4g_webclient_get
+    target_path_offset: ''
+  - files_and_folders:
     - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
+    target_path_offset: ''
+  external_files: []
+  project_description: ''
+  project_name: 03_network_4g_webclient_get
+  project_type: bare-metal|@notUsed|@notUsed
+- builtin_files:
+  - files_and_folders:
+    - .settings
+    - applications
+    - board
+    - packages
     - .config
     - .cproject
     - .project
@@ -487,6 +717,14 @@ example_projects:
     - SConscript
     - SConstruct
     source_path_offset: 03_network_ftp_server
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
     target_path_offset: ''
   external_files: []
   project_description: ''
@@ -498,7 +736,6 @@ example_projects:
     - applications
     - board
     - packages
-    - rt-thread
     - .config
     - .cproject
     - .project
@@ -508,6 +745,14 @@ example_projects:
     - SConscript
     - SConstruct
     source_path_offset: 03_network_iperf
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
     target_path_offset: ''
   external_files: []
   project_description: ''
@@ -519,7 +764,6 @@ example_projects:
     - applications
     - board
     - packages
-    - rt-thread
     - .config
     - .cproject
     - .project
@@ -529,6 +773,14 @@ example_projects:
     - SConscript
     - SConstruct
     source_path_offset: 03_network_mqtt
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
     target_path_offset: ''
   external_files: []
   project_description: ''
@@ -540,7 +792,6 @@ example_projects:
     - applications
     - board
     - packages
-    - rt-thread
     - .config
     - .cproject
     - .project
@@ -550,6 +801,14 @@ example_projects:
     - SConscript
     - SConstruct
     source_path_offset: 03_network_tcp_client
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
     target_path_offset: ''
   external_files: []
   project_description: ''
@@ -561,7 +820,6 @@ example_projects:
     - applications
     - board
     - packages
-    - rt-thread
     - .config
     - .cproject
     - .project
@@ -571,6 +829,14 @@ example_projects:
     - SConscript
     - SConstruct
     source_path_offset: 03_network_tcp_server
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
     target_path_offset: ''
   external_files: []
   project_description: ''
@@ -582,7 +848,6 @@ example_projects:
     - applications
     - board
     - packages
-    - rt-thread
     - .config
     - .cproject
     - .project
@@ -592,6 +857,14 @@ example_projects:
     - SConscript
     - SConstruct
     source_path_offset: 03_network_telnet
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
     target_path_offset: ''
   external_files: []
   project_description: ''
@@ -603,7 +876,6 @@ example_projects:
     - applications
     - board
     - packages
-    - rt-thread
     - .config
     - .cproject
     - .project
@@ -613,6 +885,14 @@ example_projects:
     - SConscript
     - SConstruct
     source_path_offset: 03_network_udp_client
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
     target_path_offset: ''
   external_files: []
   project_description: ''
@@ -624,7 +904,6 @@ example_projects:
     - applications
     - board
     - packages
-    - rt-thread
     - .config
     - .cproject
     - .project
@@ -634,6 +913,14 @@ example_projects:
     - SConscript
     - SConstruct
     source_path_offset: 03_network_udp_server
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
     target_path_offset: ''
   external_files: []
   project_description: ''
@@ -645,7 +932,6 @@ example_projects:
     - applications
     - board
     - packages
-    - rt-thread
     - .config
     - .cproject
     - .project
@@ -655,6 +941,14 @@ example_projects:
     - SConscript
     - SConstruct
     source_path_offset: 03_network_webclient_get
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
     target_path_offset: ''
   external_files: []
   project_description: ''
@@ -666,7 +960,6 @@ example_projects:
     - applications
     - board
     - packages
-    - rt-thread
     - .config
     - .cproject
     - .project
@@ -676,6 +969,14 @@ example_projects:
     - SConscript
     - SConstruct
     source_path_offset: 03_network_webclient_post
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
     target_path_offset: ''
   external_files: []
   project_description: ''
@@ -687,7 +988,6 @@ example_projects:
     - applications
     - board
     - packages
-    - rt-thread
     - .config
     - .cproject
     - .project
@@ -697,6 +997,14 @@ example_projects:
     - SConscript
     - SConstruct
     source_path_offset: 03_network_webclient_shard_download
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
     target_path_offset: ''
   external_files: []
   project_description: ''
@@ -708,7 +1016,34 @@ example_projects:
     - applications
     - board
     - packages
+    - .config
+    - .cproject
+    - .project
+    - Kconfig
+    - rtconfig.h
+    - rtconfig.py
+    - SConscript
+    - SConstruct
+    source_path_offset: 03_network_webnet
+    target_path_offset: ''
+  - files_and_folders:
     - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
+    target_path_offset: ''
+  external_files: []
+  project_description: ''
+  project_name: 03_network_webnet
+  project_type: bare-metal|@notUsed|@notUsed
+- builtin_files:
+  - files_and_folders:
+    - .settings
+    - applications
+    - board
+    - packages
     - .config
     - .cproject
     - .project
@@ -718,6 +1053,14 @@ example_projects:
     - SConscript
     - SConstruct
     source_path_offset: 04_filesystem_directory
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
     target_path_offset: ''
   external_files: []
   project_description: ''
@@ -729,7 +1072,6 @@ example_projects:
     - applications
     - board
     - packages
-    - rt-thread
     - .config
     - .cproject
     - .project
@@ -739,6 +1081,14 @@ example_projects:
     - SConscript
     - SConstruct
     source_path_offset: 04_filesystem_file
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
     target_path_offset: ''
   external_files: []
   project_description: ''
@@ -750,7 +1100,6 @@ example_projects:
     - applications
     - board
     - packages
-    - rt-thread
     - .config
     - .cproject
     - .project
@@ -760,6 +1109,14 @@ example_projects:
     - SConscript
     - SConstruct
     source_path_offset: 05_gui_lvgl_mipi_ruiching_7in_1024_600
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
     target_path_offset: ''
   external_files: []
   project_description: ''
@@ -771,7 +1128,6 @@ example_projects:
     - applications
     - board
     - packages
-    - rt-thread
     - .config
     - .cproject
     - .project
@@ -781,6 +1137,14 @@ example_projects:
     - SConscript
     - SConstruct
     source_path_offset: 06_bus_canopen_master_motor
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
     target_path_offset: ''
   external_files: []
   project_description: ''
@@ -792,7 +1156,6 @@ example_projects:
     - applications
     - board
     - packages
-    - rt-thread
     - .config
     - .cproject
     - .project
@@ -802,6 +1165,14 @@ example_projects:
     - SConscript
     - SConstruct
     source_path_offset: 06_bus_ethercat_master
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
     target_path_offset: ''
   external_files: []
   project_description: ''
@@ -813,7 +1184,6 @@ example_projects:
     - applications
     - board
     - packages
-    - rt-thread
     - .config
     - .cproject
     - .project
@@ -823,6 +1193,14 @@ example_projects:
     - SConscript
     - SConstruct
     source_path_offset: 06_bus_modbus_rtu_master
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
     target_path_offset: ''
   external_files: []
   project_description: ''
@@ -834,7 +1212,6 @@ example_projects:
     - applications
     - board
     - packages
-    - rt-thread
     - .config
     - .cproject
     - .project
@@ -844,6 +1221,14 @@ example_projects:
     - SConscript
     - SConstruct
     source_path_offset: 06_bus_modbus_rtu_pt100
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
     target_path_offset: ''
   external_files: []
   project_description: ''
@@ -855,7 +1240,6 @@ example_projects:
     - applications
     - board
     - packages
-    - rt-thread
     - .config
     - .cproject
     - .project
@@ -865,6 +1249,14 @@ example_projects:
     - SConscript
     - SConstruct
     source_path_offset: 06_bus_modbus_tcp_master
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
     target_path_offset: ''
   external_files: []
   project_description: ''
@@ -876,7 +1268,6 @@ example_projects:
     - applications
     - board
     - packages
-    - rt-thread
     - .config
     - .cproject
     - .project
@@ -886,6 +1277,14 @@ example_projects:
     - SConscript
     - SConstruct
     source_path_offset: 07_perf_thread_interrupt
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
     target_path_offset: ''
   external_files: []
   project_description: ''
@@ -897,7 +1296,6 @@ example_projects:
     - applications
     - board
     - packages
-    - rt-thread
     - .config
     - .cproject
     - .project
@@ -908,9 +1306,73 @@ example_projects:
     - SConstruct
     source_path_offset: 08_misc_factory_default
     target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
+    target_path_offset: ''
   external_files: []
   project_description: ''
   project_name: 08_misc_factory_default
+  project_type: bare-metal|@notUsed|@notUsed
+- builtin_files:
+  - files_and_folders:
+    - .settings
+    - applications
+    - board
+    - packages
+    - .config
+    - .cproject
+    - .project
+    - Kconfig
+    - rtconfig.h
+    - rtconfig.py
+    - SConscript
+    - SConstruct
+    source_path_offset: 09_ai_mobilenetv2_yolov3
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
+    target_path_offset: ''
+  external_files: []
+  project_description: ''
+  project_name: 09_ai_mobilenetv2_yolov3
+  project_type: bare-metal|@notUsed|@notUsed
+- builtin_files:
+  - files_and_folders:
+    - .settings
+    - applications
+    - board
+    - packages
+    - .config
+    - .cproject
+    - .project
+    - Kconfig
+    - rtconfig.h
+    - rtconfig.py
+    - SConscript
+    - SConstruct
+    source_path_offset: 10_language_lua
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
+    target_path_offset: ''
+  external_files: []
+  project_description: ''
+  project_name: 10_language_lua
   project_type: bare-metal|@notUsed|@notUsed
 features:
 - High Real-Time RuiChing Industrial Platform: Hard real-time kernel with ≤1μs task
@@ -929,7 +1391,7 @@ features_zh:
 - 革命性混合架构：RT-Thread+Linux双系统
 pkg_type: Board_Support_Packages
 pkg_vendor: Real-Thread
-pkg_version: 1.0.1
+pkg_version: V1.1.0
 template_projects:
 - builtin_files:
   - files_and_folders:
@@ -937,7 +1399,6 @@ template_projects:
     - applications
     - board
     - packages
-    - rt-thread
     - .config
     - .cproject
     - .project
@@ -947,6 +1408,14 @@ template_projects:
     - SConscript
     - SConstruct
     source_path_offset: 00_base_helloworld
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
     target_path_offset: ''
   external_files: []
   project_description: ''

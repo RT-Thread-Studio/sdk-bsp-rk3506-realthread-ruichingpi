@@ -1,5 +1,0 @@
-menu 'RuiChing Components Configure'
-
-    orsource '*/Kconfig'
-
-endmenu

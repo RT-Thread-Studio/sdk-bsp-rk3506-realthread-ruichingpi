@@ -53,7 +53,7 @@ static node_list can_node[2] =
     {SERVO_NODEID_1, "walk", {200, 1000}, NULL}  // 电子齿轮比 200:1000 = 1:5
 };
 
-static s_BOARD agv_board  = {BSP_CANFESTIVAL_CAN_DEVICE_NAME};
+static s_BOARD agv_board  = {CANFESTIVAL_CAN_DEVICE_NAME};
 static node_config_state slave_conf;//配置状态
 /* Private function prototypes -----------------------------------------------*/
 static void config_node_param(uint8_t nodeId, node_config_state *conf);

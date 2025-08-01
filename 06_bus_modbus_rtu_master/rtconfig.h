@@ -15,35 +15,94 @@
 
 /* RuiChing Components Configure */
 
-#define BSP_USING_CANFESTIVAL
-#define BSP_CANFESTIVAL_CAN_DEVICE_NAME "ff320000.can"
-#define BSP_CANFESTIVAL_TIMER_DEVICE_NAME "timer0"
-#define BSP_CANFESTIVAL_RECV_THREAD_PRIO 9
-#define BSP_CANFESTIVAL_TIMER_THREAD_PRIO 10
-#define PKG_USING_AGILE_FTP
-#define PKG_USING_AGILE_FTP_LATEST_VERSION
-#define PKG_AGILE_FTP_VER_NUM 0x99999
-#define COMPONENTS_ETHERCAT_ENABLE
-#define COMPONENTS_FINSH_EXPORT_ENABLE
-#define PKG_USING_NETUTILS
-#define PKG_NETUTILS_IPERF
-#define IPERF_THREAD_STACK_SIZE 2048
-#define PKG_NETUTILS_VER_NUM 0x99999
-#define COMPONENTS_MODBUS_ENABLE
-#define PKG_USING_RT_PERF
+/* Industrial Bus */
+
+#define COMP_USING_CANFESTIVAL
+#define CANFESTIVAL_CAN_DEVICE_NAME "ff320000.can"
+#define CANFESTIVAL_TIMER_DEVICE_NAME "timer0"
+#define CANFESTIVAL_RECV_THREAD_PRIO 9
+#define CANFESTIVAL_TIMER_THREAD_PRIO 10
+#define COMP_USING_ETHERCAT
+#define COMP_USING_MODBUS
+/* end of Industrial Bus */
+
+/* Net Apps */
+
+#define COMP_USING_AGILE_FTP
+#define COMP_USING_PAHOMQTT
+#define _PAHOMQTT_PIPE_MODE
+#define MQTT_THREAD_STACK_SIZE 4096
+#define PAHOMQTT_SUBSCRIBE_HANDLERS 1
+#define MQTT_DEBUG
+#define COMP_USING_TELNET
+#define COMP_USING_TFTP
+#define NETUTILS_TFTP_PORT 69
+#define COMP_USING_WEBCLIENT
+#define WEBCLIENT_USING_FILE_DOWMLOAD
+#define COMPONENTS_WEBCLIENT_NOT_USE_TLS
+#define COMP_USING_WEBNET
+#define WEBNET_PORT 80
+#define WEBNET_CONN_MAX 16
+#define WEBNET_ROOT "/sdmmc/webnet"
+
+/* Select supported modules */
+
+#define WEBNET_USING_AUTH
+#define WEBNET_USING_CGI
+#define WEBNET_USING_ASP
+#define WEBNET_USING_SSI
+#define WEBNET_USING_INDEX
+#define WEBNET_USING_ALIAS
+#define WEBNET_USING_UPLOAD
+#define WEBNET_CACHE_LEVEL 0
+#define WEBNET_USING_SSI_VIRTUAL_HANDLER
+/* end of Select supported modules */
+/* end of Net Apps */
+
+/* Graphics */
+
+#define COMP_USING_LVGL
+#define RT_LVGL_THREAD_PRIO 20
+#define RT_LVGL_THREAD_STACK_SIZE 8192
+#define RT_LVGL_DISP_REFR_PERIOD 33
+#define RT_LVGL_VER_NUM 0x090100
+#define RT_LVGL_VER "v9.1.0"
+#define LV_CONF_SKIP
+
+/* Color Settings */
+
+#define COLOR_DEPTH_24
+#define LV_COLOR_DEPTH 24
+/* end of Color Settings */
+/* end of Graphics */
+
+/* AI */
+
+#define COMP_USING_NCNN
+/* end of AI */
+
+/* Data Parsers */
+
+#define COMP_USING_CJSON
+/* end of Data Parsers */
+
+/* Debug Tools */
+
+#define COMP_USING_BACKTRACE
+#define COMP_USING_COREDUMP
+#define COREDUMP_STORAGE_RAM
+#define COREDUMP_MAX_SIZE_KB 2048
+#define COREDUMP_FILE_SAVE_PATH "/sdmmc/core.dump"
+#define COMP_USING_IPERF2
+#define IPERF_THREAD_STACK_SIZE 16384
+#define COMP_USING_RT_PERF
 #define RT_PERF_TIMER_FREQ 24000000
 #define RT_PERF_TIMER_BITS 32
 #define RT_PERF_ENABLE_IRQ_LATENCY
-#define RT_PERF_USING_TIMER_NAME "timer0"
-#define PKG_USING_RT_PERF_V003
-#define RT_USING_SERVICE
-#define PKG_NETUTILS_TELNET
-#define PKG_USING_WEBCLIENT
-#define WEBCLIENT_USING_FILE_DOWMLOAD
-#define WEBCLIENT_NOT_USE_TLS
-#define PKG_USING_WEBCLIENT_V220
-#define PKG_WEBCLIENT_VER_NUM 0x20200
+#define RT_PERF_USING_TIMER_NAME "timer3"
+/* end of Debug Tools */
 /* end of RuiChing Components Configure */
+#define RT_USING_CPLUSPLUS
 
 /* RT-Thread online packages */
 
@@ -72,7 +131,6 @@
 
 /* end of CYW43439 WiFi */
 /* end of Wi-Fi */
-#define PKG_USING_NETUTILS_LATEST_VERSION
 
 /* IoT Cloud */
 
@@ -87,8 +145,6 @@
 
 /* JSON: JavaScript Object Notation, a lightweight data-interchange format */
 
-#define PKG_USING_CJSON
-#define PKG_USING_CJSON_V1717
 /* end of JSON: JavaScript Object Notation, a lightweight data-interchange format */
 
 /* XML: Extensible Markup Language */
@@ -145,6 +201,14 @@
 /* Kendryte SDK */
 
 /* end of Kendryte SDK */
+
+/* WCH HAL & SDK Drivers */
+
+/* end of WCH HAL & SDK Drivers */
+
+/* AT32 HAL & SDK Drivers */
+
+/* end of AT32 HAL & SDK Drivers */
 /* end of HAL & SDK Drivers */
 
 /* sensors drivers */

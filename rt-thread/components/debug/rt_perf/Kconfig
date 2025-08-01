@@ -1,0 +1,45 @@
+#-------------------------------------------------------------------------------
+# RT-Thread RuiChing
+# 
+# COPYRIGHT (C) 2024-2025 Shanghai Real-Thread Electronic Technology Co., Ltd.
+# All rights reserved.
+# 
+# The license and distribution terms for this file may be
+# found in the file LICENSE in this distribution.
+#-------------------------------------------------------------------------------
+menuconfig COMP_USING_RT_PERF
+	bool "Enable rt_perf"
+	default n
+
+	if COMP_USING_RT_PERF
+		config RT_PERF_TIMER_FREQ
+			int "Set Timer Freq(Hz)"
+			range 1000000 1000000000
+			default 24000000
+
+		config RT_PERF_TIMER_BITS
+			int "Set Timer Bits"
+			range 1 32
+			default 32
+
+		menuconfig RT_PERF_EXPORT_CSV_DATA
+			bool "Export CSV Data"
+			default n
+			if RT_PERF_EXPORT_CSV_DATA
+				config RT_PERF_EXPORT_CSV_DATA_PATH
+					string "File Path"
+					default "/mnt"
+			endif
+
+		menuconfig RT_PERF_ENABLE_IRQ_LATENCY
+			bool "Enable irq latency"
+			default n
+			if RT_PERF_ENABLE_IRQ_LATENCY
+				config RT_PERF_USING_TIMER_NAME
+					string "Select timer name"
+					default "timer3"
+			endif
+endif
+#-------------------------------------------------------------------------------
+# End
+#-------------------------------------------------------------------------------

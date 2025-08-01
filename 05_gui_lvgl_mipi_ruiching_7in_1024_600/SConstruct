@@ -9,8 +9,13 @@ import os
 #-------------------------------------------------------------------------------
 # System configuration
 #-------------------------------------------------------------------------------
-RTT_ROOT = 'rt-thread' if os.path.isdir('rt-thread') \
-    else os.path.join(os.getcwd(), '..', '..', '..', '..', '..')
+if os.path.isdir('rt-thread'):
+    RTT_ROOT = 'rt-thread'
+elif os.path.isdir('../rt-thread'):
+    RTT_ROOT = '../rt-thread'
+else:
+    RTT_ROOT = os.path.join(os.getcwd(), '..', '..', '..', '..', '..')
+
 sys.pycache_prefix = os.path.join(RTT_ROOT, 'scripts', '__pycache__')
 import rtconfig
 sys.path = sys.path + [os.path.abspath(os.path.join(RTT_ROOT, 'scripts'))]
@@ -51,11 +56,18 @@ if GetDepend('RT_USING_FPU'):
 # Prepare Device Tree
 #-------------------------------------------------------------------------------
 DTCSRC = [os.path.join(GetCurrentDir(), 'board/board.dts')]
-DTCPATH = [
-    os.path.join(GetCurrentDir()),
-    os.path.join(GetCurrentDir(), RTT_ROOT + '/components/dtsi/'),
-    os.path.join(GetCurrentDir(), RTT_ROOT + '/components/dtsi/rockchip')
-]
+if not os.path.isdir('rt-thread'):
+    DTCPATH = [
+        os.path.join(GetCurrentDir(), RTT_ROOT + '/drivers/include'),
+        os.path.join(GetCurrentDir(), RTT_ROOT + '/apps/rockchip/platform/dtsi/'),
+        os.path.join(GetCurrentDir(), RTT_ROOT + '/apps/rockchip/platform/dtsi/rockchip')
+    ]
+else:
+    DTCPATH = [
+        os.path.join(GetCurrentDir(), RTT_ROOT + '/drivers/include'),
+        os.path.join(GetCurrentDir(), RTT_ROOT + '/../platform/dtsi/'),
+        os.path.join(GetCurrentDir(), RTT_ROOT + '/../platform/dtsi/rockchip')
+    ]
 DTCFLAGS  = '-b 0 '
 DTCFLAGS += '-Wno-interrupt_provider '
 DTCFLAGS += '-Wno-unit_address_vs_reg '
@@ -74,6 +86,14 @@ if not os.path.isdir('rt-thread'):
         SConscript(RTT_ROOT + '/SConscript',
             variant_dir='build/sdk/', duplicate=0)
     )
+
+    objs.extend(
+        SConscript(RTT_ROOT + '/apps/rockchip/platform/drivers/SConscript',
+            variant_dir='build/drivers/', duplicate=0))
+else:
+    objs.extend(
+        SConscript('platform/drivers/SConscript',
+            variant_dir='build/platform/', duplicate=0))
 
 #-------------------------------------------------------------------------------
 # Make a building

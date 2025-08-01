@@ -1,0 +1,57 @@
+#-------------------------------------------------------------------------------
+# RT-Thread RuiChing
+# 
+# COPYRIGHT (C) 2024-2025 Shanghai Real-Thread Electronic Technology Co., Ltd.
+# All rights reserved.
+# 
+# The license and distribution terms for this file may be
+# found in the file LICENSE in this distribution.
+#-------------------------------------------------------------------------------
+menuconfig COMP_USING_COREDUMP
+	bool "Enable coredump"
+	help
+		Enable core dump feature to save system state when crashes occur.
+		Includes register values, stack traces, and memory regions.
+
+if COMP_USING_COREDUMP
+
+	choice
+		prompt "Storage Backend"
+		default COREDUMP_STORAGE_FILE_AND_RAM
+		help
+			Select storage backend(s) for coredump files.
+
+		config COREDUMP_STORAGE_RAM
+			bool "RAM only"
+			help
+				Save coredump only to RAM (fast but volatile).
+
+		config COREDUMP_STORAGE_FILE
+			bool "FILE only"
+			help
+				Save coredump to filesystem (persistent but slower).
+
+		config COREDUMP_STORAGE_FILE_AND_RAM
+			bool "RAM + FILE"
+			help
+				Save to both RAM and filesystem (redundant storage).
+	endchoice
+
+	config COREDUMP_MAX_SIZE_KB
+		int "Maximum CoreDump Size (KB)"
+		default 2048
+		help
+			Limits the dump size to prevent storage overflow.
+			RAM-only mode has smaller max size (10MB) due to memory constraints.
+
+	config COREDUMP_FILE_SAVE_PATH
+		string "File Save Path"
+		default "/sdmmc/core.dump"
+		help
+			Path for file-based storage (e.g. /sdmmc/core.dump or /flash/crash.dump).
+
+endif
+
+#-------------------------------------------------------------------------------
+# End
+#-------------------------------------------------------------------------------

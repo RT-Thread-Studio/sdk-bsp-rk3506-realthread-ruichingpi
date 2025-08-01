@@ -5,4 +5,9 @@
 #-------------------------------------------------------------------------------
 mainmenu "RuiChing APP Project Configure"
 
+config PKGS_DIR
+    string
+    option env="PKGS_ROOT"
+    default "packages"
+
 orsource 'rt-thread/Kconfig'

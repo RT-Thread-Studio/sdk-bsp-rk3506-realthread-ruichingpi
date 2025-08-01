@@ -11,7 +11,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-#ifdef COMPONENTS_ETHERCAT_ENABLE
+#ifdef COMP_USING_ETHERCAT
 #include "ecat_master.h"
 
 #define EC_TIMEOUTRXM 700000
@@ -290,6 +290,8 @@ int ethercat_domain_init(void)
 {
     rt_err_t ret = RT_EOK;
     static uint8_t inited = 0;
+    
+    rt_thread_mdelay(1000);
     if (inited)
     {
         rt_kprintf("ethercat always running!\n");
@@ -354,4 +356,4 @@ void motor_dir(int argc, char *argv[])
 }
 MSH_CMD_EXPORT(motor_dir, motor dir);
 
-#endif /* COMPONENTS_ETHERCAT_ENABLE */
+#endif /* COMP_USING_ETHERCAT */

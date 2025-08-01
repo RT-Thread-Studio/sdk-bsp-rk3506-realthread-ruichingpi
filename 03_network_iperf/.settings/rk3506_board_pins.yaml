@@ -1024,7 +1024,7 @@ pin:
     index: 21
     optional: true
     mux:
-      default: 0x00
+      default: 0x07
       choise:
         0x00:
           display:
@@ -1040,7 +1040,7 @@ pin:
             en: RM_IO17
           secondary:
             select: rmio
-            default: 0x00
+            default: 0x44
   GPIO0_C0:
     display:
       zh: GPIO0_C0
@@ -1158,7 +1158,7 @@ pin:
     index: 27
     optional: true
     mux:
-      default: 0x01
+      default: 0x07
       choise:
         0x00:
           display:
@@ -1174,7 +1174,7 @@ pin:
             en: RM_IO12
           secondary:
             select: rmio
-            default: 0x00
+            default: 0x45
   GPIO0_B3:
     display:
       zh: GPIO0_B3
@@ -1182,7 +1182,7 @@ pin:
     index: 28
     optional: true
     mux:
-      default: 0x01
+      default: 0x07
       choise:
         0x00:
           display:
@@ -1198,7 +1198,7 @@ pin:
             en: RM_IO11
           secondary:
             select: rmio
-            default: 0x00
+            default: 0x43
   GPIO0_B2:
     display:
       zh: GPIO0_B2

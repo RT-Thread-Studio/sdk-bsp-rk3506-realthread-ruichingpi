@@ -1,0 +1,23 @@
+#-------------------------------------------------------------------------------
+# RT-Thread RuiChing
+# 
+# COPYRIGHT (C) 2024-2025 Shanghai Real-Thread Electronic Technology Co., Ltd.
+# All rights reserved.
+# 
+# The license and distribution terms for this file may be
+# found in the file LICENSE in this distribution.
+#-------------------------------------------------------------------------------
+menuconfig COMP_USING_TFTP
+	bool "Enable tftp"
+	default n
+
+	if COMP_USING_TFTP
+		config NETUTILS_TFTP_PORT
+			int "TFTP server port"
+			range 0 65535
+			default 69
+	endif
+
+#-------------------------------------------------------------------------------
+# End
+#-------------------------------------------------------------------------------

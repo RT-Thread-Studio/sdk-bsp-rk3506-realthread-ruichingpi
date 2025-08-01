@@ -1,0 +1,9 @@
+Debug_dealWithDeviceTreeFileKey=${workspace_loc\:/${ProjName}/board.dts}
+Debug_deviceTreeDirKey=${workspace_loc\:/${ProjName}}
+Debug_dtbOutPutPath=${workspace_loc\:/${ProjName}/rtthread.dtb}
+Debug_dtcFlagsKey=-b 0^-Wno-interrupt_provider^-Wno-unit_address_vs_reg^-Wno-avoid_unnecessary_addr_size^-Wno-alias_paths^-Wno-graph_child_address^-Wno-simple_bus_reg^-Wno-unique_unit_address
+Debug_includeFilesKey=
+Debug_includePathsKey=${workspace_loc\:/${ProjName}}^${workspace_loc\:/${ProjName}/components/dtsi}
+Debug_preprocessorKey=-E^-nostdinc^-undef^-D__DTS__^-x assembler-with-cpp
+Debug_useDeviceTreeCompile=true
+eclipse.preferences.version=1

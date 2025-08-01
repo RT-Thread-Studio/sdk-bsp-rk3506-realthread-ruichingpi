@@ -12,7 +12,7 @@ Import('rtconfig')
 # Package configuration
 #---------------------------------------------------------------------------------
 PKGNAME = 'lv_demo_widgets'
-DEPENDS = ['RT_USING_LVGL']
+DEPENDS = ['COMP_USING_LVGL']
 
 #---------------------------------------------------------------------------------
 # Compile the configuration

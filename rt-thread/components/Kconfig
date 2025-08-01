@@ -1,0 +1,21 @@
+#-------------------------------------------------------------------------------
+# RT-Thread RuiChing
+# 
+# COPYRIGHT (C) 2024-2025 Shanghai Real-Thread Electronic Technology Co., Ltd.
+# All rights reserved.
+# 
+# The license and distribution terms for this file may be
+# found in the file LICENSE in this distribution.
+#-------------------------------------------------------------------------------
+menu 'RuiChing Components Configure'
+	orsource 'industrial_bus/Kconfig'
+	orsource 'net_apps/Kconfig'
+	orsource 'graphics/Kconfig'
+	orsource 'ai/Kconfig'
+	orsource 'data_parsers/Kconfig'
+	orsource 'debug/Kconfig'
+endmenu
+
+#-------------------------------------------------------------------------------
+# End
+#-------------------------------------------------------------------------------

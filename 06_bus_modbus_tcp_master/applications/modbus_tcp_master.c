@@ -26,7 +26,7 @@ static int modbus_tcp_master(void)
     }
 
     modbus_set_slave(ctx, 1);
-    modbus_set_response_timeout(ctx, 10, 0);
+    modbus_set_response_timeout(ctx, 2, 0);
 
     if (modbus_connect(ctx) == -1)
     {
