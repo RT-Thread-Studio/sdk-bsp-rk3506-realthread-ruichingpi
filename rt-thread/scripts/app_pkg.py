@@ -9,6 +9,7 @@ import sys
 MAGIC = struct.unpack("<I", b"app\0")[0]  # 使用 b"" 定义字节串
 LOAD_ADDR = 0x300000 + 0x40
 APP_SIZE = 0x1000000  # 16M
+VERSION_IDENT = 0x11112222
 
 def parse_map_for_entrypoint(map_file):
     with open(map_file, "r") as f:
@@ -43,7 +44,7 @@ def pack_bin(build_path, debug_mode=0):
     size = os.path.getsize(bin_file)
 
     # 定义 8 个保留字段，初始化为 0，并添加 crc_value
-    res = [0] * 8 + [crc_value]
+    res = [0] * 7 + [crc_value]
 
     # 按照结构体 smodule_head 的排布打包头信息
     header = struct.pack("<I I I I I 11I",
@@ -54,7 +55,8 @@ def pack_bin(build_path, debug_mode=0):
                          1,              # update
                          0,              # download
                          debug_mode,     # debug
-                         *res)           # res[9] + crc_value
+                         VERSION_IDENT,  # 版本标识符
+                         *res)           # res[7] + crc_value
 
     with open(out_file, "wb") as f:
         f.write(header)

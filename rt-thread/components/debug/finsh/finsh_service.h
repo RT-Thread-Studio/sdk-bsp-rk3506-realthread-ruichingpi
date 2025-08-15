@@ -17,7 +17,8 @@
 #define APP_FINSH_GET_ECHO           0x03
 #define APP_FINSH_MSH_EXEC           0x04
 #define APP_FINSH_CONSOLE_SET_DEVICE 0x05
-#define APP_FINSH_GET_PROMPT         0x06
+#define APP_FINSH_CONSOLE_GET_DEVICE 0x06
+#define APP_FINSH_GET_PROMPT         0x07
 
 struct app_syscall_table
 {
@@ -34,6 +35,7 @@ struct msh_cmd_args
 struct finsh_console_device
 {
     const char *name;
+    rt_device_t cur_dev;
     rt_device_t old_dev;
 };
 
@@ -42,5 +44,7 @@ rt_err_t finsh_init(void);
 struct service_core *finsh_service_get(void);
 
 rt_device_t rt_console_set_device(const char *name);
+
+rt_device_t rt_console_get_device(void);
 
 #endif /* __FINSH_SERVICE_H__ */

@@ -1490,7 +1490,10 @@ static int webclient_clean(struct webclient_session *session)
 #ifdef COMPONENTS_WEBCLIENT_USING_MBED_TLS
     if (session->tls_session)
     {
-        mbedtls_client_close(session->tls_session);
+        if (mbedtls_client_close(session->tls_session) == RT_EOK)
+        {
+            session->tls_session = RT_NULL;
+        }
     }
     else
     {

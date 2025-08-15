@@ -17,6 +17,11 @@
 #include <finsh_service.h>
 #include <kpi.h>
 
+struct app_info
+{
+    rt_uint32_t version_ident;
+};
+
 static int rti_start(void)
 {
     return 0;
@@ -47,11 +52,18 @@ void clean_bss(void)
     while (p < &__bss_end) { *p++ = 0; }
 }
 
-rt_section(".text.app_entrypoint") void _START(void)
+rt_section(".text.app_entrypoint") void _START(void *parameter)
 {
     clean_bss();
 
     kpi_init();
+
+    if(parameter == RT_NULL)
+    {
+        rt_kprintf("The app parameter is empty. Please update the kernel\n");
+        rt_kprintf("app startup failed!\n");
+        return ;
+    }
 
     finsh_init();
 

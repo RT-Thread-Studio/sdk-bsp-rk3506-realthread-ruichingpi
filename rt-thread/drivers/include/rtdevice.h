@@ -105,4 +105,8 @@
 #include "drivers/dev_touch.h"
 #endif /* RT_USING_TOUCH */
 
+#ifdef RT_MFD_SYSCON
+#include "drivers/syscon.h"
+#endif /* RT_MFD_SYSCON */
+
 #endif /* __RT_DEVICE_H__ */

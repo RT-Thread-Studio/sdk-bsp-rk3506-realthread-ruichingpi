@@ -21,4 +21,10 @@
 #include <sys/statfs.h>
 #include <sys/time.h>
 
+struct dfs_fdtable
+{
+    uint32_t maxfd;
+    struct dfs_file **fds;
+};
+
 #endif /* __DFS_H__ */

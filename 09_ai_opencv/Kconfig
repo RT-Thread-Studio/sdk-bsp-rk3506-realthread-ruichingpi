@@ -1,0 +1,13 @@
+#-------------------------------------------------------------------------------
+# RT-Thread RuiChing
+# Copyright (c) Shanghai Real-Thread Electronic Technology Co., Ltd.
+# All rights reserved.
+#-------------------------------------------------------------------------------
+mainmenu "RuiChing APP Project Configure"
+
+config PKGS_DIR
+    string
+    option env="PKGS_ROOT"
+    default "packages"
+
+orsource 'rt-thread/Kconfig'

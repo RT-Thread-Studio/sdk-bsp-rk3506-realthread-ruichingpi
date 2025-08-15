@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RT-Thread MJPEG视频流演示</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        .video-container {
+            width: 640px;
+            height: 480px;
+            background-color: #000;
+            margin: 20px auto;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid #333;
+        }
+        #videoStream {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        .control-panel {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        button:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+        .status {
+            text-align: center;
+            margin: 10px 0;
+            color: #7f8c8d;
+            font-size: 14px;
+            min-height: 20px;
+        }
+        .video-info {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 13px;
+            color: #555;
+        }
+        .browser-warning {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        @media (max-width: 700px) {
+            .video-container {
+                width: 100%;
+                height: 360px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>RT-Thread MJPEG视频流演示</h1>
+    
+    <div class="video-container">
+        <img id="videoStream" src="" alt="实时视频流" crossorigin="anonymous">
+    </div>
+    
+    <div class="status" id="statusText">状态: 准备连接</div>
+    
+    <div class="control-panel">
+        <button id="startBtn">开始流</button>
+        <button id="stopBtn" disabled>停止流</button>
+    </div>
+    
+    <div class="video-info">
+        <p>视频尺寸: 640×480像素 | 视频源: /cgi-bin/mjpeg_stream</p>
+        <p id="browserWarning" class="browser-warning"></p>
+    </div>
+
+    <script>
+        // 全局配置
+        const config = {
+            baseUrl: '/cgi-bin/mjpeg_stream',
+            refreshInterval: 3000,  // 默认刷新间隔
+            maxRetries: 3,          // 最大重试次数
+            retryDelay: 1000        // 重试延迟(ms)
+        };
+
+        // DOM元素
+        const elements = {
+            video: document.getElementById('videoStream'),
+            status: document.getElementById('statusText'),
+            startBtn: document.getElementById('startBtn'),
+            stopBtn: document.getElementById('stopBtn'),
+            warning: document.getElementById('browserWarning')
+        };
+
+        // 运行时状态
+        let state = {
+            streamInterval: null,
+            retryCount: 0,
+            isEdge: /Edg|Edge/.test(navigator.userAgent),
+            isMobile: /Mobi|Android/i.test(navigator.userAgent)
+        };
+
+        // 初始化检测
+        function init() {
+            checkCompatibility();
+            setupNetworkAdaptation();
+            setupEventListeners();
+        }
+
+        // 浏览器兼容性检查
+        function checkCompatibility() {
+            if (state.isEdge) {
+                elements.warning.textContent = '检测到Edge浏览器，建议使用Chrome/Firefox获得最佳体验';
+            }
+            
+            // 测试MJPEG支持
+            const testImg = new Image();
+            testImg.onerror = () => {
+                elements.warning.textContent = '当前浏览器可能不支持MJPEG流，请尝试其他浏览器';
+            };
+            testImg.src = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAP///...';
+        }
+
+        // 网络自适应
+        function setupNetworkAdaptation() {
+            if (navigator.connection) {
+                const connection = navigator.connection;
+                if (connection.effectiveType.includes('2g') || connection.saveData) {
+                    config.refreshInterval = 5000;
+                }
+            } else if (state.isMobile) {
+                config.refreshInterval = 4000;
+            }
+        }
+
+        // 事件监听
+        function setupEventListeners() {
+            elements.startBtn.addEventListener('click', startStream);
+            elements.stopBtn.addEventListener('click', stopStream);
+            elements.video.addEventListener('error', handleStreamError);
+            elements.video.addEventListener('load', () => {
+                updateStatus('流传输中...');
+                state.retryCount = 0;
+            });
+        }
+
+        // 开始视频流
+        function startStream() {
+            updateStatus('正在连接...');
+            elements.startBtn.disabled = true;
+            elements.stopBtn.disabled = false;
+            
+            // 强制清除缓存（针对Edge/Chrome）
+            elements.video.src = '';
+            setTimeout(() => {
+                elements.video.src = getStreamUrl();
+                startRefreshTimer();
+            }, 50);
+        }
+
+        // 停止视频流
+        function stopStream() {
+            clearInterval(state.streamInterval);
+            elements.video.src = '';
+            updateStatus('已停止');
+            elements.startBtn.disabled = false;
+            elements.stopBtn.disabled = true;
+            state.retryCount = 0;
+        }
+
+        // 处理流错误
+        function handleStreamError() {
+            if (state.retryCount < config.maxRetries) {
+                state.retryCount++;
+                updateStatus(`连接中断，正在重试 (${state.retryCount}/${config.maxRetries})...`);
+                setTimeout(() => {
+                    elements.video.src = getStreamUrl();
+                }, config.retryDelay);
+            } else {
+                updateStatus('连接失败，请检查服务器状态');
+                stopStream();
+            }
+        }
+
+        // 启动刷新定时器
+        function startRefreshTimer() {
+            clearInterval(state.streamInterval);
+            state.streamInterval = setInterval(() => {
+                // 保留当前时间戳参数避免缓存
+                const newUrl = getStreamUrl().replace(/([?&]t=)\d+/, '$1' + Date.now());
+                elements.video.src = newUrl;
+            }, config.refreshInterval);
+        }
+
+        // 获取带时间戳的流URL
+        function getStreamUrl() {
+            return `${config.baseUrl}?t=${Date.now()}`;
+        }
+
+        // 更新状态显示
+        function updateStatus(text) {
+            elements.status.textContent = `状态: ${text}`;
+        }
+
+        // 页面加载完成后初始化
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

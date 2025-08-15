@@ -32,7 +32,7 @@ CXXFLAGS         = ""
 CPPDEFINES       = []
 LOCAL_CPPDEFINES = []
 
-LIBS             = ['ncnn']
+LIBS             = ['ncnn_no_simpleocv']
 LIBPATH          = [GetCurrentDir()+'/lib']
 
 LINKFLAGS        = ""

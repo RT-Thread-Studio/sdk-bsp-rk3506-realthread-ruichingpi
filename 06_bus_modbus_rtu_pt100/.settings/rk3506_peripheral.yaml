@@ -246,6 +246,91 @@ gmac_config: &gmac_config
         display:
           zh: cpu2
           en: cpu2
+  mac-addr0:
+    display:
+      zh: mac 地址
+      en: mac addr
+    input_type: input
+    choise:
+      default: 08:00:27:ae:56:87
+  mac-addr1:
+    display:
+      zh: mac 地址
+      en: mac addr
+    input_type: input
+    choise:
+      default: 08:00:27:ae:56:88
+  static-ip-addr0:
+    display:
+      zh: 静态 ip 地址
+      en: static ip addr
+    input_type: input
+    choise:
+      default: 192.168.2.100
+  static-ip-addr1:
+    display:
+      zh: 静态 ip 地址
+      en: static ip addr
+    input_type: input
+    choise:
+      default: 192.168.3.100
+  gateway0:
+    display:
+      zh: 网关
+      en: gateway
+    input_type: input
+    choise:
+      default: 192.168.2.1
+  gateway1:
+    display:
+      zh: 网关
+      en: gateway
+    input_type: input
+    choise:
+      default: 192.168.3.1
+  netmask0:
+    display:
+      zh: 子网掩码
+      en: netmask
+    input_type: input
+    choise:
+      default: 255.255.255.0
+  netmask1:
+    display:
+      zh: 子网掩码
+      en: netmask
+    input_type: input
+    choise:
+      default: 255.255.255.0
+  dns0:
+    display:
+      zh: dns0
+      en: dns0
+    input_type: input
+    choise:
+      default: 114.114.114.114
+  dns1:
+    display:
+      zh: dns1
+      en: dns1
+    input_type: input
+    choise:
+      default: 223.6.6.6
+  dhcp:
+    display:
+      zh: dhcp
+      en: dhcp
+    input_type: choise
+    choise:
+      default: disable
+      enable:
+        display:
+          zh: 使能
+          en: enable
+      disable:
+        display:
+          zh: 关闭
+          en: disable
 
 mmc_config: &mmc_config
   display:
@@ -322,11 +407,38 @@ wdt_config: &wdt_config
           zh: cpu2
           en: cpu2
 
+kernel_config: &kernel_config
+  display:
+    zh: 内核配置
+    en: kernel configuration
+  type: configuration
+  console-name:
+    display:
+      zh: 控制台设备选择
+      en: console device select
+    input_type: input
+    choise:
+      default: fiq_debugger
+
 periperal:
   display:
     zh: 外设配置
     en: peripheral
   type: periperal
+
+  kernel:
+    display:
+      zh: 内核配置
+      en: kernel configuration
+    all_config: *kernel_config
+    console:
+      display:
+        zh: 控制台
+        en: console
+      config:
+        - console-name
+      status: enable
+
   uart:
     display:
       zh: 串口
@@ -628,6 +740,11 @@ periperal:
         en: GMAC0
       status: enable
       config:
+        - mac-addr0
+        - dhcp
+        - static-ip-addr0
+        - gateway0
+        - netmask0
         - interrupt_affinity
       pin:
         ETH_RMII0_RXDVCRS:
@@ -681,6 +798,11 @@ periperal:
         en: GMAC1
       status: enable
       config:
+        - mac-addr1
+        - dhcp
+        - static-ip-addr1
+        - gateway1
+        - netmask1
         - interrupt_affinity
       pin:
         ETH_RMII1_RXDVCRS:
@@ -728,6 +850,14 @@ periperal:
             zh: ETH_RMII1_MDC
             en: ETH_RMII1_MDC
           mux: ETH_RMII1_MDC
+    dns:
+      display:
+        zh: DNS 服务器
+        en: DNS Server
+      status: enable
+      config:
+        - dns0
+        - dns1
 
   mmc:
     display:
@@ -772,6 +902,7 @@ periperal:
             zh: SDMMC_D3
             en: SDMMC_D3
           mux: SDMMC_D3
+
   pwm:
     display:
       zh: PWM

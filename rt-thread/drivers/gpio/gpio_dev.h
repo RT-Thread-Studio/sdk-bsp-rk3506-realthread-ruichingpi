@@ -10,7 +10,8 @@
 #ifndef __GPIO_DEV_H__
 #define __GPIO_DEV_H__
 
-#include <rtdevice.h>
+#include <rtdef.h>
+#include <drivers/ioctl.h>
 
 #define PIN_NONE                    (-1)
 

@@ -1,0 +1,139 @@
+/**
+ * RT-Thread RuiChing
+ *
+ * COPYRIGHT (C) 2024-2025 Shanghai Real-Thread Electronic Technology Co., Ltd.
+ * All rights reserved.
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution.
+ */
+/dts-v1/;
+#include "rc3506j.dtsi"
+#include "ruiching-lcd-mipi-4_3-480x800.dtsi"
+
+&gpio1_c0 {
+    mux = <0x3>;
+};
+
+&gpio1_a0 {
+    mux = <0x3>;
+};
+
+&gpio1_a1 {
+    mux = <0x3>;
+};
+
+&gpio1_a2 {
+    mux = <0x3>;
+};
+
+&gpio1_a3 {
+    mux = <0x3>;
+};
+
+&gpio1_a4 {
+    mux = <0x3>;
+};
+
+&gpio1_a5 {
+    mux = <0x3>;
+};
+
+&gpio1_a6 {
+    mux = <0x3>;
+};
+
+&gpio1_a7 {
+    mux = <0x3>;
+};
+
+&gpio1_b0 {
+    mux = <0x3>;
+};
+
+&gpio1_b1 {
+    mux = <0x3>;
+};
+
+&gpio1_b2 {
+    mux = <0x3>;
+};
+
+&gpio1_b3 {
+    mux = <0x3>;
+};
+
+&gpio1_b4 {
+    mux = <0x3>;
+};
+
+&gpio1_b5 {
+    mux = <0x3>;
+};
+
+&gpio1_b6 {
+    mux = <0x3>;
+};
+
+&gpio1_b7 {
+    mux = <0x3>;
+};
+
+&gpio1_b0 {
+    mux = <0x3>;
+};
+
+&flexbus {
+    status = "okay";
+    rockchip,flexbus1-opmode = <1>;
+};
+
+
+&flexbus_adc {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl = <&gpio1_c0
+        &gpio1_a0 &gpio1_a1 &gpio1_a2 &gpio1_a3
+        &gpio1_a4 &gpio1_a5 &gpio1_a6 &gpio1_a7
+        &gpio1_b0 &gpio1_b1 &gpio1_b2 &gpio1_b3
+        &gpio1_b4 &gpio1_b5 &gpio1_b6 &gpio1_b7>;
+
+    adc@0 {
+        compatible = "adi,ad7606-8";
+
+        /*
+         * adi,oversampling_ratio —— 过采样比设置
+         * 对应 AD7606 的 OS[2:0] 引脚，控制内部数字滤波器的采样平均次数。
+         * 取值与含义：
+         *   0  →  无过采样（OS=000），最大采样速率
+         *   1  →  ×2   过采样（OS=001）
+         *   2  →  ×4   过采样（OS=010）
+         *   3  →  ×8   过采样（OS=011）
+         *   4  →  ×16  过采样（OS=100）
+         *   5  →  ×32  过采样（OS=101）
+         *   6  →  ×64  过采样（OS=110）
+         */
+        adi,oversampling_ratio = <6>; /* 当前配置为 ×64 过采样 */
+
+        /*
+         * adi,range —— 输入量程选择
+         * 对应 AD7606 的 RANGE 引脚，控制输入电压的满量程范围。
+         * 取值与含义：
+         *   0  →  ±5V  模式
+         *   1  →  ±10V 模式
+         * 注意：应与硬件 RANGE 引脚电平保持一致，否则测量会错误。
+         */
+        adi,range = <0>; /* 当前配置为 ±5V 量程 */
+
+        cs-gpios = <&gpio1 57 GPIO_ACTIVE_LOW>;
+        rd-gpios = <&gpio1 58 GPIO_ACTIVE_LOW>;
+        reset-gpios = <&gpio1 55 GPIO_ACTIVE_HIGH>;
+        busy-gpios = <&gpio1 56 GPIO_ACTIVE_HIGH>;
+        range-gpios = <&gpio1 52 GPIO_ACTIVE_HIGH>;
+        adi,conversion-start-gpios-a = <&gpio1 53 GPIO_ACTIVE_HIGH>;
+        adi,conversion-start-gpios-b = <&gpio1 54 GPIO_ACTIVE_HIGH>;
+        adi,oversampling-ratio-gpios-0 = <&gpio1 49 GPIO_ACTIVE_HIGH>;
+        adi,oversampling-ratio-gpios-1 = <&gpio1 50 GPIO_ACTIVE_HIGH>;
+        adi,oversampling-ratio-gpios-2 = <&gpio1 51 GPIO_ACTIVE_HIGH>;
+    };
+};

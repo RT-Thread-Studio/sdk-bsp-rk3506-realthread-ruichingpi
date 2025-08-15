@@ -22,7 +22,7 @@ int main(void)
     if (luaL_dostring(L, "print('Hello, RT-Thread!123456789')") != LUA_OK)
     {
         rt_kprintf("Lua error: %s\n", lua_tostring(L, -1));
-        lua_pop(L, 1); 
+        lua_pop(L, 1);
     }
 
     lua_close(L);

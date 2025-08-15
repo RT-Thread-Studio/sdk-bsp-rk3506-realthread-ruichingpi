@@ -1,0 +1,10 @@
+/*
+ * RT-Thread RuiChing
+ *
+ * Copyright (c) Shanghai Real-Thread Electronic Technology Co., Ltd.
+ *
+ * All rights reserved.
+ */
+/dts-v1/;
+#include "rc3506j.dtsi"
+#include "ruiching-lcd-mipi-4_3-480x800.dtsi"
