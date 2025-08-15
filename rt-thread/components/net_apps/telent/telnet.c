@@ -82,6 +82,7 @@ struct telnet_session
     rt_uint8_t finsh_saved_echo_mode;
 
     rt_sem_t read_notice;
+    rt_sem_t send_notice;
 };
 
 static struct telnet_session* telnet;
@@ -289,9 +290,26 @@ static void client_close(struct telnet_session* telnet)
     rt_kprintf("telnet: resume console to %s\n", RT_CONSOLE_DEVICE_NAME);
 }
 
+static void telnet_send_thread(void *par)
+{
+    while(1)
+    {
+        rt_sem_take(telnet->send_notice, RT_WAITING_FOREVER);
+        /* send data to telnet client */
+        send_to_client(telnet);
+    }
+}
+
 /* RT-Thread Device Driver Interface */
 static rt_err_t telnet_init(rt_device_t dev)
 {
+    rt_thread_t tid = RT_NULL;
+    tid = rt_thread_create("te_send", telnet_send_thread, RT_NULL, 2048, 25, 10);
+    if(tid != RT_NULL)
+    {
+        rt_thread_startup(tid);
+    }
+
     return RT_EOK;
 }
 
@@ -334,21 +352,36 @@ static rt_ssize_t telnet_write (rt_device_t dev, rt_off_t pos, const void* buffe
 
     ptr = (rt_uint8_t*) buffer;
 
-    rt_mutex_take(telnet->tx_ringbuffer_lock, RT_WAITING_FOREVER);
-    while (size)
+    if (rt_interrupt_get_nest() > 0)
     {
-        if (*ptr == '\n')
-            rt_ringbuffer_putchar(&telnet->tx_ringbuffer, '\r');
+        while (size)
+        {
+            if (*ptr == '\n')
+                rt_ringbuffer_putchar(&telnet->tx_ringbuffer, '\r');
 
-        if (rt_ringbuffer_putchar(&telnet->tx_ringbuffer, *ptr) == 0) /* overflow */
-            break;
-        ptr++;
-        size--;
+            if (rt_ringbuffer_putchar(&telnet->tx_ringbuffer, *ptr) == 0) /* overflow */
+                break;
+            ptr++;
+            size--;
+        }
     }
-    rt_mutex_release(telnet->tx_ringbuffer_lock);
+    else
+    {
+       rt_mutex_take(telnet->tx_ringbuffer_lock, RT_WAITING_FOREVER);
+        while (size)
+        {
+            if (*ptr == '\n')
+                rt_ringbuffer_putchar(&telnet->tx_ringbuffer, '\r');
 
-    /* send data to telnet client */
-    send_to_client(telnet);
+            if (rt_ringbuffer_putchar(&telnet->tx_ringbuffer, *ptr) == 0) /* overflow */
+                break;
+            ptr++;
+            size--;
+        }
+       rt_mutex_release(telnet->tx_ringbuffer_lock);
+    }
+
+    rt_sem_release(telnet->send_notice);
 
     return (rt_uint32_t) ptr - (rt_uint32_t) buffer;
 }
@@ -617,6 +650,7 @@ void telnet_server(void)
         telnet->rx_ringbuffer_lock = rt_mutex_create("telnet_rx", RT_IPC_FLAG_FIFO);
 
         telnet->read_notice = rt_sem_create("telnet_rx", 0, RT_IPC_FLAG_FIFO);
+        telnet->send_notice = rt_sem_create("telnet_tx", 0, RT_IPC_FLAG_FIFO);
 
         tid = rt_thread_create("telnet", telnet_thread, RT_NULL, 2048, 25, 5);
         if (tid != RT_NULL)

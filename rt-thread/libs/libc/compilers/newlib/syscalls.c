@@ -222,10 +222,10 @@ _ssize_t _read_r(struct _reent *ptr, int fd, void *buf, size_t nbytes)
     {
 #ifdef RT_USING_POSIX_STDIO
         // if (rt_posix_stdio_get_console() < 0)
-        {
-            // LOG_W("Do not invoke standard input before initializing Compiler");
-            return 0;
-        }
+        // {
+        //     // LOG_W("Do not invoke standard input before initializing Compiler");
+        //     return 0;
+        // }
 #else
         ptr->_errno = ENOTSUP;
         return -1;
@@ -288,11 +288,11 @@ _ssize_t _write_r(struct _reent *ptr, int fd, const void *buf, size_t nbytes)
     if (fd == STDOUT_FILENO || fd == STDERR_FILENO)
     {
 #if defined(RT_USING_CONSOLE) && defined(RT_USING_DEVICE)
-        // rt_device_t console;
+        rt_device_t console;
 
-        // console = rt_console_get_device();
-        // if (console)
-        //     return rt_device_write(console, -1, buf, nbytes);
+        console = rt_console_get_device();
+        if (console)
+            return rt_device_write(console, -1, buf, nbytes);
 
         return nbytes;
 #else

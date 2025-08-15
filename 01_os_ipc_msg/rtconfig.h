@@ -39,7 +39,7 @@
 #define NETUTILS_TFTP_PORT 69
 #define COMP_USING_WEBCLIENT
 #define WEBCLIENT_USING_FILE_DOWMLOAD
-#define COMPONENTS_WEBCLIENT_NOT_USE_TLS
+#define COMPONENTS_WEBCLIENT_USING_MBED_TLS
 #define COMP_USING_WEBNET
 #define WEBNET_PORT 80
 #define WEBNET_CONN_MAX 16
@@ -101,6 +101,37 @@
 #define RT_PERF_ENABLE_IRQ_LATENCY
 #define RT_PERF_USING_TIMER_NAME "timer3"
 /* end of Debug Tools */
+
+/* Language */
+
+#define COMP_USING_LUA
+/* end of Language */
+
+/* security */
+
+#define COMP_USING_MBEDTLS
+
+/* Select Root Certificate */
+
+#define COMP_USING_MBEDTLS_USE_ALL_CERTS
+#define COMP_USING_MBEDTLS_USER_CERTS
+#define COMP_USING_MBEDTLS_THAWTE_ROOT_CA
+#define COMP_USING_MBEDTLS_VERSIGN_PBULIC_ROOT_CA
+#define COMP_USING_MBEDTLS_VERSIGN_UNIVERSAL_ROOT_CA
+#define COMP_USING_MBEDTLS_GEOTRUST_ROOT_CA
+#define COMP_USING_MBEDTLS_DIGICERT_ROOT_CA
+#define COMP_USING_MBEDTLS_GODADDY_ROOT_CA
+#define COMP_USING_MBEDTLS_COMODOR_ROOT_CA
+#define COMP_USING_MBEDTLS_DST_ROOT_CA
+#define COMP_USING_MBEDTLS_CLOBALSIGN_ROOT_CA
+#define COMP_USING_MBEDTLS_ENTRUST_ROOT_CA
+#define COMP_USING_MBEDTLS_AMAZON_ROOT_CA
+#define COMP_USING_MBEDTLS_CERTUM_TRUSTED_NETWORK_ROOT_CA
+/* end of Select Root Certificate */
+#define MBEDTLS_AES_ROM_TABLES
+#define MBEDTLS_ECP_WINDOW_SIZE 6
+#define MBEDTLS_SSL_MAX_CONTENT_LEN 16384
+/* end of security */
 /* end of RuiChing Components Configure */
 #define RT_USING_CPLUSPLUS
 
@@ -201,14 +232,6 @@
 /* Kendryte SDK */
 
 /* end of Kendryte SDK */
-
-/* WCH HAL & SDK Drivers */
-
-/* end of WCH HAL & SDK Drivers */
-
-/* AT32 HAL & SDK Drivers */
-
-/* end of AT32 HAL & SDK Drivers */
 /* end of HAL & SDK Drivers */
 
 /* sensors drivers */

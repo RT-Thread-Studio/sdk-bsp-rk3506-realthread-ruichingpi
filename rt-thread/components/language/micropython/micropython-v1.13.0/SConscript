@@ -1,0 +1,97 @@
+#-*- encoding: utf-8 -*-
+#---------------------------------------------------------------------------------
+# SConscript
+# Copyright (c) Shanghai Real-Thread Electronic Technology Co., Ltd.
+#---------------------------------------------------------------------------------
+import os
+from building import *
+Import('RTT_ROOT')
+Import('rtconfig')
+
+#---------------------------------------------------------------------------------
+# Package configuration
+#---------------------------------------------------------------------------------
+PKGNAME = 'MicroPython'
+DEPENDS = ['COMP_USING_MICROPYTHON']
+
+#---------------------------------------------------------------------------------
+# Compile the configuration
+#---------------------------------------------------------------------------------
+SOURCES          = Glob('py/*.c')
+SOURCES         += Glob('lib/mp-readline/*.c')
+SOURCES         += Glob('lib/utils/*.c')
+SOURCES         += Glob('extmod/*.c')
+SOURCES         += Glob('port/*.c')
+SOURCES         += Glob('port/modules/*.c')
+SOURCES         += Glob('port/modules/machine/*.c')
+SOURCES         += Glob('port/modules/user/*.c')
+SOURCES         += Glob('lib/netutils/*.c')
+SOURCES         += Glob('lib/timeutils/*.c')
+# SOURCES         += Glob('drivers/bus/*.c')
+SOURCES         += Glob('port/native/*.c')
+
+LOCAL_CPPPATH    = []
+LOCAL_CCFLAGS    = ""
+LOCAL_ASFLAGS    = ""
+
+CPPPATH          = [os.path.join(GetCurrentDir(), '.')]
+CPPPATH         += [os.path.join(GetCurrentDir(), 'port')]
+CPPPATH         += [os.path.join(GetCurrentDir(), 'port/modules')]
+CPPPATH         += [os.path.join(GetCurrentDir(), 'port/modules/machine')]
+
+
+CCFLAGS          = " -std=gnu99"
+ASFLAGS          = ""
+
+CPPDEFINES       = []
+LOCAL_CPPDEFINES = []
+
+LIBS             = []
+LIBPATH          = [GetCurrentDir()]
+
+LINKFLAGS        = ""
+
+#---------------------------------------------------------------------------------
+# Feature clip configuration, optional
+#---------------------------------------------------------------------------------
+
+#---------------------------------------------------------------------------------
+# Compiler platform configuration, optional
+#---------------------------------------------------------------------------------
+
+#---------------------------------------------------------------------------------
+# System variables
+#---------------------------------------------------------------------------------
+objs   = []
+root   = GetCurrentDir()
+
+#---------------------------------------------------------------------------------
+# Sub target
+#---------------------------------------------------------------------------------
+list = os.listdir(root)
+if GetDepend(DEPENDS):
+    for d in list:
+        path = os.path.join(root, d)
+        if os.path.isfile(os.path.join(path, 'SConscript')):
+            objs = objs + SConscript(os.path.join(d, 'SConscript'))
+
+#---------------------------------------------------------------------------------
+# Main target
+#---------------------------------------------------------------------------------
+objs += DefineGroup(name = PKGNAME, src = SOURCES, depend = DEPENDS,
+                    CPPPATH          = CPPPATH,
+                    CCFLAGS          = CCFLAGS,
+                    ASFLAGS          = ASFLAGS,
+                    LOCAL_CPPPATH    = LOCAL_CPPPATH,
+                    LOCAL_CCFLAGS    = LOCAL_CCFLAGS,
+                    LOCAL_ASFLAGS    = LOCAL_ASFLAGS,
+                    CPPDEFINES       = CPPDEFINES,
+                    LOCAL_CPPDEFINES = LOCAL_CPPDEFINES,
+                    LIBS             = LIBS,
+                    LIBPATH          = LIBPATH,
+                    LINKFLAGS        = LINKFLAGS)
+
+Return("objs")
+#---------------------------------------------------------------------------------
+# End
+#---------------------------------------------------------------------------------

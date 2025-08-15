@@ -19,6 +19,7 @@
 #include <sys/select.h>
 #include <sys/socket.h>
 #include <termios.h>
+#include <netdev.h>
 
 extern rt_uint8_t __kpi_start[];
 
@@ -289,6 +290,16 @@ KPI_DEFINED(getaddrinfo);
 KPI_DEFINED(rt_opendir);
 KPI_DEFINED(rt_readdir);
 KPI_DEFINED(rt_closedir);
+
+KPI_DEFINED(if_set_mac);
+KPI_DEFINED(if_get_mac);
+KPI_DEFINED(if_set_dns);
+KPI_DEFINED(if_get_dns);
+KPI_DEFINED(if_dhcp);
+KPI_DEFINED(if_set_ip);
+KPI_DEFINED(if_get_ip);
+KPI_DEFINED(if_up);
+KPI_DEFINED(if_down);
 
 KPI_DEFINED(service_find);
 KPI_DEFINED(service_register);
@@ -598,6 +609,9 @@ KPI_DEFINED(rt_dac_disable);
 
 KPI_DEFINED(rt_hw_watchdog_register);
 
+KPI_DEFINED(rt_syscon_find_by_ofw_phandle);
+
+
 /* kpi addr init */
 void kpi_init(void)
 {
@@ -870,6 +884,16 @@ void kpi_init(void)
     rt_opendir = KPI_IMPORT(rt_opendir, 679);
     rt_readdir = KPI_IMPORT(rt_readdir, 680);
     rt_closedir = KPI_IMPORT(rt_closedir, 681);
+
+    if_set_mac = KPI_IMPORT(if_set_mac, 700);
+    if_get_mac = KPI_IMPORT(if_get_mac, 701);
+    if_set_dns = KPI_IMPORT(if_set_dns, 702);
+    if_get_dns = KPI_IMPORT(if_get_dns, 703);
+    if_dhcp = KPI_IMPORT(if_dhcp, 704);
+    if_set_ip = KPI_IMPORT(if_set_ip, 705);
+    if_get_ip = KPI_IMPORT(if_get_ip, 706);
+    if_up = KPI_IMPORT(if_up, 707);
+    if_down = KPI_IMPORT(if_down, 708);
 
     service_find = KPI_IMPORT(service_find, 1180);
     service_register = KPI_IMPORT(service_register, 1181);
@@ -1208,4 +1232,7 @@ void kpi_init(void)
     rt_dac_disable = KPI_IMPORT(rt_dac_disable, 1755);
 
     rt_hw_watchdog_register = KPI_IMPORT(rt_hw_watchdog_register, 1767);
+
+    rt_syscon_find_by_ofw_phandle =
+        KPI_IMPORT(rt_syscon_find_by_ofw_phandle, 1779);
 }

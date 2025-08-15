@@ -1,9 +1,9 @@
 #-------------------------------------------------------------------------------
 # RT-Thread RuiChing
-# 
+#
 # COPYRIGHT (C) 2024-2025 Shanghai Real-Thread Electronic Technology Co., Ltd.
 # All rights reserved.
-# 
+#
 # The license and distribution terms for this file may be
 # found in the file LICENSE in this distribution.
 #-------------------------------------------------------------------------------
@@ -34,7 +34,7 @@ menuconfig COMP_USING_WEBCLIENT
 
 				config COMPONENTS_WEBCLIENT_USING_MBED_TLS
 					bool "MbedTLS support"
-					select PKG_USING_MBEDTLS
+					select COMP_USING_MBEDTLS
 		endchoice
 endif
 #-------------------------------------------------------------------------------

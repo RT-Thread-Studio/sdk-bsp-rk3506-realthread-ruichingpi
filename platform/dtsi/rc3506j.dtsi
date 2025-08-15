@@ -30,6 +30,17 @@
         rockchip,baudrate = <115200>;	/* Only 115200 and 1500000 */
         interrupts = <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>;
     };
+
+    console: console {
+        status = "okay";
+        console-name = "fiq_debugger";
+    };
+
+    dns: dns {
+		status = "okay";
+		dns1 = "223.6.6.6";
+		dns0 = "114.114.114.114";
+	};
 };
 
 &rng {
@@ -182,6 +193,11 @@
     phy-handle = <&rmii_phy0>;
     pinctrl = <&gpio2_b6 &gpio2_b7 &gpio2_b3 &gpio2_b4 &gpio2_b5 &gpio2_b0 &gpio2_b1 &gpio2_c0 &gpio2_b2>;
     status = "okay";
+	mac-addr0 = "08:00:27:ae:56:87";
+	static-ip-addr0 = "192.168.2.100";
+    gateway0 = "192.168.2.1";
+    netmask0 = "255.255.255.0";
+    interrupt-affinity = <&cpu0>;
 };
 
 &gmac1 {
@@ -196,6 +212,11 @@
     phy-handle = <&rgmii_phy1>;
     pinctrl = <&gpio3_b1 &gpio3_b2 &gpio3_b3 &gpio3_a6 &gpio3_a7 &gpio3_b6 &gpio3_b0 &gpio3_b4 &gpio3_b5>;
     status = "okay";
+    mac-addr1 = "08:00:27:ae:56:88";
+	static-ip-addr1 = "192.168.3.100";
+    gateway1 = "192.168.3.1";
+    netmask1 = "255.255.255.0";
+    interrupt-affinity = <&cpu0>;
 };
 
 &saradc {

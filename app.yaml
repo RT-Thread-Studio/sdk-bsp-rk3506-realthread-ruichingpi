@@ -464,6 +464,62 @@ example_projects:
     - rtconfig.py
     - SConscript
     - SConstruct
+    source_path_offset: 02_peripheral_flexbus_ad7606
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
+    target_path_offset: ''
+  external_files: []
+  project_description: ''
+  project_name: 02_peripheral_flexbus_ad7606
+  project_type: bare-metal|@notUsed|@notUsed
+- builtin_files:
+  - files_and_folders:
+    - .settings
+    - applications
+    - board
+    - packages
+    - .config
+    - .cproject
+    - .project
+    - Kconfig
+    - rtconfig.h
+    - rtconfig.py
+    - SConscript
+    - SConstruct
+    source_path_offset: 02_peripheral_mipi_ruiching_4_3in_480_800
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
+    target_path_offset: ''
+  external_files: []
+  project_description: ''
+  project_name: 02_peripheral_mipi_ruiching_4_3in_480_800
+  project_type: bare-metal|@notUsed|@notUsed
+- builtin_files:
+  - files_and_folders:
+    - .settings
+    - applications
+    - board
+    - packages
+    - .config
+    - .cproject
+    - .project
+    - Kconfig
+    - rtconfig.h
+    - rtconfig.py
+    - SConscript
+    - SConstruct
     source_path_offset: 02_peripheral_mipi_ruiching_7in_1024_600
     target_path_offset: ''
   - files_and_folders:
@@ -800,6 +856,34 @@ example_projects:
     - rtconfig.py
     - SConscript
     - SConstruct
+    source_path_offset: 03_network_netctrl
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
+    target_path_offset: ''
+  external_files: []
+  project_description: ''
+  project_name: 03_network_netctrl
+  project_type: bare-metal|@notUsed|@notUsed
+- builtin_files:
+  - files_and_folders:
+    - .settings
+    - applications
+    - board
+    - packages
+    - .config
+    - .cproject
+    - .project
+    - Kconfig
+    - rtconfig.h
+    - rtconfig.py
+    - SConscript
+    - SConstruct
     source_path_offset: 03_network_tcp_client
     target_path_offset: ''
   - files_and_folders:
@@ -1052,6 +1136,34 @@ example_projects:
     - rtconfig.py
     - SConscript
     - SConstruct
+    source_path_offset: 03_network_webnet_uvc_stream
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
+    target_path_offset: ''
+  external_files: []
+  project_description: ''
+  project_name: 03_network_webnet_uvc_stream
+  project_type: bare-metal|@notUsed|@notUsed
+- builtin_files:
+  - files_and_folders:
+    - .settings
+    - applications
+    - board
+    - packages
+    - .config
+    - .cproject
+    - .project
+    - Kconfig
+    - rtconfig.h
+    - rtconfig.py
+    - SConscript
+    - SConstruct
     source_path_offset: 04_filesystem_directory
     target_path_offset: ''
   - files_and_folders:
@@ -1093,6 +1205,34 @@ example_projects:
   external_files: []
   project_description: ''
   project_name: 04_filesystem_file
+  project_type: bare-metal|@notUsed|@notUsed
+- builtin_files:
+  - files_and_folders:
+    - .settings
+    - applications
+    - board
+    - packages
+    - .config
+    - .cproject
+    - .project
+    - Kconfig
+    - rtconfig.h
+    - rtconfig.py
+    - SConscript
+    - SConstruct
+    source_path_offset: 05_gui_lvgl_mipi_ruiching_4_3in_480_800
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
+    target_path_offset: ''
+  external_files: []
+  project_description: ''
+  project_name: 05_gui_lvgl_mipi_ruiching_4_3in_480_800
   project_type: bare-metal|@notUsed|@notUsed
 - builtin_files:
   - files_and_folders:
@@ -1360,6 +1500,34 @@ example_projects:
     - rtconfig.py
     - SConscript
     - SConstruct
+    source_path_offset: 09_ai_opencv
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
+    target_path_offset: ''
+  external_files: []
+  project_description: ''
+  project_name: 09_ai_opencv
+  project_type: bare-metal|@notUsed|@notUsed
+- builtin_files:
+  - files_and_folders:
+    - .settings
+    - applications
+    - board
+    - packages
+    - .config
+    - .cproject
+    - .project
+    - Kconfig
+    - rtconfig.h
+    - rtconfig.py
+    - SConscript
+    - SConstruct
     source_path_offset: 10_language_lua
     target_path_offset: ''
   - files_and_folders:
@@ -1391,7 +1559,7 @@ features_zh:
 - 革命性混合架构：RT-Thread+Linux双系统
 pkg_type: Board_Support_Packages
 pkg_vendor: Real-Thread
-pkg_version: V1.1.0
+pkg_version: 1.2.0
 template_projects:
 - builtin_files:
   - files_and_folders:

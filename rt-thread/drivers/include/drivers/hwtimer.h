@@ -73,16 +73,17 @@ typedef struct rt_hwtimer_device
     rt_int32_t freq;     /* counting frequency set by the user */
     rt_int32_t overflow; /* timer overflows */
     float period_sec;
-    rt_int32_t cycles;  /* how many times will generate a timeout event after overflow */
+    rt_int32_t
+        cycles; /* how many times will generate a timeout event after overflow */
     rt_int32_t reload;      /* reload cycles(using in period mode) */
     rt_hwtimer_mode_t mode; /* timing mode(oneshot/period) */
 } rt_hwtimer_t;
 
-#if 0
 rt_err_t rt_device_hwtimer_register(
     rt_hwtimer_t *timer, const char *name, void *user_data);
 void rt_device_hwtimer_isr(rt_hwtimer_t *timer);
 
+#if 0
 #ifdef RT_USING_DM
 extern void (*rt_device_hwtimer_us_delay)(rt_uint32_t us);
 #endif /* RT_USING_DM */

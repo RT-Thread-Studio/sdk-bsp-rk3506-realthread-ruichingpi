@@ -2,7 +2,9 @@
 #include <rtdevice.h>
 #include "layer.h"
 #include "net.h"
-#include "simpleocv.h"
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 #include <float.h>
 #include <stdio.h>
 #include <vector>

@@ -29,16 +29,20 @@ struct usbh_videoframe {
 typedef void (*frame_callback_t)(struct usbh_videoframe *frame);
 char file_path[50];
 static struct rt_semaphore sem_lock;
+bool flag = false;
 //  定义回调函数
 frame_callback_t my_function(struct usbh_videoframe *frame) {
      int fd = -1;
-     if (frame->frame_format == 0) {
+     flag = true;
+     if (frame->frame_format == 0 && flag) {
+         flag = false;
          //yuv
          char *file = "output.yuv";
          strncat( file_path, file, sizeof(file_path) - strlen(file_path) -1 );
          fd = open(file_path, O_RDWR | O_CREAT);
          rt_kprintf("YUV data saved to %s\r\n",file_path);
-    } else {
+    } else if (frame->frame_format == 1 && flag){
+        flag = false;
           //mjpeg
          char* file = "output.jpg";
          strncat( file_path, file, sizeof(file_path) - strlen(file_path) -1 );
@@ -49,10 +53,11 @@ frame_callback_t my_function(struct usbh_videoframe *frame) {
          rt_kprintf("failed to open file %s\r\n",file_path);
          return RT_NULL;
     }
+    rt_sem_release(&sem_lock);
     rt_kprintf("frame buf:%p,frame len:%d\r\n", frame->frame_buf, frame->frame_size);
     write(fd, frame->frame_buf, frame->frame_size);
     close(fd);
-    rt_sem_release(&sem_lock);
+
 }
 
 static int uvc_capture(int argc, char *argv[])
@@ -77,7 +82,7 @@ static int uvc_capture(int argc, char *argv[])
     } else if(type == 1) {
          rt_kprintf("uvc capture mjpeg type picture\r\n");
     } else {
-	 rt_kprintf("uvc capture type is unsupport!\r\n");   
+	 rt_kprintf("uvc capture type is unsupport!\r\n");
 	 return (-RT_ERROR);
     }
   

@@ -50,7 +50,7 @@ struct service_core *finsh_service_get(void)
 rt_device_t rt_console_set_device(const char *name)
 {
     rt_err_t ret;
-    struct finsh_console_device dev_info = { name, RT_NULL };
+    struct finsh_console_device dev_info = { name, RT_NULL, RT_NULL };
 
     /* Validate input */
     if (!name)
@@ -69,4 +69,21 @@ rt_device_t rt_console_set_device(const char *name)
     }
 
     return dev_info.old_dev; /* Return old device handle */
+}
+
+rt_device_t rt_console_get_device(void)
+{
+    rt_err_t ret;
+    struct finsh_console_device dev_info = { RT_NULL, RT_NULL, RT_NULL };
+
+    /* Call service control */
+    ret = service_control(
+        gs_finsh_service, APP_FINSH_CONSOLE_GET_DEVICE, &dev_info);
+    if (ret != RT_EOK)
+    {
+        rt_kprintf("[CONSOLE] Failed to set device: %d\n", ret);
+        return RT_NULL;
+    }
+
+    return dev_info.cur_dev;
 }
