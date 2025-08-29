@@ -126,7 +126,7 @@ void canopen_start(void)
 {
     rt_thread_t tid = RT_NULL;
 
-    tid = rt_thread_create("canopen_task", canopen_task, RT_NULL, 1024, 7, 10);
+    tid = rt_thread_create("canopen_task", canopen_task, RT_NULL, 10240, 7, 10);
 
     if(tid != RT_NULL)
     {
@@ -612,7 +612,7 @@ static void slaveBootupHdl(CO_Data* d, UNS8 nodeId)
   {
     rt_kprintf("After the MCU is powered on, node %d is powered on\n",nodeId);
   }
-	tid = rt_thread_create("co_cfg", config_single_node, (void *)(int)nodeId, 2048, 12 + nodeId, 2);
+	tid = rt_thread_create("co_cfg", config_single_node, (void *)(int)nodeId, 10240, 12 + nodeId, 2);
 	if(tid == RT_NULL)
 	{
 		rt_kprintf("canopen config thread start failed!\n");

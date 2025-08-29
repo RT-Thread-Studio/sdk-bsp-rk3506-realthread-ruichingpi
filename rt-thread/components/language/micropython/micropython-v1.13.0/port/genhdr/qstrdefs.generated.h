@@ -779,6 +779,9 @@ QDEF(MP_QSTR_writevto, (const byte*)"\x75\x08" "writevto")
 QDEF(MP_QSTR_do_handshake, (const byte*)"\x86\x0c" "do_handshake")
 QDEF(MP_QSTR___ne__, (const byte*)"\x0e\x06" "__ne__")
 QDEF(MP_QSTR_i, (const byte*)"\xcc\x01" "i")
+QDEF(MP_QSTR_my_led, (const byte*)"\x83\x06" "my_led")
+QDEF(MP_QSTR_LED, (const byte*)"\x88\x03" "LED")
+QDEF(MP_QSTR_toggle, (const byte*)"\xb7\x06" "toggle")
 
 #if MICROPY_USER_EXTMODS
 #include "qstrdefs.user.extmods.h"

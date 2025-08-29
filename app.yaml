@@ -324,6 +324,34 @@ example_projects:
     - rtconfig.py
     - SConscript
     - SConstruct
+    source_path_offset: 02_peripheral_flexbus_ad7606
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
+    target_path_offset: ''
+  external_files: []
+  project_description: ''
+  project_name: 02_peripheral_flexbus_ad7606
+  project_type: bare-metal|@notUsed|@notUsed
+- builtin_files:
+  - files_and_folders:
+    - .settings
+    - applications
+    - board
+    - packages
+    - .config
+    - .cproject
+    - .project
+    - Kconfig
+    - rtconfig.h
+    - rtconfig.py
+    - SConscript
+    - SConstruct
     source_path_offset: 02_peripheral_gpio_input
     target_path_offset: ''
   - files_and_folders:
@@ -449,34 +477,6 @@ example_projects:
   external_files: []
   project_description: ''
   project_name: 02_peripheral_i2c_hym8563
-  project_type: bare-metal|@notUsed|@notUsed
-- builtin_files:
-  - files_and_folders:
-    - .settings
-    - applications
-    - board
-    - packages
-    - .config
-    - .cproject
-    - .project
-    - Kconfig
-    - rtconfig.h
-    - rtconfig.py
-    - SConscript
-    - SConstruct
-    source_path_offset: 02_peripheral_flexbus_ad7606
-    target_path_offset: ''
-  - files_and_folders:
-    - rt-thread
-    source_path_offset: .
-    target_path_offset: ''
-  - files_and_folders:
-    - platform
-    source_path_offset: .
-    target_path_offset: ''
-  external_files: []
-  project_description: ''
-  project_name: 02_peripheral_flexbus_ad7606
   project_type: bare-metal|@notUsed|@notUsed
 - builtin_files:
   - files_and_folders:
@@ -673,6 +673,34 @@ example_projects:
   external_files: []
   project_description: ''
   project_name: 02_peripheral_spi_norflash
+  project_type: bare-metal|@notUsed|@notUsed
+- builtin_files:
+  - files_and_folders:
+    - .settings
+    - applications
+    - board
+    - packages
+    - .config
+    - .cproject
+    - .project
+    - Kconfig
+    - rtconfig.h
+    - rtconfig.py
+    - SConscript
+    - SConstruct
+    source_path_offset: 02_peripheral_usb_device_acm
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
+    target_path_offset: ''
+  external_files: []
+  project_description: ''
+  project_name: 02_peripheral_usb_device_acm
   project_type: bare-metal|@notUsed|@notUsed
 - builtin_files:
   - files_and_folders:
@@ -1220,6 +1248,34 @@ example_projects:
     - rtconfig.py
     - SConscript
     - SConstruct
+    source_path_offset: 05_gui_lvgl_ethercat_motor_control_7in_1024_600
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
+    target_path_offset: ''
+  external_files: []
+  project_description: ''
+  project_name: 05_gui_lvgl_ethercat_motor_control_7in_1024_600
+  project_type: bare-metal|@notUsed|@notUsed
+- builtin_files:
+  - files_and_folders:
+    - .settings
+    - applications
+    - board
+    - packages
+    - .config
+    - .cproject
+    - .project
+    - Kconfig
+    - rtconfig.h
+    - rtconfig.py
+    - SConscript
+    - SConstruct
     source_path_offset: 05_gui_lvgl_mipi_ruiching_4_3in_480_800
     target_path_offset: ''
   - files_and_folders:
@@ -1444,6 +1500,34 @@ example_projects:
     - rtconfig.py
     - SConscript
     - SConstruct
+    source_path_offset: 08_misc_amp_factory_default
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
+    target_path_offset: ''
+  external_files: []
+  project_description: ''
+  project_name: 08_misc_amp_factory_default
+  project_type: bare-metal|@notUsed|@notUsed
+- builtin_files:
+  - files_and_folders:
+    - .settings
+    - applications
+    - board
+    - packages
+    - .config
+    - .cproject
+    - .project
+    - Kconfig
+    - rtconfig.h
+    - rtconfig.py
+    - SConscript
+    - SConstruct
     source_path_offset: 08_misc_factory_default
     target_path_offset: ''
   - files_and_folders:
@@ -1542,6 +1626,90 @@ example_projects:
   project_description: ''
   project_name: 10_language_lua
   project_type: bare-metal|@notUsed|@notUsed
+- builtin_files:
+  - files_and_folders:
+    - .settings
+    - applications
+    - board
+    - packages
+    - .config
+    - .cproject
+    - .project
+    - Kconfig
+    - rtconfig.h
+    - rtconfig.py
+    - SConscript
+    - SConstruct
+    source_path_offset: 10_language_micropython
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
+    target_path_offset: ''
+  external_files: []
+  project_description: ''
+  project_name: 10_language_micropython
+  project_type: bare-metal|@notUsed|@notUsed
+- builtin_files:
+  - files_and_folders:
+    - .settings
+    - applications
+    - board
+    - packages
+    - .config
+    - .cproject
+    - .project
+    - Kconfig
+    - rtconfig.h
+    - rtconfig.py
+    - SConscript
+    - SConstruct
+    source_path_offset: 11_amp_qt_ethercat_master
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
+    target_path_offset: ''
+  external_files: []
+  project_description: ''
+  project_name: 11_amp_qt_ethercat_master
+  project_type: bare-metal|@notUsed|@notUsed
+- builtin_files:
+  - files_and_folders:
+    - .settings
+    - applications
+    - board
+    - packages
+    - .config
+    - .cproject
+    - .project
+    - Kconfig
+    - rtconfig.h
+    - rtconfig.py
+    - SConscript
+    - SConstruct
+    source_path_offset: 11_loader_app
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
+    target_path_offset: ''
+  external_files: []
+  project_description: ''
+  project_name: 11_loader_app
+  project_type: bare-metal|@notUsed|@notUsed
 features:
 - High Real-Time RuiChing Industrial Platform: Hard real-time kernel with ≤1μs task
     response and low cycle jitter ≤±5μs cycle error
@@ -1559,7 +1727,7 @@ features_zh:
 - 革命性混合架构：RT-Thread+Linux双系统
 pkg_type: Board_Support_Packages
 pkg_vendor: Real-Thread
-pkg_version: 1.2.0
+pkg_version: 1.3.0
 template_projects:
 - builtin_files:
   - files_and_folders:

@@ -7,9 +7,9 @@ import re
 import sys
 
 MAGIC = struct.unpack("<I", b"app\0")[0]  # 使用 b"" 定义字节串
-LOAD_ADDR = 0x300000 + 0x40
+LOAD_ADDR = 0x4000000 + 0x40
 APP_SIZE = 0x1000000  # 16M
-VERSION_IDENT = 0x11112222
+VERSION_IDENT = 0x11112223
 
 def parse_map_for_entrypoint(map_file):
     with open(map_file, "r") as f:

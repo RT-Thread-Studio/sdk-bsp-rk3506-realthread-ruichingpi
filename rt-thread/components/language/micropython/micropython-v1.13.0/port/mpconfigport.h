@@ -27,6 +27,7 @@
 #include <rtthread.h>
 #include <stdint.h>
 #include <stdio.h>
+#include "user_mpconfigport.h"
 
 // options to control how MicroPython is built
 
@@ -140,14 +141,10 @@
 #define MICROPY_PY_MACHINE_I2C_MAKE_NEW machine_hard_i2c_make_new
 #endif
 
-#ifdef MICROPYTHON_USING_MACHINE_SPI
 #define MICROPY_PY_MACHINE_SPI      (1)
 #define MICROPY_PY_MACHINE_SPI_MAKE_NEW machine_hard_spi_make_new
-#endif
 
-#ifdef MICROPYTHON_USING_MACHINE_UART
 #define MICROPY_PY_MACHINE_UART      (1)
-#endif
 
 #ifdef MICROPYTHON_USING_MACHINE_ADC
 #define MICROPY_PY_MACHINE_ADC       (1)
@@ -175,7 +172,7 @@
 
 /*****************************************************************************/
 /* System Module                                                             */
-
+#define MICROPYTHON_USING_UOS
 #ifdef MICROPYTHON_USING_UOS
 #define MICROPY_PY_IO               (1)
 #define MICROPY_PY_IO_FILEIO        (1)

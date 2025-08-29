@@ -28,9 +28,9 @@
 
 #if MICROPY_PY_MODUOS_FILE
 
+#include <unistd.h>
 #include <stdint.h>
 #include <string.h>
-#include <dfs_posix.h>
 #include "py/runtime.h"
 #include "py/objstr.h"
 #include "py/mperrno.h"
@@ -48,126 +48,28 @@ mp_obj_t mp_posix_umount(mp_obj_t mnt_in) {
 }
 MP_DEFINE_CONST_FUN_OBJ_1(mp_posix_umount_obj, mp_posix_umount);
 
-mp_obj_t mp_posix_mkfs(size_t n_args, const mp_obj_t *args)  {
-
-    int result = RT_EOK;
-    char *type = "elm"; /* use the default file system type as 'fatfs' */
-
-    if (n_args == 1)
-    {
-        result = dfs_mkfs(type, mp_obj_str_get_str(args[0]));
-    }else if (n_args == 2)
-    {
-        type = (char *)mp_obj_str_get_str(args[0]);
-        result = dfs_mkfs(type, mp_obj_str_get_str(args[1]));
-    }
-
-    if (result != RT_EOK)
-    {
-        mp_raise_ValueError("mkfs failed, please check filesystem type and device name.");
-    }
+mp_obj_t mp_posix_mkfs(size_t n_args, const mp_obj_t *args) {
 
     return mp_const_none;
 }
 MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(mp_posix_mkfs_obj, 1, 2, mp_posix_mkfs);
 
 mp_obj_t mp_posix_chdir(mp_obj_t path_in) {
-    const char *changepath = mp_obj_str_get_str(path_in);
-    if (chdir(changepath) != 0) {
-        mp_printf(&mp_plat_print, "No such directory: %s\n", changepath);
-    }
+
     return mp_const_none;
 }
 MP_DEFINE_CONST_FUN_OBJ_1(mp_posix_chdir_obj, mp_posix_chdir);
 
 mp_obj_t mp_posix_getcwd(void) {
-    char buf[MICROPY_ALLOC_PATH_MAX + 1];
-    getcwd(buf, sizeof(buf));
-    return mp_obj_new_str(buf, strlen(buf));
+
+    return mp_const_none;
 }
 MP_DEFINE_CONST_FUN_OBJ_0(mp_posix_getcwd_obj, mp_posix_getcwd);
 
 #include <dfs_file.h>
-static struct dfs_file fd;
-static struct dirent dirent;
 mp_obj_t mp_posix_listdir(size_t n_args, const mp_obj_t *args) {
 
-    mp_obj_t dir_list = mp_obj_new_list(0, NULL);
-
-    struct stat stat;
-    int length;
-    char *fullpath, *path;
-    const char *pathname;
-
-    if (n_args == 0) {
-#ifdef DFS_USING_WORKDIR
-        extern char working_directory[];
-        pathname = working_directory;
-#else
-        pathname = "/";
-#endif
-    } else {
-       pathname = mp_obj_str_get_str(args[0]);
-    }
-
-    fullpath = NULL;
-    if (pathname == NULL)
-    {
-#ifdef DFS_USING_WORKDIR
-        extern char working_directory[];
-        /* open current working directory */
-        path = rt_strdup(working_directory);
-#else
-        path = rt_strdup("/");
-#endif
-        if (path == NULL)
-            mp_raise_OSError(MP_ENOMEM); /* out of memory */
-    }
-    else
-    {
-        path = (char *)pathname;
-    }
-
-    /* list directory */
-    if (dfs_file_open(&fd, path, O_DIRECTORY) == 0)
-    {
-        do {
-            memset(&dirent, 0, sizeof(struct dirent));
-            length = dfs_file_getdents(&fd, &dirent, sizeof(struct dirent));
-            if (length > 0) {
-                memset(&stat, 0, sizeof(struct stat));
-
-                /* build full path for each file */
-                fullpath = dfs_normalize_path(path, dirent.d_name);
-                if (fullpath == NULL)
-                    break;
-
-                if (dfs_file_stat(fullpath, &stat) == 0) {
-                    mp_obj_tuple_t *t = MP_OBJ_TO_PTR(mp_obj_new_tuple(3, NULL));
-                    t->items[0] = mp_obj_new_str(dirent.d_name, strlen(dirent.d_name));
-                    t->items[1] = MP_OBJ_NEW_SMALL_INT(MP_S_IFDIR);
-                    t->items[2] = MP_OBJ_NEW_SMALL_INT(0); // no inode number
-                    mp_obj_t next = MP_OBJ_FROM_PTR(t);
-                    mp_obj_t *items;
-                    mp_obj_get_array_fixed_n(next, 3, &items);
-                    mp_obj_list_append(dir_list, items[0]);
-                } else {
-                    mp_printf(&mp_plat_print, "BAD file: %s\n", dirent.d_name);
-                }
-                rt_free(fullpath);
-            }
-        } while (length > 0);
-
-        dfs_file_close(&fd);
-    }
-    else
-    {
-//        mp_printf(&mp_plat_print, "No such directory\n");
-    }
-    if (pathname == NULL)
-        rt_free(path);
-
-    return dir_list;
+    return mp_const_none;
 }
 MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(mp_posix_listdir_obj, 0, 1, mp_posix_listdir);
 
@@ -209,17 +111,7 @@ mp_obj_t mp_posix_rename(mp_obj_t old_path_in, mp_obj_t new_path_in) {
 MP_DEFINE_CONST_FUN_OBJ_2(mp_posix_rename_obj, mp_posix_rename);
 
 mp_obj_t mp_posix_rmdir(uint n_args, const mp_obj_t *arg) {
-    int index;
-    if (n_args == 0) {
-        mp_printf(&mp_plat_print, "Usage: rm FILE...\n");
-        mp_printf(&mp_plat_print, "Remove (unlink) the FILE(s).\n");
-        return mp_const_none;
-    }
-    for (index = 0; index < n_args; index++) {
-        //mp_printf(&mp_plat_print, "Remove %s.\n", mp_obj_str_get_str(arg[index]));
-        rmdir(mp_obj_str_get_str(arg[index]));
-    }
-    // TODO  recursive deletion
+
     return mp_const_none;
 }
 MP_DEFINE_CONST_FUN_OBJ_VAR(mp_posix_rmdir_obj, 0, mp_posix_rmdir);
@@ -302,17 +194,7 @@ MP_DEFINE_CONST_FUN_OBJ_1(mp_posix_file_crc32_obj, mp_posix_file_crc32);
 
 mp_import_stat_t mp_posix_import_stat(const char *path) {
 
-    struct stat stat;
-
-    if (dfs_file_stat(path, &stat) == 0) {
-        if (S_ISDIR(stat.st_mode)) {
-            return MP_IMPORT_STAT_DIR;
-        } else {
-            return MP_IMPORT_STAT_FILE;
-        }
-    } else {
         return MP_IMPORT_STAT_NO_EXIST;
-    }
 }
 
 #endif //MICROPY_MODUOS_FILE

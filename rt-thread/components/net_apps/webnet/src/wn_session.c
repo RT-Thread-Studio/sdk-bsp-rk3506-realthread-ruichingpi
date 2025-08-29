@@ -284,6 +284,7 @@ void webnet_session_set_header(struct webnet_session *session, const char* mimet
 
     char *ptr, *end_buffer;
     int offset;
+    const char* connection_type;  
 
     ptr = (char*)session->buffer;
     end_buffer = (char*)session->buffer + session->buffer_length;
@@ -296,24 +297,28 @@ void webnet_session_set_header(struct webnet_session *session, const char* mimet
         offset = rt_snprintf(ptr, end_buffer - ptr, auth, session->request->host);
         ptr += offset;
     }
+
+    if (session->request->connection == WEBNET_CONN_CLOSE) {
+        connection_type = "close";
+    } else {
+        connection_type = "Keep-Alive";
+    }
+
     if (length >= 0)
     {
-        offset = rt_snprintf(ptr, end_buffer - ptr, content, mimetype, length,
-                             session->request->connection == WEBNET_CONN_CLOSE? "close" : "Keep-Alive");
+        offset = rt_snprintf(ptr, end_buffer - ptr, content, mimetype, length, connection_type);
         ptr += offset;
     }
     else
     {
-        offset = rt_snprintf(ptr, end_buffer - ptr, content_nolength, mimetype, "close");
+        offset = rt_snprintf(ptr, end_buffer - ptr, content_nolength, mimetype, connection_type);
         ptr += offset;
     }
-    /* get the total length */
+
     length = ptr - (char*)session->buffer;
 
-    /* invoke webnet event */
     if (webnet_module_handle_event(session, WEBNET_EVENT_RSP_HEADER) == WEBNET_MODULE_CONTINUE)
     {
-        /* write to session */
         webnet_session_write(session, session->buffer, length);
     }
 }

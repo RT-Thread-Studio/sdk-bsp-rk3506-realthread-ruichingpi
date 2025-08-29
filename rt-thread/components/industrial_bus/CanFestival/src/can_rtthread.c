@@ -1,16 +1,15 @@
-#include <stdint.h>
 #include <rtthread.h>
 #include <rtdevice.h>
-
 #include "canfestival.h"
 #include "timers_driver.h"
+#include <stdint.h>
 
 #define DBG_TAG "app.CANopen"
 #define DBG_LVL DBG_LOG
 #include <rtdbg.h>
 
 #define MAX_MUTEX_WAIT_TIME 5000
-#define MAX_SEM_WAIT_TIME 5000
+#define MAX_SEM_WAIT_TIME   5000
 
 struct can_app_struct
 {
@@ -19,17 +18,14 @@ struct can_app_struct
 };
 
 static rt_device_t candev = RT_NULL;
-static CO_Data * OD_Data = RT_NULL;
+static CO_Data *OD_Data = RT_NULL;
 static rt_mutex_t canfstvl_mutex = RT_NULL;
 
-static struct can_app_struct can_data =
-{
-    CANFESTIVAL_CAN_DEVICE_NAME
-};
+static struct can_app_struct can_data = { CANFESTIVAL_CAN_DEVICE_NAME };
 
 void EnterMutex(void)
 {
-    if(rt_mutex_take(canfstvl_mutex, MAX_MUTEX_WAIT_TIME) != RT_EOK)
+    if (rt_mutex_take(canfstvl_mutex, MAX_MUTEX_WAIT_TIME) != RT_EOK)
     {
         LOG_E("canfestival take mutex failed!");
     }
@@ -37,16 +33,16 @@ void EnterMutex(void)
 
 void LeaveMutex(void)
 {
-    if(rt_mutex_release(canfstvl_mutex) != RT_EOK)
+    if (rt_mutex_release(canfstvl_mutex) != RT_EOK)
     {
         LOG_E("canfestival release mutex failed!");
     }
 }
 
-static rt_err_t can1ind(rt_device_t dev,  rt_size_t size)
+static rt_err_t can1ind(rt_device_t dev, rt_size_t size)
 {
     rt_err_t err = rt_sem_release(&can_data.sem);
-    if(err != RT_EOK)
+    if (err != RT_EOK)
     {
         LOG_E("canfestival release receive semaphore failed!");
     }
@@ -64,7 +60,7 @@ unsigned char canSend(CAN_PORT port, Message *m)
     msg.len = m->len;
     msg.sync = CAN_ASYNC;
     msg.priv = LOW_PRIORITY;
-    msg.fdf  = CAN_20;
+    msg.fdf = CAN_20;
     memcpy(msg.data, m->data, m->len);
 
     if (port == RT_NULL)
@@ -74,10 +70,11 @@ unsigned char canSend(CAN_PORT port, Message *m)
 
     rt_ssize_t write_size = rt_device_write(port, 0, &msg, 1);
 
-    if(write_size <= 0)
+    if (write_size <= 0)
     {
-        LOG_W("canfestival send failed, err = %d msg.rtr:%d write_size:%d", rt_get_errno(), msg.rtr, write_size);
-        if(++err_cnt >= 100)
+        LOG_W("canfestival send failed, err = %d msg.rtr:%d write_size:%d",
+            rt_get_errno(), msg.rtr, write_size);
+        if (++err_cnt >= 100)
         {
             setState(OD_Data, Stopped);
         }
@@ -128,7 +125,8 @@ static rt_device_t can_init(const char *name, enum CANBAUD baud)
         return RT_NULL;
     }
 
-    err = rt_device_open(can, (RT_DEVICE_OFLAG_RDWR | RT_DEVICE_FLAG_INT_RX | RT_DEVICE_FLAG_INT_TX));
+    err = rt_device_open(can,
+        (RT_DEVICE_OFLAG_RDWR | RT_DEVICE_FLAG_INT_RX | RT_DEVICE_FLAG_INT_TX));
     if (err != RT_EOK)
     {
         LOG_E("canfestival open device %s failed, err = %d", name, err);
@@ -145,39 +143,48 @@ static rt_device_t can_init(const char *name, enum CANBAUD baud)
     return can;
 }
 
-void canopen_recv_thread_entry(void* parameter)
+void canopen_recv_thread_entry(void *parameter)
 {
     Message co_msg;
-    struct rt_can_msg msg;
+    struct rt_can_msg msg[CAN_FRAMEWORK_TX_FIFO_SIZE];
+    struct rt_can_msg *curr;
     rt_err_t err;
 
     rt_size_t read_size = 0;
     while (1)
     {
         err = rt_sem_take(&can_data.sem, MAX_SEM_WAIT_TIME);
-        if ( err != RT_EOK)
+        if (err != RT_EOK)
         {
-            if(getState(OD_Data) == Operational)
+            if (getState(OD_Data) == Operational)
             {
                 LOG_W("canfestival wait receive timeout, err = %d", err);
             }
         }
         else
         {
-            read_size = rt_device_read(candev, 0, &msg, sizeof(msg));
+            read_size =
+                rt_device_read(candev, 0, msg, CAN_FRAMEWORK_TX_FIFO_SIZE);
             if (read_size <= 0)
             {
                 LOG_W("canfestival receive faild, err = %d", rt_get_errno());
             }
             else
             {
-                co_msg.cob_id = msg.id;
-                co_msg.len = msg.len;
-                co_msg.rtr = msg.rtr;
-                memcpy(co_msg.data, msg.data, msg.len);
-                EnterMutex();
-                canDispatch(OD_Data, &co_msg);
-                LeaveMutex();
+                curr = &msg[read_size];
+                curr -= read_size;
+
+                while (read_size--)
+                {
+                    co_msg.cob_id = curr->id;
+                    co_msg.len = curr->len;
+                    co_msg.rtr = curr->rtr;
+                    memcpy(co_msg.data, curr->data, curr->len);
+                    EnterMutex();
+                    canDispatch(OD_Data, &co_msg);
+                    LeaveMutex();
+                    curr++;
+                }
             }
         }
     }
@@ -236,16 +243,15 @@ CAN_PORT canOpen(s_BOARD *board, CO_Data *d)
         return RT_NULL;
     }
 
-    canfstvl_mutex = rt_mutex_create("canfstvl",RT_IPC_FLAG_PRIO);
+    canfstvl_mutex = rt_mutex_create("canfstvl", RT_IPC_FLAG_PRIO);
     if (canfstvl_mutex == RT_NULL)
     {
         return RT_NULL;
     }
 
     OD_Data = d;
-    tid = rt_thread_create("cf_recv",
-                           canopen_recv_thread_entry, &can_data,
-                           2048, CANFESTIVAL_RECV_THREAD_PRIO, 20);
+    tid = rt_thread_create("cf_recv", canopen_recv_thread_entry, &can_data,
+        10240, CANFESTIVAL_RECV_THREAD_PRIO, 20);
     if (tid != RT_NULL)
     {
         rt_thread_startup(tid);
