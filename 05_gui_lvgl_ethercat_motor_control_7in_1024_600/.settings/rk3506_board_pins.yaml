@@ -1,0 +1,3140 @@
+#引脚电气属性配置
+pinconf:
+  display:
+    zh: 引脚属性配置
+    en: pin config
+  type: configuration
+  drive_strength:
+    display:
+      zh: 驱动能力
+      en: drive strength
+    input_type: choise  # 不支持自定义参数输入
+    default: 0x07
+    choise:
+      0x00:
+        display:
+          zh: 禁用
+          en: disable
+      0x01:
+        display:
+          zh: 驱动强度0
+          en: level0
+      0x03:
+        display:
+          zh: 驱动强度1
+          en: level1
+      0x07:
+        display:
+          zh: 驱动强度2
+          en: level2
+      0x0F:
+        display:
+          zh: 驱动强度3
+          en: level3
+      0x1F:
+        display:
+          zh: 驱动强度4
+          en: level4
+      0x3F:
+        display:
+          zh: 驱动强度5
+          en: level5
+  pull_up_down:
+    display:
+      zh: 上/下拉电阻
+      en: pull-up/down
+    input_type: choise  # 不支持自定义参数输入
+    default: 0x00
+    choise:
+      0x00:
+        display:
+          zh: 高阻态
+          en: high-z
+      0x01:
+        display:
+          zh: 上拉
+          en: pull up
+      0x02:
+        display:
+          zh: 下拉
+          en: pull down
+  input_enable:
+    display:
+      zh: 输入使能
+      en: input enable
+    input_type: choise  # 不支持自定义参数输入
+    default: 0x00
+    choise:
+      0x00:
+        display:
+          zh: 禁用
+          en: disable
+      0x01:
+        display:
+          zh: 使能
+          en: enable
+  schmitt:
+    display:
+      zh: 施密特触发器
+      en: schmitt trigger
+    input_type: choise  # 不支持自定义参数输入
+    default: 0x01
+    choise:
+      0x00:
+        display:
+          zh: 禁用
+          en: disable
+      0x01:
+        display:
+          zh: 使能
+          en: enable
+  weak_pull_keeper:
+    display:
+      zh: 弱上拉保持
+      en: weak pull keeper
+    input_type: choise  # 不支持自定义参数输入
+    default: 0x00
+    choise:
+      0x00:
+        display:
+          zh: 禁用
+          en: disable
+      0x01:
+        display:
+          zh: 使能
+          en: enable
+  slew_rate:
+    display:
+      zh: 斜率控制
+      en: slew rate
+    input_type: choise  # 不支持自定义参数输入
+    default: 0x00
+    choise:
+      0x00:
+        display:
+          zh: 禁用
+          en: disable
+      0x01:
+        display:
+          zh: 使能
+          en: enable
+  open_drain:
+    display:
+      zh: 开漏输出
+      en: open drain
+    input_type: choise  # 不支持自定义参数输入
+    default: 0x00
+    choise:
+      0x00:
+        display:
+          zh: 禁用
+          en: disable
+      0x01:
+        display:
+          zh: 使能
+          en: enable
+
+#矩阵IO
+rmio:
+  display:
+    zh: 矩阵IO
+    en: RM_IO
+  mux:
+    choise:
+      0x00:
+        display:
+          zh: none
+          en: none
+      0x01:
+        display:
+          zh: UART1_TX
+          en: UART1_TX
+      0x02:
+        display:
+          zh: UART1_RX
+          en: UART1_RX
+      0x03:
+        display:
+          zh: UART2_TX
+          en: UART2_TX
+      0x04:
+        display:
+          zh: UART2_RX
+          en: UART2_RX
+      0x05:
+        display:
+          zh: UART3_TX
+          en: UART3_TX
+      0x06:
+        display:
+          zh: UART3_RX
+          en: UART3_RX
+      0x07:
+        display:
+          zh: UART3_CTSN
+          en: UART3_CTSN
+      0x08:
+        display:
+          zh: UART3_RTSN
+          en: UART3_RTSN
+      0x09:
+        display:
+          zh: UART4_TX
+          en: UART4_TX
+      0x0A:
+        display:
+          zh: UART4_RX
+          en: UART4_RX
+      0x0B:
+        display:
+          zh: UART4_CTSN
+          en: UART4_CTSN
+      0x0C:
+        display:
+          zh: UART4_RTSN
+          en: UART4_RTSN
+      0x0D:
+        display:
+          zh: MIPI_DPHY_DSI_TX_TE
+          en: MIPI_DPHY_DSI_TX_TE
+      0x0E:
+        display:
+          zh: CLK_32K
+          en: CLK_32K
+      0x0F:
+        display:
+          zh: I2C0_SCL
+          en: I2C0_SCL
+      0x10:
+        display:
+          zh: I2C0_SDA
+          en: I2C0_SDA
+      0x11:
+        display:
+          zh: I2C1_SCL
+          en: I2C1_SCL
+      0x12:
+        display:
+          zh: I2C1_SDA
+          en: I2C1_SDA
+      0x13:
+        display:
+          zh: I2C2_SCL
+          en: I2C2_SCL
+      0x14:
+        display:
+          zh: I2C2_SDA
+          en: I2C2_SDA
+      0x15:
+        display:
+          zh: PDM_CLK0
+          en: PDM_CLK0
+      0x16:
+        display:
+          zh: PDM_SDI0
+          en: PDM_SDI0
+      0x17:
+        display:
+          zh: PDM_SDI1
+          en: PDM_SDI1
+      0x18:
+        display:
+          zh: PDM_SDI2
+          en: PDM_SDI2
+      0x19:
+        display:
+          zh: PDM_SDI3
+          en: PDM_SDI3
+      0x1A:
+        display:
+          zh: CAN1_TX
+          en: CAN1_TX
+      0x1B:
+        display:
+          zh: CAN1_RX
+          en: CAN1_RX
+      0x1C:
+        display:
+          zh: CAN0_TX
+          en: CAN0_TX
+      0x1D:
+        display:
+          zh: CAN0_RX
+          en: CAN0_RX
+      0x1E:
+        display:
+          zh: PWM0_CH0
+          en: PWM0_CH0
+      0x1F:
+        display:
+          zh: PWM0_CH1
+          en: PWM0_CH1
+      0x20:
+        display:
+          zh: PWM0_CH2
+          en: PWM0_CH2
+      0x21:
+        display:
+          zh: PWM0_CH3
+          en: PWM0_CH3
+      0x22:
+        display:
+          zh: PWM1_CH0
+          en: PWM1_CH0
+      0x23:
+        display:
+          zh: PWM1_CH1
+          en: PWM1_CH1
+      0x24:
+        display:
+          zh: PWM1_CH2
+          en: PWM1_CH2
+      0x25:
+        display:
+          zh: PWM1_CH3
+          en: PWM1_CH3
+      0x26:
+        display:
+          zh: PWM1_CH4
+          en: PWM1_CH4
+      0x27:
+        display:
+          zh: PWM1_CH5
+          en: PWM1_CH5
+      0x28:
+        display:
+          zh: PWM1_CH6
+          en: PWM1_CH6
+      0x29:
+        display:
+          zh: PWM1_CH7
+          en: PWM1_CH7
+      0x2A:
+        display:
+          zh: TOUCH_KEY_DRIVE
+          en: TOUCH_KEY_DRIVE
+      0x2B:
+        display:
+          zh: TOUCH_KEY_IN0
+          en: TOUCH_KEY_IN0
+      0x2C:
+        display:
+          zh: TOUCH_KEY_IN1
+          en: TOUCH_KEY_IN1
+      0x2D:
+        display:
+          zh: TOUCH_KEY_IN2
+          en: TOUCH_KEY_IN2
+      0x2E:
+        display:
+          zh: TOUCH_KEY_IN3
+          en: TOUCH_KEY_IN3
+      0x2F:
+        display:
+          zh: TOUCH_KEY_IN4
+          en: TOUCH_KEY_IN4
+      0x30:
+        display:
+          zh: TOUCH_KEY_IN5
+          en: TOUCH_KEY_IN5
+      0x31:
+        display:
+          zh: TOUCH_KEY_IN6
+          en: TOUCH_KEY_IN6
+      0x32:
+        display:
+          zh: TOUCH_KEY_IN7
+          en: TOUCH_KEY_IN7
+      0x33:
+        display:
+          zh: SAI0_MCLK
+          en: SAI0_MCLK
+      0x34:
+        display:
+          zh: SAI0_SCLK
+          en: SAI0_SCLK
+      0x35:
+        display:
+          zh: SAI0_LRCK
+          en: SAI0_LRCK
+      0x36:
+        display:
+          zh: SAI0_SDI0
+          en: SAI0_SDI0
+      0x37:
+        display:
+          zh: SAI0_SDI1
+          en: SAI0_SDI1
+      0x38:
+        display:
+          zh: SAI0_SDI2
+          en: SAI0_SDI2
+      0x39:
+        display:
+          zh: SAI0_SDI3
+          en: SAI0_SDI3
+      0x3A:
+        display:
+          zh: SAI0_SDO
+          en: SAI0_SDO
+      0x3B:
+        display:
+          zh: SAI1_MCLK
+          en: SAI1_MCLK
+      0x3C:
+        display:
+          zh: SAI1_SCLK
+          en: SAI1_SCLK
+      0x3D:
+        display:
+          zh: SAI1_LRCK
+          en: SAI1_LRCK
+      0x3E:
+        display:
+          zh: SAI1_SDI
+          en: SAI1_SDI
+      0x3F:
+        display:
+          zh: SAI1_SDO0
+          en: SAI1_SDO0
+      0x40:
+        display:
+          zh: SAI1_SDO1
+          en: SAI1_SDO1
+      0x41:
+        display:
+          zh: SAI1_SDO2
+          en: SAI1_SDO2
+      0x42:
+        display:
+          zh: SAI1_SDO3
+          en: SAI1_SDO3
+      0x43:
+        display:
+          zh: SPI0_CLK
+          en: SPI0_CLK
+      0x44:
+        display:
+          zh: SPI0_MOSI
+          en: SPI0_MOSI
+      0x45:
+        display:
+          zh: SPI0_MISO
+          en: SPI0_MISO
+      0x46:
+        display:
+          zh: SPI0_CSN0
+          en: SPI0_CSN0
+      0x47:
+        display:
+          zh: SPI0_CSN1
+          en: SPI0_CSN1
+      0x48:
+        display:
+          zh: SPI1_CLK
+          en: SPI1_CLK
+      0x49:
+        display:
+          zh: SPI1_MOSI
+          en: SPI1_MOSI
+      0x4A:
+        display:
+          zh: SPI1_MISO
+          en: SPI1_MISO
+      0x4B:
+        display:
+          zh: SPI1_CSN0
+          en: SPI1_CSN0
+      0x4C:
+        display:
+          zh: SPI1_CSN1
+          en: SPI1_CSN1
+      0x4D:
+        display:
+          zh: TSADC_CTRL
+          en: TSADC_CTRL
+      0x4E:
+        display:
+          zh: PMU_SLEEP
+          en: PMU_SLEEP
+      0x4F:
+        display:
+          zh: CORE_POWER_OFF
+          en: CORE_POWER_OFF
+      0x50:
+        display:
+          zh: SPDIF_TX
+          en: SPDIF_TX
+      0x51:
+        display:
+          zh: SPDIF_RX
+          en: SPDIF_RX
+      0x52:
+        display:
+          zh: PWM1_BIP_CNTR_A0
+          en: PWM1_BIP_CNTR_A0
+      0x53:
+        display:
+          zh: PWM1_BIP_CNTR_A1
+          en: PWM1_BIP_CNTR_A1
+      0x54:
+        display:
+          zh: PWM1_BIP_CNTR_A2
+          en: PWM1_BIP_CNTR_A2
+      0x55:
+        display:
+          zh: PWM1_BIP_CNTR_A3
+          en: PWM1_BIP_CNTR_A3
+      0x56:
+        display:
+          zh: PWM1_BIP_CNTR_A4
+          en: PWM1_BIP_CNTR_A4
+      0x57:
+        display:
+          zh: PWM1_BIP_CNTR_A5
+          en: PWM1_BIP_CNTR_A5
+      0x58:
+        display:
+          zh: PWM1_BIP_CNTR_B0
+          en: PWM1_BIP_CNTR_B0
+      0x59:
+        display:
+          zh: PWM1_BIP_CNTR_B1
+          en: PWM1_BIP_CNTR_B1
+      0x5A:
+        display:
+          zh: PWM1_BIP_CNTR_B2
+          en: PWM1_BIP_CNTR_B2
+      0x5B:
+        display:
+          zh: PWM1_BIP_CNTR_B3
+          en: PWM1_BIP_CNTR_B3
+      0x5C:
+        display:
+          zh: PWM1_BIP_CNTR_B4
+          en: PWM1_BIP_CNTR_B4
+      0x5D:
+        display:
+          zh: PWM1_BIP_CNTR_B5
+          en: PWM1_BIP_CNTR_B5
+      0x5E:
+        display:
+          zh: PDM_CLK1
+          en: PDM_CLK1
+      0x5F:
+        display:
+          zh: ETH_RMII0_PPSCLK
+          en: ETH_RMII0_PPSCLK
+      0x60:
+        display:
+          zh: ETH_RMII0_PPSTRIG
+          en: ETH_RMII0_PPSTRIG
+      0x61:
+        display:
+          zh: ETH_RMII1_PPSCLK
+          en: ETH_RMII1_PPSCLK
+      0x62:
+        display:
+          zh: ETH_RMII1_PPSTRIG
+          en: ETH_RMII1_PPSTRIG
+
+#核心板引脚
+pin:
+  display:
+    zh: 引脚
+    en: pin
+  type: pin
+  pin_num: 128
+
+  #第一组引脚
+  GPIO1_C4:
+    display:
+      zh: GPIO1_C4
+      en: GPIO1_C4
+    index: 1
+    optional: true
+    mux:
+      default: 0x00
+      choise:
+        0x00:
+          display:
+            zh: GPIO1_C4
+            en: GPIO1_C4
+        0x01:
+          display:
+            zh: VO_LCDC_D7
+            en: VO_LCDC_D7
+        0x02:
+          display:
+            zh: DSMC_D11
+            en: DSMC_D11
+        0x03:
+          display:
+            zh: FLEXBUS0_D7
+            en: FLEXBUS0_D7
+        0x08:
+          display:
+            zh: DSMC_SLV_D2
+            en: DSMC_SLV_D2
+  GPIO1_C5:
+    display:
+      zh: GPIO1_C5
+      en: GPIO1_C5
+    index: 2
+    optional: true
+    mux:
+      default: 0x00
+      choise:
+        0x00:
+          display:
+            zh: GPIO1_C5
+            en: GPIO1_C5
+        0x01:
+          display:
+            zh: VO_LCDC_D6
+            en: VO_LCDC_D6
+        0x02:
+          display:
+            zh: DSMC_D12
+            en: DSMC_D12
+        0x03:
+          display:
+            zh: FLEXBUS0_D6
+            en: FLEXBUS0_D6
+        0x08:
+          display:
+            zh: DSMC_SLV_D3
+            en: DSMC_SLV_D3
+  GPIO1_C6:
+    display:
+      zh: GPIO1_C6
+      en: GPIO1_C6
+    index: 3
+    optional: true
+    mux:
+      default: 0x00
+      choise:
+        0x00:
+          display:
+            zh: GPIO1_C6
+            en: GPIO1_C6
+        0x01:
+          display:
+            zh: VO_LCDC_D5
+            en: VO_LCDC_D5
+        0x02:
+          display:
+            zh: DSMC_D13
+            en: DSMC_D13
+        0x03:
+          display:
+            zh: FLEXBUS0_D5
+            en: FLEXBUS0_D5
+        0x08:
+          display:
+            zh: DSMC_SLV_D4
+            en: DSMC_SLV_D4
+  GPIO1_C7:
+    display:
+      zh: GPIO1_C7
+      en: GPIO1_C7
+    index: 4
+    optional: true
+    mux:
+      default: 0x00
+      choise:
+        0x00:
+          display:
+            zh: GPIO1_C7
+            en: GPIO1_C7
+        0x01:
+          display:
+            zh: VO_LCDC_D4
+            en: VO_LCDC_D4
+        0x02:
+          display:
+            zh: DSMC_D14
+            en: DSMC_D14
+        0x03:
+          display:
+            zh: FLEXBUS0_D4
+            en: FLEXBUS0_D4
+        0x08:
+          display:
+            zh: DSMC_SLV_D5
+            en: DSMC_SLV_D5
+  GND5:
+    display:
+      zh: GND
+      en: GND
+    index: 5
+    optional: false
+  GPIO1_D0:
+    display:
+      zh: GPIO1_D0
+      en: GPIO1_D0
+    index: 6
+    optional: true
+    mux:
+      default: 0x00
+      choise:
+        0x00:
+          display:
+            zh: GPIO1_D0
+            en: GPIO1_D0
+        0x01:
+          display:
+            zh: VO_LCDC_D3
+            en: VO_LCDC_D3
+        0x02:
+          display:
+            zh: DSMC_D15
+            en: DSMC_D15
+        0x03:
+          display:
+            zh: FLEXBUS0_D3
+            en: FLEXBUS0_D3
+        0x04:
+          display:
+            zh: DSM_AUD_LN_M0
+            en: DSM_AUD_LN_M0
+        0x08:
+          display:
+            zh: DSMC_SLV_D6
+            en: DSMC_SLV_D6
+  GPIO1_D1:
+    display:
+      zh: GPIO1_D1
+      en: GPIO1_D1
+    index: 7
+    optional: true
+    mux:
+      default: 0x06
+      choise:
+        0x00:
+          display:
+            zh: GPIO1_D1
+            en: GPIO1_D1
+        0x01:
+          display:
+            zh: VO_LCDC_D2
+            en: VO_LCDC_D2
+        0x02:
+          display:
+            zh: DSMC_DQS1
+            en: DSMC_DQS1
+        0x03:
+          display:
+            zh: FLEXBUS0_D2
+            en: FLEXBUS0_D2
+        0x04:
+          display:
+            zh: DSM_AUD_LP_M0
+            en: DSM_AUD_LP_M0
+        0x06:
+          display:
+            zh: UART5_RTSN_M1
+            en: UART5_RTSN_M1
+        0x07:
+          display:
+            zh: RM_IO29
+            en: RM_IO29
+          secondary:
+            select: rmio
+            default: 0x00
+        0x08:
+          display:
+            zh: DSMC_SLV_D7
+            en: DSMC_SLV_D7
+  GPIO1_D2:
+    display:
+      zh: GPIO1_D2
+      en: GPIO1_D2
+    index: 8
+    optional: true
+    mux:
+      default: 0x06
+      choise:
+        0x00:
+          display:
+            zh: GPIO1_D2
+            en: GPIO1_D2
+        0x01:
+          display:
+            zh: VO_LCDC_D1
+            en: VO_LCDC_D1
+        0x02:
+          display:
+            zh: DSMC_CSN2
+            en: DSMC_CSN2
+        0x03:
+          display:
+            zh: FLEXBUS0_D1
+            en: FLEXBUS0_D1
+        0x06:
+          display:
+            zh: UART5_TX_M1
+            en: UART5_TX_M1
+        0x07:
+          display:
+            zh: RM_IO30
+            en: RM_IO30
+          secondary:
+            select: rmio
+            default: 0x00
+        0x08:
+          display:
+            zh: DSMC_SLV_CSN0
+            en: DSMC_SLV_CSN0
+  GPIO1_D3:
+    display:
+      zh: GPIO1_D3
+      en: GPIO1_D3
+    index: 9
+    optional: true
+    mux:
+      default: 0x06
+      choise:
+        0x00:
+          display:
+            zh: GPIO1_D3
+            en: GPIO1_D3
+        0x01:
+          display:
+            zh: VO_LCDC_D0
+            en: VO_LCDC_D0
+        0x02:
+          display:
+            zh: DSMC_CSN3
+            en: DSMC_CSN3
+        0x03:
+          display:
+            zh: FLEXBUS0_D0
+            en: FLEXBUS0_D0
+        0x06:
+          display:
+            zh: UART5_RX_M1
+            en: UART5_RX_M1
+        0x07:
+          display:
+            zh: RM_IO31
+            en: RM_IO31
+          secondary:
+            select: rmio
+            default: 0x00
+        0x08:
+          display:
+            zh: DSMC_SLV_RDYN
+            en: DSMC_SLV_RDYN
+  GND10:
+    display:
+      zh: GND
+      en: GND
+    index: 10
+    optional: false
+  GPIO0_D0:
+    display:
+      zh: GPIO0_D0
+      en: GPIO0_D0
+    index: 11
+    optional: true
+    mux:
+      default: 0x00
+      choise:
+        0x00:
+          display:
+            zh: GPIO0_D0
+            en: GPIO0_D0
+        0x01:
+          display:
+            zh: OSC_CLK_OUT
+            en: OSC_CLK_OUT
+        0x02:
+          display:
+            zh: REF_CLK0_OUT
+            en: REF_CLK0_OUT
+  GND12:
+    display:
+      zh: GND
+      en: GND
+    index: 12
+    optional: false
+  GPIO0_C6:
+    display:
+      zh: GPIO0_C6
+      en: GPIO0_C6
+    index: 13
+    optional: true
+    mux:
+      default: 0x02
+      choise:
+        0x00:
+          display:
+            zh: GPIO0_C6
+            en: GPIO0_C6
+        0x01:
+          display:
+            zh: UART0_TX
+            en: UART0_TX
+        0x02:
+          display:
+            zh: JTAG_TCK_M1
+            en: JTAG_TCK_M1
+        0x07:
+          display:
+            zh: RM_IO22
+            en: RM_IO22
+          secondary:
+            select: rmio
+            default: 0x00
+  GPIO0_C7:
+    display:
+      zh: GPIO0_C7
+      en: GPIO0_C7
+    index: 14
+    optional: true
+    mux:
+      default: 0x02
+      choise:
+        0x00:
+          display:
+            zh: GPIO0_C7
+            en: GPIO0_C7
+        0x01:
+          display:
+            zh: UART0_RX
+            en: UART0_RX
+        0x02:
+          display:
+            zh: JTAG_TMS_M1
+            en: JTAG_TMS_M1
+        0x07:
+          display:
+            zh: RM_IO23
+            en: RM_IO23
+          secondary:
+            select: rmio
+            default: 0x00
+  GND15:
+    display:
+      zh: GND
+      en: GND
+    index: 15
+    optional: false
+  NPOR_L16:
+    display:
+      zh: NPOR_L
+      en: NPOR_L
+    index: 16
+    optional: false
+  GND17:
+    display:
+      zh: GND
+      en: GND
+    index: 17
+    optional: false
+  GPIO0_C4:
+    display:
+      zh: GPIO0_C4
+      en: GPIO0_C4
+    index: 18
+    optional: true
+    mux:
+      default: 0x07
+      choise:
+        0x00:
+          display:
+            zh: GPIO0_C4
+            en: GPIO0_C4
+        0x01:
+          display:
+            zh: ETH_CLK0_50M_OUT
+            en: ETH_CLK0_50M_OUT
+        0x02:
+          display:
+            zh: AUPLL_CLK_IN
+            en: AUPLL_CLK_IN
+        0x07:
+          display:
+            zh: RM_IO20
+            en: RM_IO20
+          secondary:
+            select: rmio
+            default: 0x1D
+  GPIO0_C3:
+    display:
+      zh: GPIO0_C3
+      en: GPIO0_C3
+    index: 19
+    optional: true
+    mux:
+      default: 0x07
+      choise:
+        0x00:
+          display:
+            zh: GPIO0_C3
+            en: GPIO0_C3
+        0x01:
+          display:
+            zh: ETH_CLK1_25M_OUT
+            en: ETH_CLK1_25M_OUT
+        0x02:
+          display:
+            zh: SPI0_CSN0
+            en: SPI0_CSN0
+        0x07:
+          display:
+            zh: RM_IO19
+            en: RM_IO19
+          secondary:
+            select: rmio
+            default: 0x1C
+  GPIO0_C2:
+    display:
+      zh: GPIO0_C2
+      en: GPIO0_C2
+    index: 20
+    optional: true
+    mux:
+      default: 0x07
+      choise:
+        0x00:
+          display:
+            zh: GPIO0_C2
+            en: GPIO0_C2
+        0x01:
+          display:
+            zh: REF_CLK1_OUT
+            en: REF_CLK1_OUT
+        0x02:
+          display:
+            zh: SPI0_MISO
+            en: SPI0_MISO
+        0x07:
+          display:
+            zh: RM_IO18
+            en: RM_IO18
+          secondary:
+            select: rmio
+            default: 0x20
+  GPIO0_C1:
+    display:
+      zh: GPIO0_C1
+      en: GPIO0_C1
+    index: 21
+    optional: true
+    mux:
+      default: 0x07
+      choise:
+        0x00:
+          display:
+            zh: GPIO0_C1
+            en: GPIO0_C1
+        0x01:
+          display:
+            zh: SPI0_MOSI
+            en: SPI0_MOSI
+        0x07:
+          display:
+            zh: RM_IO17
+            en: RM_IO17
+          secondary:
+            select: rmio
+            default: 0x44
+  GPIO0_C0:
+    display:
+      zh: GPIO0_C0
+      en: GPIO0_C0
+    index: 22
+    optional: true
+    mux:
+      default: 0x00
+      choise:
+        0x00:
+          display:
+            zh: GPIO0_C0
+            en: GPIO0_C0
+        0x01:
+          display:
+            zh: SPI0_CLK
+            en: SPI0_CLK
+        0x07:
+          display:
+            zh: RM_IO16
+            en: RM_IO16
+          secondary:
+            select: rmio
+            default: 0x00
+  GND23:
+    display:
+      zh: GND
+      en: GND
+    index: 23
+    optional: false
+  GPIO0_B7:
+    display:
+      zh: GPIO0_B7
+      en: GPIO0_B7
+    index: 24
+    optional: true
+    mux:
+      default: 0x07
+      choise:
+        0x00:
+          display:
+            zh: GPIO0_B7
+            en: GPIO0_B7
+        0x01:
+          display:
+            zh: SAI1_SDO3
+            en: SAI1_SDO3
+        0x02:
+          display:
+            zh: SPI0_CSN1
+            en: SPI0_CSN1
+        0x07:
+          display:
+            zh: RM_IO15
+            en: RM_IO15
+          secondary:
+            select: rmio
+            default: 0x10
+  GPIO0_B6:
+    display:
+      zh: GPIO0_B6
+      en: GPIO0_B6
+    index: 25
+    optional: true
+    mux:
+      default: 0x07
+      choise:
+        0x00:
+          display:
+            zh: GPIO0_B6
+            en: GPIO0_B6
+        0x01:
+          display:
+            zh: SAI1_SDO2
+            en: SAI1_SDO2
+        0x02:
+          display:
+            zh: SPI1_CSN0
+            en: SPI1_CSN0
+        0x07:
+          display:
+            zh: RM_IO14
+            en: RM_IO14
+          secondary:
+            select: rmio
+            default: 0xF
+  GPIO0_B5:
+    display:
+      zh: GPIO0_B5
+      en: GPIO0_B5
+    index: 26
+    optional: true
+    mux:
+      default: 0x01
+      choise:
+        0x00:
+          display:
+            zh: GPIO0_B5
+            en: GPIO0_B5
+        0x01:
+          display:
+            zh: SAI1_SDO1
+            en: SAI1_SDO1
+        0x07:
+          display:
+            zh: RM_IO13
+            en: RM_IO13
+          secondary:
+            select: rmio
+            default: 0x00
+  GPIO0_B4:
+    display:
+      zh: GPIO0_B4
+      en: GPIO0_B4
+    index: 27
+    optional: true
+    mux:
+      default: 0x07
+      choise:
+        0x00:
+          display:
+            zh: GPIO0_B4
+            en: GPIO0_B4
+        0x01:
+          display:
+            zh: SAI1_SDO0
+            en: SAI1_SDO0
+        0x07:
+          display:
+            zh: RM_IO12
+            en: RM_IO12
+          secondary:
+            select: rmio
+            default: 0x45
+  GPIO0_B3:
+    display:
+      zh: GPIO0_B3
+      en: GPIO0_B3
+    index: 28
+    optional: true
+    mux:
+      default: 0x07
+      choise:
+        0x00:
+          display:
+            zh: GPIO0_B3
+            en: GPIO0_B3
+        0x01:
+          display:
+            zh: SAI1_SDI
+            en: SAI1_SDI
+        0x07:
+          display:
+            zh: RM_IO11
+            en: RM_IO11
+          secondary:
+            select: rmio
+            default: 0x43
+  GPIO0_B2:
+    display:
+      zh: GPIO0_B2
+      en: GPIO0_B2
+    index: 29
+    optional: true
+    mux:
+      default: 0x01
+      choise:
+        0x00:
+          display:
+            zh: GPIO0_B2
+            en: GPIO0_B2
+        0x01:
+          display:
+            zh: SAI1_LRCK
+            en: SPI1_MISO
+        0x02:
+          display:
+            zh: SPI1_MISO
+            en: SPI1_MISO
+        0x07:
+          display:
+            zh: RM_IO10
+            en: RM_IO10
+          secondary:
+            select: rmio
+            default: 0x00
+  GPIO0_B1:
+    display:
+      zh: GPIO0_B1
+      en: GPIO0_B1
+    index: 30
+    optional: true
+    mux:
+      default: 0x01
+      choise:
+        0x00:
+          display:
+            zh: GPIO0_B1
+            en: GPIO0_B1
+        0x01:
+          display:
+            zh: SAI1_SCLK
+            en: SAI1_SCLK
+        0x02:
+          display:
+            zh: SPI1_MOSI
+            en: SPI1_MOSI
+        0x07:
+          display:
+            zh: RM_IO9
+            en: RM_IO9
+          secondary:
+            select: rmio
+            default: 0x00
+  GPIO0_B0:
+    display:
+      zh: GPIO0_B0
+      en: GPIO0_B0
+    index: 31
+    optional: true
+    mux:
+      default: 0x01
+      choise:
+        0x00:
+          display:
+            zh: GPIO0_B0
+            en: GPIO0_B0
+        0x01:
+          display:
+            zh: SAI1_MCLK
+            en: SAI1_MCLK
+        0x02:
+          display:
+            zh: SPI1_CLK
+            en: SPI1_CLK
+        0x07:
+          display:
+            zh: RM_IO8
+            en: RM_IO8
+          secondary:
+            select: rmio
+            default: 0x00
+  GND32:
+    display:
+      zh: GND
+      en: GND
+    index: 32
+    optional: false
+
+  #第二组引脚
+  VCC_IN33:
+    display:
+      zh: VCC_IN
+      en: VCC_IN
+    index: 33
+    optional: false
+  VCC_IN34:
+    display:
+      zh: VCC_IN
+      en: VCC_IN
+    index: 34
+    optional: false
+  GND35:
+    display:
+      zh: GND
+      en: GND
+    index: 35
+    optional: false
+  GPIO0_A7:
+    display:
+      zh: GPIO0_A7
+      en: GPIO0_A7
+    index: 36
+    optional: true
+    mux:
+      default: 0x07
+      choise:
+        0x00:
+          display:
+            zh: GPIO0_A7
+            en: GPIO0_A7
+        0x01:
+          display:
+            zh: SAI0_SDI3
+            en: SAI0_SDI3
+        0x07:
+          display:
+            zh: RM_IO7
+            en: RM_IO7
+          secondary:
+            select: rmio
+            default: 0x08
+  GPIO0_A6:
+    display:
+      zh: GPIO0_A6
+      en: GPIO0_A6
+    index: 37
+    optional: true
+    mux:
+      default: 0x07
+      choise:
+        0x00:
+          display:
+            zh: GPIO0_A6
+            en: GPIO0_A6
+        0x01:
+          display:
+            zh: SAI0_SDI2
+            en: SAI0_SDI2
+        0x07:
+          display:
+            zh: RM_IO6
+            en: RM_IO6
+          secondary:
+            select: rmio
+            default: 0x07
+  GPIO0_A5:
+    display:
+      zh: GPIO0_A5
+      en: GPIO0_A5
+    index: 38
+    optional: true
+    mux:
+      default: 0x07
+      choise:
+        0x00:
+          display:
+            zh: GPIO0_A5
+            en: GPIO0_A5
+        0x01:
+          display:
+            zh: SAI0_SDI1
+            en: SAI0_SDI1
+        0x07:
+          display:
+            zh: RM_IO5
+            en: RM_IO5
+          secondary:
+            select: rmio
+            default: 0x06
+  GPIO0_A4:
+    display:
+      zh: GPIO0_A4
+      en: GPIO0_A4
+    index: 39
+    optional: true
+    mux:
+      default: 0x07
+      choise:
+        0x00:
+          display:
+            zh: GPIO0_A4
+            en: GPIO0_A4
+        0x01:
+          display:
+            zh: SAI0_SDI0
+            en: SAI0_SDI0
+        0x07:
+          display:
+            zh: RM_IO4
+            en: RM_IO4
+          secondary:
+            select: rmio
+            default: 0x05
+  GPIO0_A3:
+    display:
+      zh: GPIO0_A3
+      en: GPIO0_A3
+    index: 40
+    optional: true
+    mux:
+      default: 0x07
+      choise:
+        0x00:
+          display:
+            zh: GPIO0_A3
+            en: GPIO0_A3
+        0x01:
+          display:
+            zh: SAI0_SD0
+            en: SAI0_SD0
+        0x07:
+          display:
+            zh: RM_IO3
+            en: RM_IO3
+          secondary:
+            select: rmio
+            default: 0x02
+  GPIO0_A2:
+    display:
+      zh: GPIO0_A2
+      en: GPIO0_A2
+    index: 41
+    optional: true
+    mux:
+      default: 0x07
+      choise:
+        0x00:
+          display:
+            zh: GPIO0_A2
+            en: GPIO0_A2
+        0x01:
+          display:
+            zh: SAI0_MCLK
+            en: SAI0_MCLK
+        0x07:
+          display:
+            zh: RM_IO2
+            en: RM_IO2
+          secondary:
+            select: rmio
+            default: 0x01
+  GPIO0_A1:
+    display:
+      zh: GPIO0_A1
+      en: GPIO0_A1
+    index: 42
+    optional: true
+    mux:
+      default: 0x07
+      choise:
+        0x00:
+          display:
+            zh: GPIO0_A1
+            en: GPIO0_A1
+        0x01:
+          display:
+            zh: SAI0_SCLK
+            en: SAI0_SCLK
+        0x07:
+          display:
+            zh: RM_IO1
+            en: RM_IO1
+          secondary:
+            select: rmio
+            default: 0x11
+  GPIO0_A0:
+    display:
+      zh: GPIO0_A0
+      en: GPIO0_A0
+    index: 43
+    optional: true
+    mux:
+      default: 0x07
+      choise:
+        0x00:
+          display:
+            zh: GPIO0_A0
+            en: GPIO0_A0
+        0x01:
+          display:
+            zh: SAI0_LRCK
+            en: SAI0_LRCK
+        0x07:
+          display:
+            zh: RM_IO0
+            en: RM_IO0
+          secondary:
+            select: rmio
+            default: 0x12
+  GND44:
+    display:
+      zh: GND
+      en: GND
+    index: 44
+    optional: false
+  GPIO3_B6:
+    display:
+      zh: GPIO3_B6
+      en: GPIO3_B6
+    index: 45
+    optional: true
+    mux:
+      default: 0x02
+      choise:
+        0x00:
+          display:
+            zh: GPIO3_B6
+            en: GPIO3_B6
+        0x01:
+          display:
+            zh: SAI2_MCLK_M0
+            en: SAI2_MCLK_M0
+        0x02:
+          display:
+            zh: ETH_RMII1_RXDVCRS
+            en: ETH_RMII1_RXDVCRS
+  GPIO3_B5:
+    display:
+      zh: GPIO3_B5
+      en: GPIO3_B5
+    index: 46
+    optional: true
+    mux:
+      default: 0x02
+      choise:
+        0x00:
+          display:
+            zh: GPIO3_B5
+            en: GPIO3_B5
+        0x01:
+          display:
+            zh: UART5_RTSN_M0
+            en: UART5_RTSN_M0
+        0x02:
+          display:
+            zh: ETH_RMII1_MDIO
+            en: ETH_RMII1_MDIO
+  GPIO3_B4:
+    display:
+      zh: GPIO3_B4
+      en: GPIO3_B4
+    index: 47
+    optional: true
+    mux:
+      default: 0x02
+      choise:
+        0x00:
+          display:
+            zh: GPIO3_B4
+            en: GPIO3_B4
+        0x01:
+          display:
+            zh: UART5_TX_M0
+            en: UART5_TX_M0
+        0x02:
+          display:
+            zh: ETH_RMII1_MDC
+            en: ETH_RMII1_MDC
+  GND48:
+    display:
+      zh: GND
+      en: GND
+    index: 48
+    optional: false
+  GPIO3_B0:
+    display:
+      zh: GPIO3_B0
+      en: GPIO3_B0
+    index: 49
+    optional: true
+    mux:
+      default: 0x02
+      choise:
+        0x00:
+          display:
+            zh: GPIO3_B0
+            en: GPIO3_B0
+        0x01:
+          display:
+            zh: SAI2_SDO_M0
+            en: SAI2_SDO_M0
+        0x02:
+          display:
+            zh: ETH_RMII1_CLK
+            en: ETH_RMII1_CLK
+  GPIO3_B3:
+    display:
+      zh: GPIO3_B3
+      en: GPIO3_B3
+    index: 50
+    optional: true
+    mux:
+      default: 0x02
+      choise:
+        0x00:
+          display:
+            zh: GPIO3_B3
+            en: GPIO3_B3
+        0x01:
+          display:
+            zh: UART5_RX_M0
+            en: UART5_RX_M0
+        0x02:
+          display:
+            zh: ETH_RMII1_TXEN
+            en: ETH_RMII1_TXEN
+  GPIO3_B2:
+    display:
+      zh: GPIO3_B2
+      en: GPIO3_B2
+    index: 51
+    optional: true
+    mux:
+      default: 0x02
+      choise:
+        0x00:
+          display:
+            zh: GPIO3_B2
+            en: GPIO3_B2
+        0x01:
+          display:
+            zh: UART5_CTSN_M0
+            en: UART5_CTSN_M0
+        0x02:
+          display:
+            zh: ETH_RMII1_TXD1
+            en: ETH_RMII1_TXD1
+  GPIO3_B1:
+    display:
+      zh: GPIO3_B1
+      en: GPIO3_B1
+    index: 52
+    optional: true
+    mux:
+      default: 0x02
+      choise:
+        0x00:
+          display:
+            zh: GPIO3_B1
+            en: GPIO3_B1
+        0x01:
+          display:
+            zh: SAI2_LRCK_M0
+            en: SAI2_LRCK_M0
+        0x02:
+          display:
+            zh: ETH_RMII1_TXD0
+            en: ETH_RMII1_TXD0
+  GPIO3_A7:
+    display:
+      zh: GPIO3_A7
+      en: GPIO3_A7
+    index: 53
+    optional: true
+    mux:
+      default: 0x02
+      choise:
+        0x00:
+          display:
+            zh: GPIO3_A7
+            en: GPIO3_A7
+        0x01:
+          display:
+            zh: SAI2_SCLK_M0
+            en: SAI2_SCLK_M0
+        0x02:
+          display:
+            zh: ETH_RMII1_RXD1
+            en: ETH_RMII1_RXD1
+  GPIO3_A6:
+    display:
+      zh: GPIO3_A6
+      en: GPIO3_A6
+    index: 54
+    optional: true
+    mux:
+      default: 0x02
+      choise:
+        0x00:
+          display:
+            zh: GPIO3_A6
+            en: GPIO3_A6
+        0x01:
+          display:
+            zh: SAI2_SDI_M0
+            en: SAI2_SDI_M0
+        0x02:
+          display:
+            zh: ETH_RMII1_RXD0
+            en: ETH_RMII1_RXD0
+  GPIO3_A4:
+    display:
+      zh: GPIO3_A4
+      en: GPIO3_A4
+    index: 55
+    optional: true
+    mux:
+      default: 0x01
+      choise:
+        0x00:
+          display:
+            zh: GPIO3_A4
+            en: GPIO3_A4
+        0x01:
+          display:
+            zh: SDMMC_D2
+            en: SDMMC_D2
+        0x02:
+          display:
+            zh: JTAG_TCK_M0
+            en: JTAG_TCK_M0
+  GPIO3_A3:
+    display:
+      zh: GPIO3_A3
+      en: GPIO3_A3
+    index: 56
+    optional: true
+    mux:
+      default: 0x01
+      choise:
+        0x00:
+          display:
+            zh: GPIO3_A3
+            en: GPIO3_A3
+        0x01:
+          display:
+            zh: SDMMC_D1
+            en: SDMMC_D1
+        0x02:
+          display:
+            zh: TEST_CLK_OUT
+            en: TEST_CLK_OUT
+  GPIO3_A2:
+    display:
+      zh: GPIO3_A2
+      en: GPIO3_A2
+    index: 57
+    optional: true
+    mux:
+      default: 0x01
+      choise:
+        0x00:
+          display:
+            zh: GPIO3_A2
+            en: GPIO3_A2
+        0x01:
+          display:
+            zh: SDMMC_D0
+            en: SDMMC_D0
+  GPIO3_A5:
+    display:
+      zh: GPIO3_A5
+      en: GPIO3_A5
+    index: 58
+    optional: true
+    mux:
+      default: 0x01
+      choise:
+        0x00:
+          display:
+            zh: GPIO3_A5
+            en: GPIO3_A5
+        0x01:
+          display:
+            zh: SDMMC_D3
+            en: SDMMC_D3
+        0x02:
+          display:
+            zh: JTAG_TMS_M0
+            en: JTAG_TMS_M0
+  GPIO3_A1:
+    display:
+      zh: GPIO3_A1
+      en: GPIO3_A1
+    index: 59
+    optional: true
+    mux:
+      default: 0x01
+      choise:
+        0x00:
+          display:
+            zh: GPIO3_A1
+            en: GPIO3_A1
+        0x01:
+          display:
+            zh: SDMMC_CMD
+            en: SDMMC_CMD
+  GPIO3_A0:
+    display:
+      zh: GPIO3_A0
+      en: GPIO3_A0
+    index: 60
+    optional: true
+    mux:
+      default: 0x01
+      choise:
+        0x00:
+          display:
+            zh: GPIO3_A0
+            en: GPIO3_A0
+        0x01:
+          display:
+            zh: SDMMC_CLK
+            en: SDMMC_CLK
+  GND61:
+    display:
+      zh: GND
+      en: GND
+    index: 61
+    optional: false
+  GPIO2_B6:
+    display:
+      zh: GPIO2_B6
+      en: GPIO2_B6
+    index: 62
+    optional: true
+    mux:
+      default: 0x01
+      choise:
+        0x00:
+          display:
+            zh: GPIO2_B6
+            en: GPIO2_B6
+        0x01:
+          display:
+            zh: ETH_RMII0_MDC
+            en: ETH_RMII0_MDC
+        0x02:
+          display:
+            zh: DSM_AUD_LN_M1
+            en: DSM_AUD_LN_M1
+        0x03:
+          display:
+            zh: SAI3_SDI
+            en: SAI3_SDI
+  GPIO2_B7:
+    display:
+      zh: GPIO2_B7
+      en: GPIO2_B7
+    index: 63
+    optional: true
+    mux:
+      default: 0x01
+      choise:
+        0x00:
+          display:
+            zh: GPIO2_B7
+            en: GPIO2_B7
+        0x01:
+          display:
+            zh: ETH_RMII0_MDIO
+            en: ETH_RMII0_MDIO
+        0x02:
+          display:
+            zh: DSM_AUD_LP_M1
+            en: DSM_AUD_LP_M1
+        0x03:
+          display:
+            zh: SAI3_SDO
+            en: SAI3_SDO
+  GPIO2_C0:
+    display:
+      zh: GPIO2_C0
+      en: GPIO2_C0
+    index: 64
+    optional: true
+    mux:
+      default: 0x01
+      choise:
+        0x00:
+          display:
+            zh: GPIO2_C0
+            en: GPIO2_C0
+        0x01:
+          display:
+            zh: ETH_RMII0_RXDVCRS
+            en: ETH_RMII0_RXDVCRS
+        0x03:
+          display:
+            zh: SAI3_MCLK
+            en: SAI3_MCLK
+
+  #第三组引脚
+  VCC_1V8_OUT65:
+    display:
+      zh: VCC_1V8_OUT
+      en: VCC_1V8_OUT
+    index: 65
+    optional: false
+  VCC_3V3_OUT66:
+    display:
+      zh: VCC_3V3_OUT
+      en: VCC_3V3_OUT
+    index: 66
+    optional: false
+  GND67:
+    display:
+      zh: GND
+      en: GND
+    index: 67
+    optional: false
+  VCC_IO4_IN68:
+    display:
+      zh: VCC_IO4_IN
+      en: VCC_IO4_IN
+    index: 68
+    optional: false
+  GPIO2_B5:
+    display:
+      zh: GPIO2_B5
+      en: GPIO2_B5
+    index: 69
+    optional: true
+    mux:
+      default: 0x01
+      choise:
+        0x00:
+          display:
+            zh: GPIO2_B5
+            en: GPIO2_B5
+        0x01:
+          display:
+            zh: ETH_RMII0_TXEN
+            en: ETH_RMII0_TXEN
+        0x02:
+          display:
+            zh: DSM_AUD_RP_M1
+            en: DSM_AUD_RP_M1
+        0x03:
+          display:
+            zh: SAI3_LRCK
+            en: SAI3_LRCK
+  GPIO2_B4:
+    display:
+      zh: GPIO2_B4
+      en: GPIO2_B4
+    index: 70
+    optional: true
+    mux:
+      default: 0x01
+      choise:
+        0x00:
+          display:
+            zh: GPIO2_B4
+            en: GPIO2_B4
+        0x01:
+          display:
+            zh: ETH_RMII0_TXD1
+            en: ETH_RMII0_TXD1
+        0x02:
+          display:
+            zh: DSM_AUD_RN_M1
+            en: DSM_AUD_RN_M1
+        0x03:
+          display:
+            zh: SAI3_SCLK
+            en: SAI3_SCLK
+  GPIO2_B3:
+    display:
+      zh: GPIO2_B3
+      en: GPIO2_B3
+    index: 71
+    optional: true
+    mux:
+      default: 0x01
+      choise:
+        0x00:
+          display:
+            zh: GPIO2_B3
+            en: GPIO2_B3
+        0x01:
+          display:
+            zh: ETH_RMII0_TXD0
+            en: ETH_RMII0_TXD0
+        0x02:
+          display:
+            zh: SPI2_MISO
+            en: SPI2_MISO
+  GPIO2_B1:
+    display:
+      zh: GPIO2_B1
+      en: GPIO2_B1
+    index: 72
+    optional: true
+    mux:
+      default: 0x01
+      choise:
+        0x00:
+          display:
+            zh: GPIO2_B1
+            en: GPIO2_B1
+        0x01:
+          display:
+            zh: ETH_RMII0_RXD1
+            en: ETH_RMII0_RXD1
+        0x02:
+          display:
+            zh: SPI2_CSN
+            en: SPI2_CSN
+  GPIO2_B0:
+    display:
+      zh: GPIO2_B0
+      en: GPIO2_B0
+    index: 73
+    optional: true
+    mux:
+      default: 0x01
+      choise:
+        0x00:
+          display:
+            zh: GPIO2_B0
+            en: GPIO2_B0
+        0x01:
+          display:
+            zh: ETH_RMII0_RXD0
+            en: ETH_RMII0_RXD0
+        0x02:
+          display:
+            zh: SPI2_CLK
+            en: SPI2_CLK
+  GPIO2_B2:
+    display:
+      zh: GPIO2_B2
+      en: GPIO2_B2
+    index: 74
+    optional: true
+    mux:
+      default: 0x01
+      choise:
+        0x00:
+          display:
+            zh: GPIO2_B2
+            en: GPIO2_B2
+        0x01:
+          display:
+            zh: ETH_RMII0_CLK
+            en: ETH_RMII0_CLK
+        0x02:
+          display:
+            zh: SPI2_MOSI
+            en: SPI2_MOSI
+  GND75:
+    display:
+      zh: GND
+      en: GND
+    index: 75
+    optional: false
+  # GPIO2_A1:
+  #   display:
+  #     zh: GPIO2_A1
+  #     en: GPIO2_A1
+  #   index: 76
+  #   optional: true
+  #   mux:
+  #     default: 0x01
+  #     choise:
+  #       0x00:
+  #         display:
+  #           zh: GPIO2_A1
+  #           en: GPIO2_A1
+  #       0x01:
+  #         display:
+  #           zh: FSPI_CLK
+  #           en: FSPI_CLK
+  # GPIO2_A2:
+  #   display:
+  #     zh: GPIO2_A2
+  #     en: GPIO2_A2
+  #   index: 77
+  #   optional: true
+  #   mux:
+  #     default: 0x01
+  #     choise:
+  #       0x00:
+  #         display:
+  #           zh: GPIO2_A2
+  #           en: GPIO2_A2
+  #       0x01:
+  #         display:
+  #           zh: FSPI_D0
+  #           en: FSPI_D0
+  # GPIO2_A5:
+  #   display:
+  #     zh: GPIO2_A5
+  #     en: GPIO2_A5
+  #   index: 78
+  #   optional: true
+  #   mux:
+  #     default: 0x01
+  #     choise:
+  #       0x00:
+  #         display:
+  #           zh: GPIO2_A5
+  #           en: GPIO2_A5
+  #       0x01:
+  #         display:
+  #           zh: FSPI_D3
+  #           en: FSPI_D3
+  # GPIO2_A4:
+  #   display:
+  #     zh: GPIO2_A4
+  #     en: GPIO2_A4
+  #   index: 79
+  #   optional: true
+  #   mux:
+  #     default: 0x01
+  #     choise:
+  #       0x00:
+  #         display:
+  #           zh: GPIO2_A4
+  #           en: GPIO2_A4
+  #       0x01:
+  #         display:
+  #           zh: FSPI_D2
+  #           en: FSPI_D2
+  # GPIO2_A3:
+  #   display:
+  #     zh: GPIO2_A3
+  #     en: GPIO2_A3
+  #   index: 80
+  #   optional: true
+  #   mux:
+  #     default: 0x01
+  #     choise:
+  #       0x00:
+  #         display:
+  #           zh: GPIO2_A3
+  #           en: GPIO2_A3
+  #       0x01:
+  #         display:
+  #           zh: FSPI_D1
+  #           en: FSPI_D1
+  # GPIO2_A0:
+  #   display:
+  #     zh: GPIO2_A0
+  #     en: GPIO2_A0
+  #   index: 81
+  #   optional: true
+  #   mux:
+  #     default: 0x01
+  #     choise:
+  #       0x00:
+  #         display:
+  #           zh: GPIO2_A0
+  #           en: GPIO2_A0
+  #       0x01:
+  #         display:
+  #           zh: FSPI_CSN
+  #           en: FSPI_CSN
+  NC76:
+    display:
+      zh: NC
+      en: NC
+    index: 76
+    optional: false
+  NC77:
+    display:
+      zh: NC
+      en: NC
+    index: 77
+    optional: false
+  NC78:
+    display:
+      zh: NC
+      en: NC
+    index: 78
+    optional: false
+  NC79:
+    display:
+      zh: NC
+      en: NC
+    index: 79
+    optional: false
+  NC80:
+    display:
+      zh: NC
+      en: NC
+    index: 80
+    optional: false
+  NC81:
+    display:
+      zh: NC
+      en: NC
+    index: 81
+    optional: false
+  GND82:
+    display:
+      zh: GND
+      en: GND
+    index: 82
+    optional: false
+  GPIO4_B3:
+    display:
+      zh: GPIO4_B3
+      en: GPIO4_B3
+    index: 83
+    optional: true
+    mux:
+      default: 0x01
+      choise:
+        0x00:
+          display:
+            zh: GPIO4_B3
+            en: GPIO4_B3
+        0x01:
+          display:
+            zh: SARADC_IN3
+            en: SARADC_IN3
+  GPIO4_B2:
+    display:
+      zh: GPIO4_B2
+      en: GPIO4_B2
+    index: 84
+    optional: true
+    mux:
+      default: 0x01
+      choise:
+        0x00:
+          display:
+            zh: GPIO4_B2
+            en: GPIO4_B2
+        0x01:
+          display:
+            zh: SARADC_IN2
+            en: SARADC_IN2
+  GPIO4_B1:
+    display:
+      zh: GPIO4_B1
+      en: GPIO4_B1
+    index: 85
+    optional: true
+    mux:
+      default: 0x01
+      choise:
+        0x00:
+          display:
+            zh: GPIO4_B1
+            en: GPIO4_B1
+        0x01:
+          display:
+            zh: SARADC_IN1_RECOVER
+            en: SARADC_IN1_RECOVER
+  GPIO4_B0:
+    display:
+      zh: GPIO4_B0
+      en: GPIO4_B0
+    index: 86
+    optional: true
+    mux:
+      default: 0x01
+      choise:
+        0x00:
+          display:
+            zh: GPIO4_B0
+            en: GPIO4_B0
+        0x01:
+          display:
+            zh: SARADC_IN0_BOOT
+            en: SARADC_IN0_BOOT
+  GND87:
+    display:
+      zh: GND
+      en: GND
+    index: 87
+    optional: false
+  ACODEC_ADC_INP:
+    display:
+      zh: ACODEC_ADC_INP
+      en: ACODEC_ADC_INP
+    index: 88
+    optional: false
+  ACODEC_ADC_INN:
+    display:
+      zh: ACODEC_ADC_INN
+      en: ACODEC_ADC_INN
+    index: 89
+    optional: false
+  GND90:
+    display:
+      zh: GND
+      en: GND
+    index: 90
+    optional: false
+  USB20_OTG0_VBUSDET:
+    display:
+      zh: USB20_OTG0_VBUSDET
+      en: USB20_OTG0_VBUSDET
+    index: 91
+    optional: false
+  USB20_OTG0_ID:
+    display:
+      zh: USB20_OTG0_ID
+      en: USB20_OTG0_ID
+    index: 92
+    optional: false
+  USB20_OTG0_DM:
+    display:
+      zh: USB20_OTG0_DM
+      en: USB20_OTG0_DM
+    index: 93
+    optional: false
+  USB20_OTG0_DP:
+    display:
+      zh: USB20_OTG0_DP
+      en: USB20_OTG0_DP
+    index: 94
+    optional: false
+  USB20_OTG1_DM:
+    display:
+      zh: USB20_OTG1_DM
+      en: USB20_OTG1_DM
+    index: 95
+    optional: false
+  USB20_OTG1_DP:
+    display:
+      zh: USB20_OTG1_DP
+      en: USB20_OTG1_DP
+    index: 96
+    optional: false
+
+  #第四组引脚
+  GND97:
+    display:
+      zh: GND
+      en: GND
+    index: 97
+    optional: false
+  GPIO4_A4:
+    display:
+      zh: GPIO4_A4
+      en: GPIO4_A4
+    index: 98
+    optional: true
+    mux:
+      default: 0x01
+      choise:
+        0x00:
+          display:
+            zh: GPIO4_A4
+            en: GPIO4_A4
+        0x01:
+          display:
+            zh: MIPI_DPHY_DSI_TX_CLKN
+            en: MIPI_DPHY_DSI_TX_CLKN
+  GPIO4_A5:
+    display:
+      zh: GPIO4_A5
+      en: GPIO4_A5
+    index: 99
+    optional: true
+    mux:
+      default: 0x01
+      choise:
+        0x00:
+          display:
+            zh: GPIO4_A5
+            en: GPIO4_A5
+        0x01:
+          display:
+            zh: MIPI_DPHY_DSI_TX_CLKP
+            en: MIPI_DPHY_DSI_TX_CLKP
+  GND100:
+    display:
+      zh: GND
+      en: GND
+    index: 100
+    optional: false
+  GPIO4_A2:
+    display:
+      zh: GPIO4_A2
+      en: GPIO4_A2
+    index: 101
+    optional: true
+    mux:
+      default: 0x01
+      choise:
+        0x00:
+          display:
+            zh: GPIO4_A2
+            en: GPIO4_A2
+        0x01:
+          display:
+            zh: MIPI_DPHY_DSI_TX_D1N
+            en: MIPI_DPHY_DSI_TX_D1N
+  GPIO4_A3:
+    display:
+      zh: GPIO4_A3
+      en: GPIO4_A3
+    index: 102
+    optional: true
+    mux:
+      default: 0x01
+      choise:
+        0x00:
+          display:
+            zh: GPIO4_A3
+            en: GPIO4_A3
+        0x01:
+          display:
+            zh: MIPI_DPHY_DSI_TX_D1P
+            en: MIPI_DPHY_DSI_TX_D1P
+  GPIO4_A0:
+    display:
+      zh: GPIO4_A0
+      en: GPIO4_A0
+    index: 103
+    optional: true
+    mux:
+      default: 0x01
+      choise:
+        0x00:
+          display:
+            zh: GPIO4_A0
+            en: GPIO4_A0
+        0x01:
+          display:
+            zh: MIPI_DPHY_DSI_TX_D0N
+            en: MIPI_DPHY_DSI_TX_D0N
+  GPIO4_A1:
+    display:
+      zh: GPIO4_A1
+      en: GPIO4_A1
+    index: 104
+    optional: true
+    mux:
+      default: 0x01
+      choise:
+        0x00:
+          display:
+            zh: GPIO4_A1
+            en: GPIO4_A1
+        0x01:
+          display:
+            zh: MIPI_DPHY_DSI_TX_D0P
+            en: MIPI_DPHY_DSI_TX_D0P
+  GND105:
+    display:
+      zh: GND
+      en: GND
+    index: 105
+    optional: false
+  GPIO1_A0:
+    display:
+      zh: GPIO1_A0
+      en: GPIO1_A0
+    index: 106
+    optional: true
+    mux:
+      default: 0x00
+      choise:
+        0x00:
+          display:
+            zh: GPIO1_A0
+            en: GPIO1_A0
+        0x01:
+          display:
+            zh: VO_LCDC_DEN
+            en: VO_LCDC_DEN
+        0x02:
+          display:
+            zh: DSNC_CLKP
+            en: DSNC_CLKP
+        0x03:
+          display:
+            zh: FLEXBUS1_D0
+            en: FLEXBUS1_D0
+  GPIO1_A1:
+    display:
+      zh: GPIO1_A1
+      en: GPIO1_A1
+    index: 107
+    optional: true
+    mux:
+      default: 0x00
+      choise:
+        0x00:
+          display:
+            zh: GPIO1_A1
+            en: GPIO1_A1
+        0x01:
+          display:
+            zh: VO_LCDC_VSYNC
+            en: VO_LCDC_VSYNC
+        0x02:
+          display:
+            zh: DSMC_CLKN
+            en: DSMC_CLKN
+        0x03:
+          display:
+            zh: FLEXBUS1_D1
+            en: FLEXBUS1_D1
+        0x04:
+          display:
+            zh: DSMC_INT0
+            en: DSMC_INT0
+        0x08:
+          display:
+            zh: DSMC_SLV_INT
+            en: DSMC_SLV_INT
+  GPIO1_A2:
+    display:
+      zh: GPIO1_A2
+      en: GPIO1_A2
+    index: 108
+    optional: true
+    mux:
+      default: 0x00
+      choise:
+        0x00:
+          display:
+            zh: GPIO1_A2
+            en: GPIO1_A2
+        0x01:
+          display:
+            zh: VO_LCDC_HSYNC
+            en: VO_LCDC_HSYNC
+        0x02:
+          display:
+            zh: DSMC_DQS0
+            en: DSMC_DQS0
+        0x03:
+          display:
+            zh: FLEXBUS1_D2
+            en: FLEXBUS1_D2
+  GPIO1_A3:
+    display:
+      zh: GPIO1_A3
+      en: GPIO1_A3
+    index: 109
+    optional: true
+    mux:
+      default: 0x00
+      choise:
+        0x00:
+          display:
+            zh: GPIO1_A3
+            en: GPIO1_A3
+        0x01:
+          display:
+            zh: VO_LCDC_CLK
+            en: VO_LCDC_CLK
+        0x02:
+          display:
+            zh: DSMC_D0
+            en: DSMC_D0
+        0x03:
+          display:
+            zh: FLEXBUS1_D3
+            en: FLEXBUS1_D3
+  GND110:
+    display:
+      zh: GND
+      en: GND
+    index: 110
+    optional: false
+  GPIO1_A4:
+    display:
+      zh: GPIO1_A4
+      en: GPIO1_A4
+    index: 111
+    optional: true
+    mux:
+      default: 0x00
+      choise:
+        0x00:
+          display:
+            zh: GPIO1_A4
+            en: GPIO1_A4
+        0x01:
+          display:
+            zh: VO_LCDC_D23
+            en: VO_LCDC_D23
+        0x02:
+          display:
+            zh: DSMC_D1
+            en: DSMC_D1
+        0x03:
+          display:
+            zh: FLEXBUS1_D4
+            en: FLEXBUS1_D4
+  GPIO1_A5:
+    display:
+      zh: GPIO1_A5
+      en: GPIO1_A5
+    index: 112
+    optional: true
+    mux:
+      default: 0x00
+      choise:
+        0x00:
+          display:
+            zh: GPIO1_A5
+            en: GPIO1_A5
+        0x01:
+          display:
+            zh: VO_LCDC_D22
+            en: VO_LCDC_D22
+        0x02:
+          display:
+            zh: DSMC_D2
+            en: DSMC_D2
+        0x03:
+          display:
+            zh: FLEXBUS1_D5
+            en: FLEXBUS1_D5
+  GPIO1_A6:
+    display:
+      zh: GPIO1_A6
+      en: GPIO1_A6
+    index: 113
+    optional: true
+    mux:
+      default: 0x00
+      choise:
+        0x00:
+          display:
+            zh: GPIO1_A6
+            en: GPIO1_A6
+        0x01:
+          display:
+            zh: VO_LCDC_D21
+            en: VO_LCDC_D21
+        0x02:
+          display:
+            zh: DSMC_D3
+            en: DSMC_D3
+        0x03:
+          display:
+            zh: FLEXBUS1_D6
+            en: FLEXBUS1_D6
+  GPIO1_A7:
+    display:
+      zh: GPIO1_A7
+      en: GPIO1_A7
+    index: 114
+    optional: true
+    mux:
+      default: 0x00
+      choise:
+        0x00:
+          display:
+            zh: GPIO1_A7
+            en: GPIO1_A7
+        0x01:
+          display:
+            zh: VO_LCDC_D20
+            en: VO_LCDC_D20
+        0x02:
+          display:
+            zh: DSMC_D4
+            en: DSMC_D4
+        0x03:
+          display:
+            zh: FLEXBUS1_D7
+            en: FLEXBUS1_D7
+  GND115:
+    display:
+      zh: GND
+      en: GND
+    index: 115
+    optional: false
+  GPIO1_B0:
+    display:
+      zh: GPIO1_B0
+      en: GPIO1_B0
+    index: 116
+    optional: true
+    mux:
+      default: 0x00
+      choise:
+        0x00:
+          display:
+            zh: GPIO1_B0
+            en: GPIO1_B0
+        0x01:
+          display:
+            zh: VO_LCDC_D19
+            en: VO_LCDC_D19
+        0x02:
+          display:
+            zh: DSMC_D5
+            en: DSMC_D5
+        0x03:
+          display:
+            zh: FLEXBUS1_D8
+            en: FLEXBUS1_D8
+        0x05:
+          display:
+            zh: FLEXBUS0_CSN_M0
+            en: FLEXBUS0_CSN_M0
+  GPIO1_B1:
+    display:
+      zh: GPIO1_B1
+      en: GPIO1_B1
+    index: 117
+    optional: true
+    mux:
+      default: 0x00
+      choise:
+        0x00:
+          display:
+            zh: GPIO1_B1
+            en: GPIO1_B1
+        0x01:
+          display:
+            zh: VO_LCDC_D18
+            en: VO_LCDC_D18
+        0x02:
+          display:
+            zh: DSMC_CSN1
+            en: DSMC_CSN1
+        0x03:
+          display:
+            zh: FLEXBUS1_D9
+            en: FLEXBUS1_D9
+        0x05:
+          display:
+            zh: FLEXBUS1_CSN_M0
+            en: FLEXBUS1_CSN_M0
+        0x06:
+          display:
+            zh: UART5_CTSN_M1
+            en: UART5_CTSN_M1
+        0x07:
+          display:
+            zh: RM_IO24
+            en: RM_IO24
+          secondary:
+            select: rmio
+            default: 0x1C
+  GPIO1_B2:
+    display:
+      zh: GPIO1_B2
+      en: GPIO1_B2
+    index: 118
+    optional: true
+    mux:
+      default: 0x00
+      choise:
+        0x00:
+          display:
+            zh: GPIO1_B2
+            en: GPIO1_B2
+        0x01:
+          display:
+            zh: VO_LCDC_D17
+            en: VO_LCDC_D17
+        0x02:
+          display:
+            zh: DSMC_CSN2
+            en: DSMC_CSN2
+        0x03:
+          display:
+            zh: FLEXBUS1_D10
+            en: FLEXBUS1_D10
+        0x04:
+          display:
+            zh: FLEXBUS0_D15
+            en: FLEXBUS0_D15
+        0x05:
+          display:
+            zh: FLEXBUS0_CSN_M1
+            en: FLEXBUS0_CSN_M1
+        0x06:
+          display:
+            zh: SAI2_SCLK_M1
+            en: SAI2_SCLK_M1
+        0x07:
+          display:
+            zh: RM_IO25
+            en: RM_IO25
+          secondary:
+            select: rmio
+            default: 0x1C
+  GPIO1_B3:
+    display:
+      zh: GPIO1_B3
+      en: GPIO1_B3
+    index: 119
+    optional: true
+    mux:
+      default: 0x00
+      choise:
+        0x00:
+          display:
+            zh: GPIO1_B3
+            en: GPIO1_B3
+        0x01:
+          display:
+            zh: VO_LCDC_D16
+            en: VO_LCDC_D16
+        0x02:
+          display:
+            zh: DSMC_INT3
+            en: DSMC_INT3
+        0x03:
+          display:
+            zh: FLEXBUS1_D11
+            en: FLEXBUS1_D11
+        0x04:
+          display:
+            zh: FLEXBUS0_D14
+            en: FLEXBUS0_D14
+        0x05:
+          display:
+            zh: FLEXBUS1_CSN_M1
+            en: FLEXBUS1_CSN_M1
+        0x06:
+          display:
+            zh: SAI2_LRCK_M1
+            en: SAI2_LRCK_M1
+        0x07:
+          display:
+            zh: RM_IO26
+            en: RM_IO26
+          secondary:
+            select: rmio
+            default: 0x1C
+  GPIO1_B4:
+    display:
+      zh: GPIO1_B4
+      en: GPIO1_B4
+    index: 120
+    optional: true
+    mux:
+      default: 0x00
+      choise:
+        0x00:
+          display:
+            zh: GPIO1_B4
+            en: GPIO1_B4
+        0x01:
+          display:
+            zh: VO_LCDC_D15
+            en: VO_LCDC_D15
+        0x02:
+          display:
+            zh: DSMC_D6
+            en: DSMC_D6
+        0x03:
+          display:
+            zh: FLEXBUS1_D12
+            en: FLEXBUS1_D12
+        0x04:
+          display:
+            zh: FLEXBUS0_D13
+            en: FLEXBUS0_D13
+        0x05:
+          display:
+            zh: FLEXBUS0_CSN_M2
+            en: FLEXBUS0_CSN_M2
+  GPIO1_B5:
+    display:
+      zh: GPIO1_B5
+      en: GPIO1_B5
+    index: 121
+    optional: true
+    mux:
+      default: 0x00
+      choise:
+        0x00:
+          display:
+            zh: GPIO1_B5
+            en: GPIO1_B5
+        0x01:
+          display:
+            zh: VO_LCDC_D14
+            en: VO_LCDC_D14
+        0x02:
+          display:
+            zh: DSMC_D7
+            en: DSMC_D7
+        0x03:
+          display:
+            zh: FLEXBUS1_D13
+            en: FLEXBUS1_D13
+        0x04:
+          display:
+            zh: FLEXBUS0_D12
+            en: FLEXBUS0_D12
+        0x05:
+          display:
+            zh: FLEXBUS1_CSN_M2
+            en: FLEXBUS1_CSN_M2
+  GPIO1_B6:
+    display:
+      zh: GPIO1_B6
+      en: GPIO1_B6
+    index: 122
+    optional: true
+    mux:
+      default: 0x00
+      choise:
+        0x00:
+          display:
+            zh: GPIO1_B6
+            en: GPIO1_B6
+        0x01:
+          display:
+            zh: VO_LCDC_D13
+            en: VO_LCDC_D13
+        0x02:
+          display:
+            zh: DSMC_CSN0
+            en: DSMC_CSN0
+        0x03:
+          display:
+            zh: FLEXBUS1_D14
+            en: FLEXBUS1_D14
+        0x04:
+          display:
+            zh: FLEXBUS0_D11
+            en: FLEXBUS0_D11
+        0x05:
+          display:
+            zh: FLEXBUS0_CSN_M3
+            en: FLEXBUS0_CSN_M3
+  GPIO1_B7:
+    display:
+      zh: GPIO1_B7
+      en: GPIO1_B7
+    index: 123
+    optional: true
+    mux:
+      default: 0x00
+      choise:
+        0x00:
+          display:
+            zh: GPIO1_B7
+            en: GPIO1_B7
+        0x01:
+          display:
+            zh: VO_LCDC_D12
+            en: VO_LCDC_D12
+        0x02:
+          display:
+            zh: DSMC_RDYN
+            en: DSMC_RDYN
+        0x03:
+          display:
+            zh: FLEXBUS1_D15
+            en: FLEXBUS1_D15
+        0x04:
+          display:
+            zh: FLEXBUS0_D10
+            en: FLEXBUS0_D10
+        0x05:
+          display:
+            zh: FLEXBUS1_CSN_M3
+            en: FLEXBUS1_CSN_M3
+  GND124:
+    display:
+      zh: GND
+      en: GND
+    index: 124
+    optional: false
+  GPIO1_C0:
+    display:
+      zh: GPIO1_C0
+      en: GPIO1_C0
+    index: 125
+    optional: true
+    mux:
+      default: 0x00
+      choise:
+        0x00:
+          display:
+            zh: GPIO1_C0
+            en: GPIO1_C0
+        0x01:
+          display:
+            zh: VO_LCDC_D11
+            en: VO_LCDC_D11
+        0x02:
+          display:
+            zh: DSMC_RESETN
+            en: DSMC_RESETN
+        0x03:
+          display:
+            zh: FLEXBUS1_CLK
+            en: FLEXBUS1_CLK
+        0x04:
+          display:
+            zh: DSMC_INT1
+            en: DSMC_INT1
+        0x05:
+          display:
+            zh: FLEXBUS0_CSN_M4
+            en: FLEXBUS0_CSN_M4
+        0x08:
+          display:
+            zh: DSMC_SLV_CLK
+            en: DSMC_SLV_CLK
+  GPIO1_C1:
+    display:
+      zh: GPIO1_C1
+      en: GPIO1_C1
+    index: 126
+    optional: true
+    mux:
+      default: 0x00
+      choise:
+        0x00:
+          display:
+            zh: GPIO1_C1
+            en: GPIO1_C1
+        0x01:
+          display:
+            zh: VO_LCDC_D10
+            en: VO_LCDC_D10
+        0x02:
+          display:
+            zh: DSMC_D8
+            en: DSMC_D8
+        0x03:
+          display:
+            zh: FLEXBUS0_CLK
+            en: FLEXBUS0_CLK
+        0x04:
+          display:
+            zh: DSM_AUD_RN_M0
+            en: DSM_AUD_RN_M0
+        0x05:
+          display:
+            zh: FLEXBUS1_CSN_M4
+            en: FLEXBUS1_CSN_M4
+        0x06:
+          display:
+            zh: SAI2_MCLK_M1
+            en: SAI2_MCLK_M1
+        0x08:
+          display:
+            zh: DSMC_SLV_DQS0
+            en: DSMC_SLV_DQS0
+  GPIO1_C2:
+    display:
+      zh: GPIO1_C2
+      en: GPIO1_C2
+    index: 127
+    optional: true
+    mux:
+      default: 0x00
+      choise:
+        0x00:
+          display:
+            zh: GPIO1_C2
+            en: GPIO1_C2
+        0x01:
+          display:
+            zh: VO_LCDC_D9
+            en: VO_LCDC_D9
+        0x02:
+          display:
+            zh: DSMC_D9
+            en: DSMC_D9
+        0x03:
+          display:
+            zh: FLEXBUS0_D9
+            en: FLEXBUS0_D9
+        0x04:
+          display:
+            zh: DSM_AUD_RP_M0
+            en: DSM_AUD_RP_M0
+        0x05:
+          display:
+            zh: FLEXBUS0_CSN_M5
+            en: FLEXBUS0_CSN_M5
+        0x06:
+          display:
+            zh: SAI2_SDI_M1
+            en: SAI2_SDI_M1
+        0x07:
+          display:
+            zh: RM_IO27
+            en: RM_IO27
+          secondary:
+            select: rmio
+            default: 0x1C
+        0x08:
+          display:
+            zh: DSMC_SLV_D0
+            en: DSMC_SLV_D0
+  GPIO1_C3:
+    display:
+      zh: GPIO1_C3
+      en: GPIO1_C3
+    index: 128
+    optional: true
+    mux:
+      default: 0x00
+      choise:
+        0x00:
+          display:
+            zh: GPIO1_C3
+            en: GPIO1_C3
+        0x01:
+          display:
+            zh: VO_LCDC_D8
+            en: VO_LCDC_D8
+        0x02:
+          display:
+            zh: DSMC_D10
+            en: DSMC_D10
+        0x03:
+          display:
+            zh: FLEXBUS0_D8
+            en: FLEXBUS0_D8
+        0x05:
+          display:
+            zh: FLEXBUS1_CSN_M5
+            en: FLEXBUS1_CSN_M5
+        0x06:
+          display:
+            zh: SAI2_SDO_M1
+            en: SAI2_SDO_M1
+        0x07:
+          display:
+            zh: RM_IO28
+            en: RM_IO28
+          secondary:
+            select: rmio
+            default: 0x1C
+        0x08:
+          display:
+            zh: DSMC_SLV_D1
+            en: DSMC_SLV_D1

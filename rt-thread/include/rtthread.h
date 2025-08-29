@@ -720,6 +720,11 @@ rt_inline rt_bool_t rt_sched_thread_is_binding(rt_thread_t thread)
 #endif
 #endif
 
+//perfetto
+typedef int (*__kpi_perfetto_set_path)(const char *path);
+typedef int (*__kpi_perfetto_start)(void);
+typedef int (*__kpi_perfetto_stop)(void);
+
 KPI_EXTERN(rt_tick_get);
 KPI_EXTERN(rt_tick_set);
 KPI_EXTERN(rt_tick_from_millisecond);
@@ -862,5 +867,9 @@ KPI_EXTERN(rt_kprintf);
 KPI_EXTERN(rt_kputs);
 
 KPI_EXTERN(rt_assert_handler);
+
+KPI_EXTERN(perfetto_set_path);
+KPI_EXTERN(perfetto_start);
+KPI_EXTERN(perfetto_stop);
 
 #endif /* __RTTHREAD_H__ */

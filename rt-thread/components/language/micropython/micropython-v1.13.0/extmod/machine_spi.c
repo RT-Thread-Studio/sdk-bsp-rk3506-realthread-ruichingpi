@@ -24,11 +24,10 @@
  * THE SOFTWARE.
  */
 
+#include "extmod/machine_spi.h"
+#include "py/runtime.h"
 #include <stdio.h>
 #include <string.h>
-
-#include "py/runtime.h"
-#include "extmod/machine_spi.h"
 
 #if MICROPY_PY_MACHINE_SPI
 
@@ -41,19 +40,28 @@
 /******************************************************************************/
 // MicroPython bindings for generic machine.SPI
 
-STATIC mp_obj_t mp_machine_soft_spi_make_new(const mp_obj_type_t *type, size_t n_args, size_t n_kw, const mp_obj_t *all_args);
+STATIC mp_obj_t mp_machine_soft_spi_make_new(const mp_obj_type_t *type,
+    size_t n_args,
+    size_t n_kw,
+    const mp_obj_t *all_args);
 
-mp_obj_t mp_machine_spi_make_new(const mp_obj_type_t *type, size_t n_args, size_t n_kw, const mp_obj_t *args) {
+mp_obj_t mp_machine_spi_make_new(
+    const mp_obj_type_t *type, size_t n_args, size_t n_kw, const mp_obj_t *args)
+{
     // check the id argument, if given
-    if (n_args > 0) {
-        if (args[0] != MP_OBJ_NEW_SMALL_INT(-1)) {
-            #if defined(MICROPY_PY_MACHINE_SPI_MAKE_NEW)
+    if (n_args > 0)
+    {
+        if (args[0] != MP_OBJ_NEW_SMALL_INT(-1))
+        {
+#if defined(MICROPY_PY_MACHINE_SPI_MAKE_NEW)
             // dispatch to port-specific constructor
-            extern mp_obj_t MICROPY_PY_MACHINE_SPI_MAKE_NEW(const mp_obj_type_t *type, size_t n_args, size_t n_kw, const mp_obj_t *all_args);
+            extern mp_obj_t MICROPY_PY_MACHINE_SPI_MAKE_NEW(
+                const mp_obj_type_t *type, size_t n_args, size_t n_kw,
+                const mp_obj_t *all_args);
             return MICROPY_PY_MACHINE_SPI_MAKE_NEW(type, n_args, n_kw, args);
-            #else
+#else
             mp_raise_ValueError("invalid SPI peripheral");
-            #endif
+#endif
         }
         --n_args;
         ++args;
@@ -63,68 +71,169 @@ mp_obj_t mp_machine_spi_make_new(const mp_obj_type_t *type, size_t n_args, size_
     return mp_machine_soft_spi_make_new(type, n_args, n_kw, args);
 }
 
-STATIC mp_obj_t machine_spi_init(size_t n_args, const mp_obj_t *args, mp_map_t *kw_args) {
-    mp_obj_base_t *s = (mp_obj_base_t*)MP_OBJ_TO_PTR(args[0]);
-    mp_machine_spi_p_t *spi_p = (mp_machine_spi_p_t*)s->type->protocol;
+STATIC mp_obj_t machine_spi_init(
+    size_t n_args, const mp_obj_t *args, mp_map_t *kw_args)
+{
+    mp_obj_base_t *s = (mp_obj_base_t *)MP_OBJ_TO_PTR(args[0]);
+    mp_machine_spi_p_t *spi_p = (mp_machine_spi_p_t *)s->type->protocol;
     spi_p->init(s, n_args - 1, args + 1, kw_args);
     return mp_const_none;
 }
 STATIC MP_DEFINE_CONST_FUN_OBJ_KW(machine_spi_init_obj, 1, machine_spi_init);
 
-STATIC mp_obj_t machine_spi_deinit(mp_obj_t self) {
-    mp_obj_base_t *s = (mp_obj_base_t*)MP_OBJ_TO_PTR(self);
-    mp_machine_spi_p_t *spi_p = (mp_machine_spi_p_t*)s->type->protocol;
-    if (spi_p->deinit != NULL) {
+STATIC mp_obj_t machine_spi_deinit(mp_obj_t self)
+{
+    mp_obj_base_t *s = (mp_obj_base_t *)MP_OBJ_TO_PTR(self);
+    mp_machine_spi_p_t *spi_p = (mp_machine_spi_p_t *)s->type->protocol;
+    if (spi_p->deinit != NULL)
+    {
         spi_p->deinit(s);
     }
     return mp_const_none;
 }
 STATIC MP_DEFINE_CONST_FUN_OBJ_1(machine_spi_deinit_obj, machine_spi_deinit);
 
-STATIC void mp_machine_spi_transfer(mp_obj_t self, size_t len, const void *src, void *dest) {
-    mp_obj_base_t *s = (mp_obj_base_t*)MP_OBJ_TO_PTR(self);
-    mp_machine_spi_p_t *spi_p = (mp_machine_spi_p_t*)s->type->protocol;
+STATIC void mp_machine_spi_transfer(
+    mp_obj_t self, size_t len, const void *src, void *dest)
+{
+    mp_obj_base_t *s = (mp_obj_base_t *)MP_OBJ_TO_PTR(self);
+    mp_machine_spi_p_t *spi_p = (mp_machine_spi_p_t *)s->type->protocol;
     spi_p->transfer(s, len, src, dest);
 }
 
-STATIC mp_obj_t mp_machine_spi_read(size_t n_args, const mp_obj_t *args) {
+STATIC mp_obj_t mp_machine_spi_read(size_t n_args, const mp_obj_t *args)
+{
     vstr_t vstr;
     vstr_init_len(&vstr, mp_obj_get_int(args[1]));
     memset(vstr.buf, n_args == 3 ? mp_obj_get_int(args[2]) : 0, vstr.len);
     mp_machine_spi_transfer(args[0], vstr.len, vstr.buf, vstr.buf);
     return mp_obj_new_str_from_vstr(&mp_type_bytes, &vstr);
 }
-MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(mp_machine_spi_read_obj, 2, 3, mp_machine_spi_read);
+MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(
+    mp_machine_spi_read_obj, 2, 3, mp_machine_spi_read);
 
-STATIC mp_obj_t mp_machine_spi_readinto(size_t n_args, const mp_obj_t *args) {
+STATIC mp_obj_t mp_machine_spi_readinto(size_t n_args, const mp_obj_t *args)
+{
     mp_buffer_info_t bufinfo;
     mp_get_buffer_raise(args[1], &bufinfo, MP_BUFFER_WRITE);
     memset(bufinfo.buf, n_args == 3 ? mp_obj_get_int(args[2]) : 0, bufinfo.len);
     mp_machine_spi_transfer(args[0], bufinfo.len, bufinfo.buf, bufinfo.buf);
     return mp_const_none;
 }
-MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(mp_machine_spi_readinto_obj, 2, 3, mp_machine_spi_readinto);
+MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(
+    mp_machine_spi_readinto_obj, 2, 3, mp_machine_spi_readinto);
 
-STATIC mp_obj_t mp_machine_spi_write(mp_obj_t self, mp_obj_t wr_buf) {
+STATIC mp_obj_t mp_machine_spi_write(mp_obj_t self, mp_obj_t wr_buf)
+{
     mp_buffer_info_t src;
     mp_get_buffer_raise(wr_buf, &src, MP_BUFFER_READ);
-    mp_machine_spi_transfer(self, src.len, (const uint8_t*)src.buf, NULL);
+    mp_machine_spi_transfer(self, src.len, (const uint8_t *)src.buf, NULL);
     return mp_const_none;
 }
 MP_DEFINE_CONST_FUN_OBJ_2(mp_machine_spi_write_obj, mp_machine_spi_write);
 
-STATIC mp_obj_t mp_machine_spi_write_readinto(mp_obj_t self, mp_obj_t wr_buf, mp_obj_t rd_buf) {
+STATIC mp_obj_t mp_machine_spi_write_readinto(
+    mp_obj_t self, mp_obj_t wr_buf, mp_obj_t rd_buf)
+{
     mp_buffer_info_t src;
     mp_get_buffer_raise(wr_buf, &src, MP_BUFFER_READ);
     mp_buffer_info_t dest;
     mp_get_buffer_raise(rd_buf, &dest, MP_BUFFER_WRITE);
-    if (src.len != dest.len) {
+    if (src.len != dest.len)
+    {
         mp_raise_ValueError("buffers must be the same length");
     }
     mp_machine_spi_transfer(self, src.len, src.buf, dest.buf);
     return mp_const_none;
 }
-MP_DEFINE_CONST_FUN_OBJ_3(mp_machine_spi_write_readinto_obj, mp_machine_spi_write_readinto);
+MP_DEFINE_CONST_FUN_OBJ_3(
+    mp_machine_spi_write_readinto_obj, mp_machine_spi_write_readinto);
+#include <rtthread.h>
+#include <rtdevice.h>
+STATIC mp_obj_t mp_machine_spi_register(size_t n_args, const mp_obj_t *pos_args)
+{
+    const char *device_name = NULL;
+    const char *bus_name = NULL;
+    int cs_pin = -1;
+
+    size_t pos_index = 0;
+
+    if (n_args > pos_index)
+    {
+        if (device_name != NULL)
+        {
+            mp_raise_TypeError(
+                "device_name provided both as positional and keyword argument");
+        }
+        device_name = mp_obj_str_get_str(pos_args[pos_index++]);
+    }
+
+    if (n_args > pos_index)
+    {
+        if (bus_name != NULL)
+        {
+            mp_raise_TypeError(
+                "bus_name provided both as positional and keyword argument");
+        }
+        if (!mp_obj_is_str(pos_args[pos_index]))
+        {
+            mp_raise_TypeError("bus_name must be a string");
+        }
+        bus_name = mp_obj_str_get_str(pos_args[pos_index++]);
+    }
+
+    if (n_args > pos_index)
+    {
+        if (cs_pin != -1)
+        {
+            mp_raise_TypeError(
+                "cs_pin provided both as positional and keyword argument");
+        }
+        if (!mp_obj_is_int(pos_args[pos_index]))
+        {
+            mp_raise_TypeError("cs_pin must be an integer");
+        }
+        cs_pin = mp_obj_get_int(pos_args[pos_index++]);
+    }
+
+    if (device_name == NULL)
+    {
+        mp_raise_TypeError("Missing required argument: device_name");
+    }
+    if (bus_name == NULL)
+    {
+        mp_raise_TypeError("Missing required argument: bus_name");
+    }
+    if (cs_pin == -1)
+    {
+        mp_raise_TypeError("Missing required argument: cs_pin");
+    }
+
+    rt_err_t ret;
+    struct rt_spi_device *dev;
+
+    if (rt_device_find(device_name))
+    {
+        return mp_const_none;
+    }
+
+    dev = rt_malloc(288);
+    if (dev == RT_NULL)
+    {
+        mp_raise_TypeError("Malloc failed.\n");
+    }
+
+    ret = rt_spi_bus_attach_device_cspin(
+        dev, device_name, bus_name, cs_pin, RT_NULL);
+    if (ret)
+    {
+        mp_raise_TypeError("Register device failed.\n");
+    }
+
+    return mp_const_none;
+}
+MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(
+    mp_machine_spi_register_obj, 3, 3, mp_machine_spi_register);
 
 STATIC const mp_rom_map_elem_t machine_spi_locals_dict_table[] = {
     { MP_ROM_QSTR(MP_QSTR_init), MP_ROM_PTR(&machine_spi_init_obj) },
@@ -132,7 +241,9 @@ STATIC const mp_rom_map_elem_t machine_spi_locals_dict_table[] = {
     { MP_ROM_QSTR(MP_QSTR_read), MP_ROM_PTR(&mp_machine_spi_read_obj) },
     { MP_ROM_QSTR(MP_QSTR_readinto), MP_ROM_PTR(&mp_machine_spi_readinto_obj) },
     { MP_ROM_QSTR(MP_QSTR_write), MP_ROM_PTR(&mp_machine_spi_write_obj) },
-    { MP_ROM_QSTR(MP_QSTR_write_readinto), MP_ROM_PTR(&mp_machine_spi_write_readinto_obj) },
+    { MP_ROM_QSTR(MP_QSTR_write_readinto),
+        MP_ROM_PTR(&mp_machine_spi_write_readinto_obj) },
+    { MP_ROM_QSTR(MP_QSTR_register), MP_ROM_PTR(&mp_machine_spi_register_obj) },
 
     { MP_ROM_QSTR(MP_QSTR_MSB), MP_ROM_INT(MICROPY_PY_MACHINE_SPI_MSB) },
     { MP_ROM_QSTR(MP_QSTR_LSB), MP_ROM_INT(MICROPY_PY_MACHINE_SPI_LSB) },
@@ -143,55 +254,81 @@ MP_DEFINE_CONST_DICT(mp_machine_spi_locals_dict, machine_spi_locals_dict_table);
 /******************************************************************************/
 // Implementation of soft SPI
 
-STATIC uint32_t baudrate_from_delay_half(uint32_t delay_half) {
-    #ifdef MICROPY_HW_SOFTSPI_MIN_DELAY
-    if (delay_half == MICROPY_HW_SOFTSPI_MIN_DELAY) {
+STATIC uint32_t baudrate_from_delay_half(uint32_t delay_half)
+{
+#ifdef MICROPY_HW_SOFTSPI_MIN_DELAY
+    if (delay_half == MICROPY_HW_SOFTSPI_MIN_DELAY)
+    {
         return MICROPY_HW_SOFTSPI_MAX_BAUDRATE;
-    } else
-    #endif
+    }
+    else
+#endif
     {
         return 500000 / delay_half;
     }
 }
 
-STATIC uint32_t baudrate_to_delay_half(uint32_t baudrate) {
-    #ifdef MICROPY_HW_SOFTSPI_MIN_DELAY
-    if (baudrate >= MICROPY_HW_SOFTSPI_MAX_BAUDRATE) {
+STATIC uint32_t baudrate_to_delay_half(uint32_t baudrate)
+{
+#ifdef MICROPY_HW_SOFTSPI_MIN_DELAY
+    if (baudrate >= MICROPY_HW_SOFTSPI_MAX_BAUDRATE)
+    {
         return MICROPY_HW_SOFTSPI_MIN_DELAY;
-    } else
-    #endif
+    }
+    else
+#endif
     {
         uint32_t delay_half = 500000 / baudrate;
         // round delay_half up so that: actual_baudrate <= requested_baudrate
-        if (500000 % baudrate != 0) {
+        if (500000 % baudrate != 0)
+        {
             delay_half += 1;
         }
         return delay_half;
     }
 }
 
-STATIC void mp_machine_soft_spi_print(const mp_print_t *print, mp_obj_t self_in, mp_print_kind_t kind) {
+STATIC void mp_machine_soft_spi_print(
+    const mp_print_t *print, mp_obj_t self_in, mp_print_kind_t kind)
+{
     mp_machine_soft_spi_obj_t *self = MP_OBJ_TO_PTR(self_in);
-    mp_printf(print, "SoftSPI(baudrate=%u, polarity=%u, phase=%u,"
-        " sck=" MP_HAL_PIN_FMT ", mosi=" MP_HAL_PIN_FMT ", miso=" MP_HAL_PIN_FMT ")",
-        baudrate_from_delay_half(self->spi.delay_half), self->spi.polarity, self->spi.phase,
-        mp_hal_pin_name(self->spi.sck), mp_hal_pin_name(self->spi.mosi), mp_hal_pin_name(self->spi.miso));
+    mp_printf(print,
+        "SoftSPI(baudrate=%u, polarity=%u, phase=%u,"
+        ")",
+        baudrate_from_delay_half(self->spi.delay_half), self->spi.polarity,
+        self->spi.phase);
 }
 
-STATIC mp_obj_t mp_machine_soft_spi_make_new(const mp_obj_type_t *type, size_t n_args, size_t n_kw, const mp_obj_t *all_args) {
-    enum { ARG_baudrate, ARG_polarity, ARG_phase, ARG_bits, ARG_firstbit, ARG_sck, ARG_mosi, ARG_miso };
+STATIC mp_obj_t mp_machine_soft_spi_make_new(const mp_obj_type_t *type,
+    size_t n_args,
+    size_t n_kw,
+    const mp_obj_t *all_args)
+{
+    enum
+    {
+        ARG_baudrate,
+        ARG_polarity,
+        ARG_phase,
+        ARG_bits,
+        ARG_firstbit,
+        ARG_sck,
+        ARG_mosi,
+        ARG_miso
+    };
     static const mp_arg_t allowed_args[] = {
-        { MP_QSTR_baudrate, MP_ARG_INT, {.u_int = 500000} },
-        { MP_QSTR_polarity, MP_ARG_KW_ONLY | MP_ARG_INT, {.u_int = 0} },
-        { MP_QSTR_phase,    MP_ARG_KW_ONLY | MP_ARG_INT, {.u_int = 0} },
-        { MP_QSTR_bits,     MP_ARG_KW_ONLY | MP_ARG_INT, {.u_int = 8} },
-        { MP_QSTR_firstbit, MP_ARG_KW_ONLY | MP_ARG_INT, {.u_int = MICROPY_PY_MACHINE_SPI_MSB} },
-        { MP_QSTR_sck,      MP_ARG_KW_ONLY | MP_ARG_OBJ, {.u_obj = MP_OBJ_NULL} },
-        { MP_QSTR_mosi,     MP_ARG_KW_ONLY | MP_ARG_OBJ, {.u_obj = MP_OBJ_NULL} },
-        { MP_QSTR_miso,     MP_ARG_KW_ONLY | MP_ARG_OBJ, {.u_obj = MP_OBJ_NULL} },
+        { MP_QSTR_baudrate, MP_ARG_INT, { .u_int = 500000 } },
+        { MP_QSTR_polarity, MP_ARG_KW_ONLY | MP_ARG_INT, { .u_int = 0 } },
+        { MP_QSTR_phase, MP_ARG_KW_ONLY | MP_ARG_INT, { .u_int = 0 } },
+        { MP_QSTR_bits, MP_ARG_KW_ONLY | MP_ARG_INT, { .u_int = 8 } },
+        { MP_QSTR_firstbit, MP_ARG_KW_ONLY | MP_ARG_INT,
+            { .u_int = MICROPY_PY_MACHINE_SPI_MSB } },
+        { MP_QSTR_sck, MP_ARG_KW_ONLY | MP_ARG_OBJ, { .u_obj = MP_OBJ_NULL } },
+        { MP_QSTR_mosi, MP_ARG_KW_ONLY | MP_ARG_OBJ, { .u_obj = MP_OBJ_NULL } },
+        { MP_QSTR_miso, MP_ARG_KW_ONLY | MP_ARG_OBJ, { .u_obj = MP_OBJ_NULL } },
     };
     mp_arg_val_t args[MP_ARRAY_SIZE(allowed_args)];
-    mp_arg_parse_all_kw_array(n_args, n_kw, all_args, MP_ARRAY_SIZE(allowed_args), allowed_args, args);
+    mp_arg_parse_all_kw_array(n_args, n_kw, all_args,
+        MP_ARRAY_SIZE(allowed_args), allowed_args, args);
 
     // create new object
     mp_machine_soft_spi_obj_t *self = m_new_obj(mp_machine_soft_spi_obj_t);
@@ -201,15 +338,18 @@ STATIC mp_obj_t mp_machine_soft_spi_make_new(const mp_obj_type_t *type, size_t n
     self->spi.delay_half = baudrate_to_delay_half(args[ARG_baudrate].u_int);
     self->spi.polarity = args[ARG_polarity].u_int;
     self->spi.phase = args[ARG_phase].u_int;
-    if (args[ARG_bits].u_int != 8) {
+    if (args[ARG_bits].u_int != 8)
+    {
         mp_raise_ValueError("bits must be 8");
     }
-    if (args[ARG_firstbit].u_int != MICROPY_PY_MACHINE_SPI_MSB) {
+    if (args[ARG_firstbit].u_int != MICROPY_PY_MACHINE_SPI_MSB)
+    {
         mp_raise_ValueError("firstbit must be MSB");
     }
-    if (args[ARG_sck].u_obj == MP_OBJ_NULL
-        || args[ARG_mosi].u_obj == MP_OBJ_NULL
-        || args[ARG_miso].u_obj == MP_OBJ_NULL) {
+    if (args[ARG_sck].u_obj == MP_OBJ_NULL ||
+        args[ARG_mosi].u_obj == MP_OBJ_NULL ||
+        args[ARG_miso].u_obj == MP_OBJ_NULL)
+    {
         mp_raise_ValueError("must specify all of sck/mosi/miso");
     }
     self->spi.sck = mp_hal_get_pin_obj(args[ARG_sck].u_obj);
@@ -222,37 +362,56 @@ STATIC mp_obj_t mp_machine_soft_spi_make_new(const mp_obj_type_t *type, size_t n
     return MP_OBJ_FROM_PTR(self);
 }
 
-STATIC void mp_machine_soft_spi_init(mp_obj_base_t *self_in, size_t n_args, const mp_obj_t *pos_args, mp_map_t *kw_args) {
-    mp_machine_soft_spi_obj_t *self = (mp_machine_soft_spi_obj_t*)self_in;
+STATIC void mp_machine_soft_spi_init(mp_obj_base_t *self_in,
+    size_t n_args,
+    const mp_obj_t *pos_args,
+    mp_map_t *kw_args)
+{
+    mp_machine_soft_spi_obj_t *self = (mp_machine_soft_spi_obj_t *)self_in;
 
-    enum { ARG_baudrate, ARG_polarity, ARG_phase, ARG_sck, ARG_mosi, ARG_miso };
+    enum
+    {
+        ARG_baudrate,
+        ARG_polarity,
+        ARG_phase,
+        ARG_sck,
+        ARG_mosi,
+        ARG_miso
+    };
     static const mp_arg_t allowed_args[] = {
-        { MP_QSTR_baudrate, MP_ARG_INT, {.u_int = -1} },
-        { MP_QSTR_polarity, MP_ARG_INT, {.u_int = -1} },
-        { MP_QSTR_phase, MP_ARG_INT, {.u_int = -1} },
-        { MP_QSTR_sck, MP_ARG_KW_ONLY | MP_ARG_OBJ, {.u_obj = MP_OBJ_NULL} },
-        { MP_QSTR_mosi, MP_ARG_KW_ONLY | MP_ARG_OBJ, {.u_obj = MP_OBJ_NULL} },
-        { MP_QSTR_miso, MP_ARG_KW_ONLY | MP_ARG_OBJ, {.u_obj = MP_OBJ_NULL} },
+        { MP_QSTR_baudrate, MP_ARG_INT, { .u_int = -1 } },
+        { MP_QSTR_polarity, MP_ARG_INT, { .u_int = -1 } },
+        { MP_QSTR_phase, MP_ARG_INT, { .u_int = -1 } },
+        { MP_QSTR_sck, MP_ARG_KW_ONLY | MP_ARG_OBJ, { .u_obj = MP_OBJ_NULL } },
+        { MP_QSTR_mosi, MP_ARG_KW_ONLY | MP_ARG_OBJ, { .u_obj = MP_OBJ_NULL } },
+        { MP_QSTR_miso, MP_ARG_KW_ONLY | MP_ARG_OBJ, { .u_obj = MP_OBJ_NULL } },
     };
     mp_arg_val_t args[MP_ARRAY_SIZE(allowed_args)];
-    mp_arg_parse_all(n_args, pos_args, kw_args, MP_ARRAY_SIZE(allowed_args), allowed_args, args);
+    mp_arg_parse_all(n_args, pos_args, kw_args, MP_ARRAY_SIZE(allowed_args),
+        allowed_args, args);
 
-    if (args[ARG_baudrate].u_int != -1) {
+    if (args[ARG_baudrate].u_int != -1)
+    {
         self->spi.delay_half = baudrate_to_delay_half(args[ARG_baudrate].u_int);
     }
-    if (args[ARG_polarity].u_int != -1) {
+    if (args[ARG_polarity].u_int != -1)
+    {
         self->spi.polarity = args[ARG_polarity].u_int;
     }
-    if (args[ARG_phase].u_int != -1) {
+    if (args[ARG_phase].u_int != -1)
+    {
         self->spi.phase = args[ARG_phase].u_int;
     }
-    if (args[ARG_sck].u_obj != MP_OBJ_NULL) {
+    if (args[ARG_sck].u_obj != MP_OBJ_NULL)
+    {
         self->spi.sck = mp_hal_get_pin_obj(args[ARG_sck].u_obj);
     }
-    if (args[ARG_mosi].u_obj != MP_OBJ_NULL) {
+    if (args[ARG_mosi].u_obj != MP_OBJ_NULL)
+    {
         self->spi.mosi = mp_hal_get_pin_obj(args[ARG_mosi].u_obj);
     }
-    if (args[ARG_miso].u_obj != MP_OBJ_NULL) {
+    if (args[ARG_miso].u_obj != MP_OBJ_NULL)
+    {
         self->spi.miso = mp_hal_get_pin_obj(args[ARG_miso].u_obj);
     }
 
@@ -260,8 +419,10 @@ STATIC void mp_machine_soft_spi_init(mp_obj_base_t *self_in, size_t n_args, cons
     mp_soft_spi_ioctl(&self->spi, MP_SPI_IOCTL_INIT);
 }
 
-STATIC void mp_machine_soft_spi_transfer(mp_obj_base_t *self_in, size_t len, const uint8_t *src, uint8_t *dest) {
-    mp_machine_soft_spi_obj_t *self = (mp_machine_soft_spi_obj_t*)self_in;
+STATIC void mp_machine_soft_spi_transfer(
+    mp_obj_base_t *self_in, size_t len, const uint8_t *src, uint8_t *dest)
+{
+    mp_machine_soft_spi_obj_t *self = (mp_machine_soft_spi_obj_t *)self_in;
     mp_soft_spi_transfer(&self->spi, len, src, dest);
 }
 
@@ -277,7 +438,7 @@ const mp_obj_type_t mp_machine_soft_spi_type = {
     .print = mp_machine_soft_spi_print,
     .make_new = mp_machine_spi_make_new, // delegate to master constructor
     .protocol = &mp_machine_soft_spi_p,
-    .locals_dict = (mp_obj_dict_t*)&mp_machine_spi_locals_dict,
+    .locals_dict = (mp_obj_dict_t *)&mp_machine_spi_locals_dict,
 };
 
 #endif // MICROPY_PY_MACHINE_SPI

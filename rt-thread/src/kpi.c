@@ -290,6 +290,7 @@ KPI_DEFINED(getaddrinfo);
 KPI_DEFINED(rt_opendir);
 KPI_DEFINED(rt_readdir);
 KPI_DEFINED(rt_closedir);
+KPI_DEFINED(fsync);
 
 KPI_DEFINED(if_set_mac);
 KPI_DEFINED(if_get_mac);
@@ -300,6 +301,10 @@ KPI_DEFINED(if_set_ip);
 KPI_DEFINED(if_get_ip);
 KPI_DEFINED(if_up);
 KPI_DEFINED(if_down);
+
+KPI_DEFINED(perfetto_set_path);
+KPI_DEFINED(perfetto_start);
+KPI_DEFINED(perfetto_stop);
 
 KPI_DEFINED(service_find);
 KPI_DEFINED(service_register);
@@ -884,6 +889,7 @@ void kpi_init(void)
     rt_opendir = KPI_IMPORT(rt_opendir, 679);
     rt_readdir = KPI_IMPORT(rt_readdir, 680);
     rt_closedir = KPI_IMPORT(rt_closedir, 681);
+    fsync = KPI_IMPORT(fsync, 682);
 
     if_set_mac = KPI_IMPORT(if_set_mac, 700);
     if_get_mac = KPI_IMPORT(if_get_mac, 701);
@@ -894,6 +900,10 @@ void kpi_init(void)
     if_get_ip = KPI_IMPORT(if_get_ip, 706);
     if_up = KPI_IMPORT(if_up, 707);
     if_down = KPI_IMPORT(if_down, 708);
+
+    perfetto_set_path = KPI_IMPORT(perfetto_set_path, 750);
+    perfetto_start = KPI_IMPORT(perfetto_start, 751);
+    perfetto_stop = KPI_IMPORT(perfetto_stop, 752);
 
     service_find = KPI_IMPORT(service_find, 1180);
     service_register = KPI_IMPORT(service_register, 1181);

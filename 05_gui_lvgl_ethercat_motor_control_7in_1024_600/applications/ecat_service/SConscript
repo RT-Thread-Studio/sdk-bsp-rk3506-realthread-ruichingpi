@@ -1,0 +1,7 @@
+from building import *
+
+cwd     = GetCurrentDir()
+src     = Glob('*.c')
+group   = DefineGroup('ecat_service', src, depend = ['COMP_USING_ETHERCAT'], CPPPATH = [])
+
+Return('group')

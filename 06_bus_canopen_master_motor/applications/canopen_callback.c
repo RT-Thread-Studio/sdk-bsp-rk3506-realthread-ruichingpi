@@ -79,7 +79,7 @@ void master402_heartbeatError(CO_Data* d, UNS8 heartbeatID)
       rt_sprintf(name,"NODEerr%d",heartbeatID);
       tid = rt_thread_create(name, master402_fix_node_Disconnected,
                               (void *)(int)heartbeatID,//强制转换为16位数据与void*指针字节一致，以消除强制转换大小不匹配警告
-                              1024, 12, 2);
+                              10240, 12, 2);
 
       if(tid == RT_NULL)
       {
@@ -121,7 +121,7 @@ void master402_preOperational(CO_Data* d)
 	rt_thread_t tid;
 	rt_kprintf("canfestival enter preOperational state\n");
 	tid = rt_thread_create("co_cfg", canopen_start_thread_entry, (void *)(int)d,//强制转换为16位数据与void*指针字节一致，以消除强制转换大小不匹配警告
-                        2048, 12, 2);
+                        10240, 12, 2);
 	if(tid == RT_NULL)
 	{
 		rt_kprintf("canfestival config thread start failed!\n");
@@ -366,7 +366,7 @@ void master402_fix_config_err(CO_Data *d,UNS8 nodeId)
     rt_kprintf("nodeID:%d,Enabling the repair thread,Repair times = %d\n",nodeId,cfg[nodeId - 2].try_cnt);
     rt_thread_t tid = rt_thread_create(name, master402_fix_config_err_thread_entry,
                       (void *)(int)nodeId,//强制转换为16位数据与void*指针字节一致，以消除强制转换大小不匹配警告
-                      1024, 12, 2);
+                      10240, 12, 2);
 
     if(tid == RT_NULL)
     {

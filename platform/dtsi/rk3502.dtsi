@@ -41,7 +41,7 @@
 		spi4 = &flexbus_spi;
 	};
 
-	clocks {
+	clocks:clocks {
 		compatible = "simple-bus";
 		#address-cells = <1>;
 		#size-cells = <1>;
@@ -331,6 +331,10 @@
 			reg = <0x0 0x62000>;
 		};
 
+        trust@1 {
+            reg =<0x3c00000 0x140000>;
+        };
+
 		cma: linux,cma {
 			compatible = "shared-dma-pool";
 			reusable;
@@ -455,7 +459,7 @@
 		#address-cells = <0>;
 	};
 
-	timer {
+	timer:timer {
 		compatible = "arm,armv7-timer";
 		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(3) | IRQ_TYPE_LEVEL_HIGH)>,
 			     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(3) | IRQ_TYPE_LEVEL_HIGH)>,

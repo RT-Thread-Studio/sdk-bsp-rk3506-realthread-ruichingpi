@@ -66,10 +66,12 @@ TARGET_PROCESSOR   += '-mfloat-abi=hard '
 #-------------------------------------------------------------------------------
 OPTIMIZATION        = '-ftree-vectorize '
 OPTIMIZATION       += '-ffast-math '
+if BUILD == 'debug':
+    OPTIMIZATION   += '-O0'
+else:
+    OPTIMIZATION   += '-O2'
 WARNINGS            = '-Wall'
-DEBUGGINGS          = {
-    'debug': '-O0 -g -gdwarf-2',
-    'release': '-O2 -g -gdwarf-2'}[BUILD]
+DEBUGGINGS          = '-gdwarf-2'
 COMMON_PREPROCESSOR = ''
 
 #-------------------------------------------------------------------------------

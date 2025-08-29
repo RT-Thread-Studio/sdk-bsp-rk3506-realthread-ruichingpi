@@ -27,7 +27,7 @@ SOURCES         += Glob('port/modules/machine/*.c')
 SOURCES         += Glob('port/modules/user/*.c')
 SOURCES         += Glob('lib/netutils/*.c')
 SOURCES         += Glob('lib/timeutils/*.c')
-# SOURCES         += Glob('drivers/bus/*.c')
+SOURCES         += Glob('drivers/bus/*.c')
 SOURCES         += Glob('port/native/*.c')
 
 LOCAL_CPPPATH    = []

@@ -118,12 +118,6 @@ STATIC mp_uint_t fdfile_ioctl(mp_obj_t o_in, mp_uint_t request, uintptr_t arg, i
             s->offset = off;
             return 0;
         }
-        case MP_STREAM_FLUSH:
-            if (fsync(o->fd) < 0) {
-                *errcode = errno;
-                return MP_STREAM_ERROR;
-            }
-            return 0;
         default:
             *errcode = EINVAL;
             return MP_STREAM_ERROR;

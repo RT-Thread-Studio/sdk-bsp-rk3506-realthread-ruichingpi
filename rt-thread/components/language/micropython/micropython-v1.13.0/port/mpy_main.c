@@ -287,12 +287,13 @@ mp_lexer_t *mp_lexer_new_from_file(const char *filename) {
 
 #if defined(RT_USING_FINSH) && defined(FINSH_USING_MSH)
 #include <finsh.h>
-static void python(uint8_t argc, char **argv) {
+static int python(uint8_t argc, char **argv) {
     if (argc > 1) {
         mpy_main(argv[1]);
     } else {
         mpy_main(NULL);
     }
+    return 0;
 }
 MSH_CMD_EXPORT(python, MicroPython: `python [file.py]` execute python script);
 #endif /* defined(RT_USING_FINSH) && defined(FINSH_USING_MSH) */

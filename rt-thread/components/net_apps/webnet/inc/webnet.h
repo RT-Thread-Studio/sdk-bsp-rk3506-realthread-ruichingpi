@@ -84,7 +84,7 @@ extern "C" {
 #define WEBNET_VERSION_NUM             0x20003      /* webnet version number */
 #define WEBNET_THREAD_NAME             "webnet"     /* webnet thread name */
 
-#define WEBNET_THREAD_STACKSIZE        (20 * 1024)   /* webnet thread stack size */
+#define WEBNET_THREAD_STACKSIZE        (200 * 1024)   /* webnet thread stack size */
 #define WEBNET_PRIORITY                20           /* webnet thread priority */
 #define WEBNET_PATH_MAX                256          /* maxiaml path length in webnet */
 #define WEBNET_SERVER                  "Server: webnet "WEBNET_VERSION"\r\n"

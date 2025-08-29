@@ -18,8 +18,8 @@
     model = "RC-Pi-3506 Board";
     compatible = "rc-pi-3506";
 
-    chosen {
-        bootargs = "earlycon=uart8250,mmio32,0xff0b0000 console=ttyFIQ0 ubi.mtd=5 root=ubi0:rootfs rw rootfstype=ubifs rootwait snd_aloop.index=7 snd_aloop.use_raw_jiffies=1";
+    chosen:chosen {
+        bootargs = "earlycon=uart8250,mmio32,0xff0b0000 console=ttyFIQ1 ubi.mtd=10 root=ubi0:rootfs rw rootfstype=ubifs rootwait snd_aloop.index=7 snd_aloop.use_raw_jiffies=1";
     };
 
     fiq_debugger: fiq-debugger {
@@ -114,7 +114,7 @@
 };
 
 &usb20_otg0 {
-	status = "disabled";
+	status = "okay";
 };
 
 &usb20_otg1 {
@@ -301,7 +301,7 @@
     clock-frequency = <400000>;
     status = "okay";
 
-    hym8563: hym8563@51 {
+    hym8563: hym8563-rtt@51 {
         compatible = "haoyu,hym8563";
         reg = <0x51>;
         #clock-cells = <0>;
@@ -309,7 +309,7 @@
         clock-output-names = "hym8563-32k";
     };
 
-    tca9534a_gpio: tca9534a@38 {
+    tca9534a_gpio: tca9534a-rtt@38 {
         compatible = "ti,tca9534a";
         reg = <0x38>;
 

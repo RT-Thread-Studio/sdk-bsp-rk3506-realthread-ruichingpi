@@ -14,6 +14,7 @@
 
 #include <stddef.h>
 #include <sys/types.h>
+#include <kpi.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -35,7 +36,7 @@ ssize_t read(int fd, void *buf, size_t len);
 ssize_t write(int fd, const void *buf, size_t len);
 off_t lseek(int fd, off_t offset, int whence);
 int pause(void);
-int fsync(int fildes);
+typedef int (*__kpi_fsync)(int fildes);
 long sysconf(int __name);
 int unlink(const char *pathname);
 int close(int d);
@@ -57,6 +58,7 @@ uid_t geteuid(void);
 gid_t getgid(void);
 gid_t getegid(void);
 
+KPI_EXTERN(fsync);
 #ifdef __cplusplus
 }
 #endif
