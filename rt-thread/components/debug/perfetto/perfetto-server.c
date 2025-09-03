@@ -7,24 +7,18 @@
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution.
  */
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <perfetto-server.h>
+#include <service.h>
+#include <rtthread.h>
 #include <webnet.h>
 #include <wn_module.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <rtthread.h>
-#include <rtdef.h>
 
 static void cgi_perfetto(struct webnet_session* session)
 {
-
     if (!session || !session->request)
         goto __exit;
     const char *action = NULL;
 
-    /* 遍历 query_items */
     for (int i = 0; i < session->request->query_counter; i++)
     {
         if (strcmp(session->request->query_items[i].name, "action") == 0)
@@ -33,6 +27,7 @@ static void cgi_perfetto(struct webnet_session* session)
             break;
         }
     }
+
     if (!action)
     {
         webnet_session_printf(session,
@@ -45,12 +40,14 @@ static void cgi_perfetto(struct webnet_session* session)
 
         if (strcmp(action, "start") == 0)
         {
-            perfetto_start();
+            service_control(service_find("perfetto_service"), APP_PERFETTO_START, RT_NULL);
+
             webnet_session_printf(session, "{\"status\":\"ok\",\"msg\":\"trace started\"}");
         }
         else if (strcmp(action, "stop") == 0)
         {
-            perfetto_stop();
+            service_control(service_find("perfetto_service"), APP_PERFETTO_STOP, RT_NULL);
+
             webnet_session_printf(session, "{\"status\":\"ok\",\"msg\":\"trace stop\"}");
         }
         else
@@ -64,15 +61,24 @@ __exit:
     return;
 }
 
-static int  start_perfetto_server(void)
+static void start_perfetto_server(void)
 {
-#ifdef WEBNET_USING_CGI
-    webnet_cgi_register("trace", cgi_perfetto);
-#endif
+    struct service_core *svc = service_find("perfetto_service");
+    if (!svc)
+    {
+        rt_kprintf("perfetto_service not found!\n");
+        return;
+    }
 
-    perfetto_set_path("/sdmmc/webnet/perfetto");
+    webnet_cgi_register("trace", cgi_perfetto);
+
+    if (service_control(svc, APP_PERFETTO_SET_PATH, "/sdmmc/webnet/perfetto") != RT_EOK)
+    {
+        rt_kprintf("perfetto_service failed\n");
+        return;
+    }
+
     webnet_init();
 
-    return 0;
 }
 MSH_CMD_EXPORT(start_perfetto_server, start perfetto server);
