@@ -54,6 +54,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 01_os_coredump
@@ -82,6 +86,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 01_os_ipc_event
@@ -110,6 +118,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 01_os_ipc_mailbox
@@ -138,6 +150,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 01_os_ipc_msg
@@ -166,6 +182,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 01_os_ipc_mutex
@@ -194,6 +214,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 01_os_ipc_sem
@@ -222,6 +246,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 01_os_msh
@@ -250,6 +278,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 01_os_thread
@@ -278,6 +310,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 01_os_time
@@ -306,6 +342,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 02_peripheral_can_send
@@ -334,6 +374,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 02_peripheral_flexbus_ad7606
@@ -362,6 +406,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 02_peripheral_gpio_input
@@ -390,6 +438,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 02_peripheral_gpio_input_interrupt
@@ -418,6 +470,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 02_peripheral_gpio_output
@@ -446,6 +502,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 02_peripheral_i2c_at24c32
@@ -474,6 +534,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 02_peripheral_i2c_hym8563
@@ -502,6 +566,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 02_peripheral_mipi_ruiching_4_3in_480_800
@@ -530,6 +598,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 02_peripheral_mipi_ruiching_7in_1024_600
@@ -558,6 +630,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 02_peripheral_pwm
@@ -586,6 +662,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 02_peripheral_rs485
@@ -614,6 +694,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 02_peripheral_saradc
@@ -642,6 +726,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 02_peripheral_sdmmc
@@ -670,6 +758,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 02_peripheral_spi_norflash
@@ -698,6 +790,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 02_peripheral_usb_device_acm
@@ -726,6 +822,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 02_peripheral_uvc_capture
@@ -754,6 +854,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 02_peripheral_wdg
@@ -782,6 +886,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 03_network_4g_webclient_get
@@ -810,6 +918,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 03_network_ftp_server
@@ -838,6 +950,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 03_network_iperf
@@ -866,6 +982,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 03_network_mqtt
@@ -894,6 +1014,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 03_network_netctrl
@@ -922,6 +1046,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 03_network_tcp_client
@@ -950,6 +1078,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 03_network_tcp_server
@@ -978,6 +1110,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 03_network_telnet
@@ -1006,6 +1142,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 03_network_udp_client
@@ -1034,6 +1174,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 03_network_udp_server
@@ -1062,6 +1206,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 03_network_webclient_get
@@ -1090,6 +1238,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 03_network_webclient_post
@@ -1118,6 +1270,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 03_network_webclient_shard_download
@@ -1146,6 +1302,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 03_network_webnet
@@ -1174,6 +1334,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 03_network_webnet_uvc_stream
@@ -1202,6 +1366,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 04_filesystem_directory
@@ -1230,6 +1398,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 04_filesystem_file
@@ -1258,6 +1430,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 05_gui_lvgl_ethercat_motor_control_7in_1024_600
@@ -1286,6 +1462,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 05_gui_lvgl_mipi_ruiching_4_3in_480_800
@@ -1314,6 +1494,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 05_gui_lvgl_mipi_ruiching_7in_1024_600
@@ -1342,6 +1526,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 06_bus_canopen_master_motor
@@ -1370,6 +1558,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 06_bus_ethercat_master
@@ -1398,6 +1590,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 06_bus_modbus_rtu_master
@@ -1426,6 +1622,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 06_bus_modbus_rtu_pt100
@@ -1454,6 +1654,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 06_bus_modbus_tcp_master
@@ -1482,6 +1686,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 07_perf_thread_interrupt
@@ -1510,6 +1718,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 08_misc_amp_factory_default
@@ -1538,6 +1750,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 08_misc_factory_default
@@ -1566,6 +1782,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 09_ai_mobilenetv2_yolov3
@@ -1594,6 +1814,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 09_ai_opencv
@@ -1622,6 +1846,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 10_language_lua
@@ -1650,6 +1878,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 10_language_micropython
@@ -1678,6 +1910,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 11_amp_qt_ethercat_master
@@ -1706,6 +1942,10 @@ example_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 11_loader_app
@@ -1727,7 +1967,7 @@ features_zh:
 - 革命性混合架构：RT-Thread+Linux双系统
 pkg_type: Board_Support_Packages
 pkg_vendor: Real-Thread
-pkg_version: 1.3.0
+pkg_version: 1.3.1
 template_projects:
 - builtin_files:
   - files_and_folders:
@@ -1753,6 +1993,10 @@ template_projects:
     - platform
     source_path_offset: .
     target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
   external_files: []
   project_description: ''
   project_name: 00_base_helloworld

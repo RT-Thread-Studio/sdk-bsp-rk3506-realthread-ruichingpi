@@ -302,10 +302,6 @@ KPI_DEFINED(if_get_ip);
 KPI_DEFINED(if_up);
 KPI_DEFINED(if_down);
 
-KPI_DEFINED(perfetto_set_path);
-KPI_DEFINED(perfetto_start);
-KPI_DEFINED(perfetto_stop);
-
 KPI_DEFINED(service_find);
 KPI_DEFINED(service_register);
 KPI_DEFINED(service_unregister);
@@ -900,10 +896,6 @@ void kpi_init(void)
     if_get_ip = KPI_IMPORT(if_get_ip, 706);
     if_up = KPI_IMPORT(if_up, 707);
     if_down = KPI_IMPORT(if_down, 708);
-
-    perfetto_set_path = KPI_IMPORT(perfetto_set_path, 750);
-    perfetto_start = KPI_IMPORT(perfetto_start, 751);
-    perfetto_stop = KPI_IMPORT(perfetto_stop, 752);
 
     service_find = KPI_IMPORT(service_find, 1180);
     service_register = KPI_IMPORT(service_register, 1181);

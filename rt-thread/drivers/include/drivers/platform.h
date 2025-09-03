@@ -11,12 +11,14 @@
 #define __PLATFORM_H__
 
 #include <drivers/core/driver.h>
+#include <drivers/core/device.h>
 #include <drivers/ofw.h>
 #include <kpi.h>
 
 struct rt_platform_device
 {
     struct rt_device parent;
+    struct device dev;
 
     int dev_id;
 
