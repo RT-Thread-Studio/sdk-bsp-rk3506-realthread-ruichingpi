@@ -554,7 +554,7 @@ int webnet_module_handle_uri(struct webnet_session *session)
 
         /* made a full path */
         rt_snprintf(full_path, WEBNET_PATH_MAX, "%s/%s%s",
-                    webnet_get_root(), request->path, default_files[index]);
+                    webnet_get_root(session), request->path, default_files[index]);
         /* normalize path */
         str_normalize_path(full_path);
 
@@ -571,7 +571,7 @@ _end_default_files:
     if (default_files[index] == RT_NULL)
     {
         /* use old full path */
-        rt_snprintf(full_path, WEBNET_PATH_MAX, "%s/%s", webnet_get_root(), request->path);
+        rt_snprintf(full_path, WEBNET_PATH_MAX, "%s/%s", webnet_get_root(session), request->path);
         /* normalize path */
         str_normalize_path(full_path);
     }
@@ -581,7 +581,7 @@ _end_default_files:
     request->path = full_path;
 
     /* check uri valid */
-    if (!str_begin_with(request->path, webnet_get_root()))
+    if (!str_begin_with(request->path, webnet_get_root(session)))
     {
         /* not found */
         request->result_code = 404;

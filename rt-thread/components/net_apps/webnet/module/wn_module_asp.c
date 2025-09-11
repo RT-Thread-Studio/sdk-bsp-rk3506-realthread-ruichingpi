@@ -101,7 +101,7 @@ static void _default_asp_handler(struct webnet_session* session, const char* nam
     }
     else if (strncmp(name, "DOCUMENT_ROOT", 13) == 0)
     {
-        webnet_session_printf(session, "%s", webnet_get_root());
+        webnet_session_printf(session, "%s", webnet_get_root(session));
     }
     else if (strncmp(name, "SERVER", 6) == 0)
     {

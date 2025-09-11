@@ -98,19 +98,27 @@ struct webnet_query_item
     char* value;
 };
 
+struct webnet_service {
+    rt_uint16_t port;
+    char root_path[WEBNET_PATH_MAX];
+    rt_thread_t tid;
+    struct rt_list_node list;
+};
+
 /* get mimetype according to URL */
 const char* mime_get_type(const char* url);
 
 /* set and get listen socket port */
-void webnet_set_port(int port);
-int webnet_get_port(void);
+void webnet_set_port(struct webnet_session *session, int port);
+int webnet_get_port(struct webnet_session *session);
 
 /* set and get root directory path */
-void webnet_set_root(const char* webroot_path);
-const char* webnet_get_root(void);
+void webnet_set_root(struct webnet_session *session, const char *webroot_path);
+const char* webnet_get_root(struct webnet_session *session);
 
 /* webnet initialize */
 int webnet_init(void);
+int webnet_start(rt_uint16_t port, const char* root_path);
 
 #ifdef  __cplusplus
     }

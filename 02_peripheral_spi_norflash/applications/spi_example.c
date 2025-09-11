@@ -14,7 +14,7 @@
 #define DBG_LVL DBG_INFO
 #include <rtdbg.h>
 
-#define SPI_BUS_NAME    "ff120000.spi"
+#define SPI_BUS_NAME    "spi0"
 #define SPI_DEVICE_NAME "w25q"
 #define SPI_CS_PIN      15
 

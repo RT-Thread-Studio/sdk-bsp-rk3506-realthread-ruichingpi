@@ -52,7 +52,7 @@ static void cgi_perfetto(struct webnet_session* session)
         }
         else
         {
-            webnet_session_printf(session, "{\"status\":\"error\",\"msg\":\"unknown action\"}");
+            webnet_session_printf(session, "{\"status\":\"ok\",\"msg\":\"unknown action\"}");
         }
     }
 
@@ -72,13 +72,13 @@ static void start_perfetto_server(void)
 
     webnet_cgi_register("trace", cgi_perfetto);
 
-    if (service_control(svc, APP_PERFETTO_SET_PATH, "/sdmmc/webnet/perfetto") != RT_EOK)
+    if (service_control(svc, APP_PERFETTO_SET_PATH, "/sdmmc/webnet_trace/perfetto") != RT_EOK)
     {
         rt_kprintf("perfetto_service failed\n");
         return;
     }
 
-    webnet_init();
+    webnet_start(9001, "/sdmmc/webnet_trace");
 
 }
 MSH_CMD_EXPORT(start_perfetto_server, start perfetto server);

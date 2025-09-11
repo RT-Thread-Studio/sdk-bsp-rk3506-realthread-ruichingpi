@@ -91,11 +91,6 @@ static void cgi_hello_handler(struct webnet_session* session)
     webnet_session_write(session, (const rt_uint8_t*)status, rt_strlen(status));
 }
 
-static char check_file_path[256];
-static const char* sd_upload = RT_NULL;
-static char * file_name = "index.html";
-static int fd = 0;
-
 void webnet_test(void)
 {
 #ifdef WEBNET_USING_CGI
@@ -120,16 +115,6 @@ void webnet_test(void)
 
     webnet_upload_add(&upload_entry_upload);
 #endif
-
-    sd_upload = webnet_get_root();
-
-    rt_sprintf(check_file_path, "%s/%s", sd_upload, file_name);
-
-    fd = open(check_file_path, O_WRONLY, 0);
-    if (fd < 0)
-    {
-        LOG_W("webnet index.html file does not exist\n");
-    }
 
     webnet_init();
 }

@@ -13,7 +13,7 @@
 
 #define CAN_TEST_NUM 10
 
-#define CAN1_NAME    "ff320000.can"
+#define CAN0_NAME    "can0"
 
 #define CAN_HEX(label, line, data, length)                                     \
     do                                                                         \

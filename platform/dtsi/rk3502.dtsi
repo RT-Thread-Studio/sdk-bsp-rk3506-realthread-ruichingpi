@@ -39,6 +39,8 @@
 		spi2 = &fspi;
 		spi3 = &flexbus_fspi;
 		spi4 = &flexbus_spi;
+		can0 = &can0;
+		can1 = &can1;
 	};
 
 	clocks:clocks {

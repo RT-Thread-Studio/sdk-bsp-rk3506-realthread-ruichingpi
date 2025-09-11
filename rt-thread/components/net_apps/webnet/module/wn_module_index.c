@@ -80,7 +80,7 @@ int webnet_module_dirindex(struct webnet_session* session, int event)
 
             webnet_session_set_header(session, "text/html", 200, "OK", -1);
             /* get sub path */
-            sub_path = request->path + strlen(webnet_get_root());
+            sub_path = request->path + strlen(webnet_get_root(session));
             delim = strrchr(sub_path, '/');
             rt_snprintf(fullpath, delim - sub_path + 1, "%s", sub_path);
             webnet_session_printf(session, header, sub_path, sub_path);
