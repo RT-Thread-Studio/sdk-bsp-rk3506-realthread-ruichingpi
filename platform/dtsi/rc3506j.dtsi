@@ -18,10 +18,6 @@
     model = "RC-Pi-3506 Board";
     compatible = "rc-pi-3506";
 
-    chosen:chosen {
-        bootargs = "earlycon=uart8250,mmio32,0xff0b0000 console=ttyFIQ1 ubi.mtd=10 root=ubi0:rootfs rw rootfstype=ubifs rootwait snd_aloop.index=7 snd_aloop.use_raw_jiffies=1";
-    };
-
     fiq_debugger: fiq-debugger {
         compatible = "rockchip,fiq-debugger";
         rockchip,serial-id = <1>;

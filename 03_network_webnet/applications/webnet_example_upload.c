@@ -63,7 +63,7 @@ static int upload_open(struct webnet_session *session)
     int fd = -1;
     const char *file_name = RT_NULL;
 
-    sd_upload = webnet_get_root();
+    sd_upload = webnet_get_root(session);
 
     file_name = get_file_name(session);
 

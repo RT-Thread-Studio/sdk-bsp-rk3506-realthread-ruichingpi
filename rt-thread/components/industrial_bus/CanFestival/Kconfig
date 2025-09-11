@@ -20,7 +20,7 @@ menuconfig COMP_USING_CANFESTIVAL
 	if COMP_USING_CANFESTIVAL
 		config CANFESTIVAL_CAN_DEVICE_NAME
 			string "CAN device name for CanFestival"
-			default "ff320000.can"
+			default "can0"
 
 		config CANFESTIVAL_TIMER_DEVICE_NAME
 			string "hwtimer device name for CanFestival"

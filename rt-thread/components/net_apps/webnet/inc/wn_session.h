@@ -69,6 +69,7 @@ struct webnet_session
     /* socket information */
     int socket;
     struct sockaddr_in cliaddr;
+    struct webnet_service port;
 
     /* webnet request */
     struct webnet_request* request;
@@ -98,8 +99,8 @@ int  webnet_session_get_physical_path(struct webnet_session *session, const char
 void webnet_session_set_header(struct webnet_session *session, const char* mimetype, int code, const char* status, int length);
 void webnet_session_set_header_status_line(struct webnet_session *session, int code, const char * reason_phrase);
 
-int webnet_sessions_set_fds(fd_set *readset, fd_set *writeset);
-void webnet_sessions_handle_fds(fd_set *readset, fd_set *writeset);
+int webnet_sessions_set_fds(fd_set *readset, fd_set *writeset, rt_uint16_t port);
+void webnet_sessions_handle_fds(fd_set *readset, fd_set *writeset, rt_uint16_t port);
 
 void webnet_sessions_set_err_callback(void (*callback)(struct webnet_session *session));
 

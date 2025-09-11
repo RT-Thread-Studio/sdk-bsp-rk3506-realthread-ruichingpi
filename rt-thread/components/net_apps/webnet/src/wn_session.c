@@ -230,12 +230,12 @@ int webnet_session_get_physical_path(struct webnet_session *session, const char*
     if (full_path == RT_NULL) return -1;
 
     /* made a full path */
-    rt_snprintf(full_path, WEBNET_PATH_MAX, "%s/%s", webnet_get_root(), virtual_path);
+    rt_snprintf(full_path, WEBNET_PATH_MAX, "%s/%s", webnet_get_root(session), virtual_path);
     /* normalize path */
     str_normalize_path(full_path);
 
     /* check URI valid */
-    if (!str_begin_with(full_path, webnet_get_root()))
+    if (!str_begin_with(full_path, webnet_get_root(session)))
     {
         /* not found */
         result = -1;
@@ -284,7 +284,7 @@ void webnet_session_set_header(struct webnet_session *session, const char* mimet
 
     char *ptr, *end_buffer;
     int offset;
-    const char* connection_type;  
+    const char* connection_type;
 
     ptr = (char*)session->buffer;
     end_buffer = (char*)session->buffer + session->buffer_length;
@@ -482,13 +482,15 @@ static void _webnet_session_badrequest(struct webnet_session *session, int code)
  *
  * @return the maximal file descriptor
  */
-int webnet_sessions_set_fds(fd_set *readset, fd_set *writeset)
+int webnet_sessions_set_fds(fd_set *readset, fd_set *writeset, rt_uint16_t port)
 {
     int maxfdp1 = 0;
     struct webnet_session *session;
 
     for (session = _session_list; session; session = session->next)
     {
+        if (session->port.port != port) continue;
+
         if (maxfdp1 < session->socket + 1)
             maxfdp1 = session->socket + 1;
 
@@ -511,13 +513,19 @@ void webnet_sessions_set_err_callback(void (*callback)(struct webnet_session *se
  * @param readset, the file descriptors set for read
  * @param writeset, the file descriptors set for write
  */
-void webnet_sessions_handle_fds(fd_set *readset, fd_set *writeset)
+void webnet_sessions_handle_fds(fd_set *readset, fd_set *writeset, rt_uint16_t port)
 {
     struct webnet_session *session, *next_session;
 
     /* Go through list of connected session and process data */
     for (session = _session_list; session; session = next_session)
     {
+        if (session->port.port != port)
+        {
+            next_session = session->next;
+            continue;
+        }
+
         /* get next session firstly if this session is closed */
         next_session = session->next;
 

@@ -136,7 +136,7 @@ int webnet_module_dav(struct webnet_session* session, int event)
 
         webnet_session_printf(session, header);
 
-        parent_path = session->request->path + strlen(webnet_get_root());
+        parent_path = session->request->path + strlen(webnet_get_root(session));
 
         /* output the parent. */
         file_stat.st_size = 0;

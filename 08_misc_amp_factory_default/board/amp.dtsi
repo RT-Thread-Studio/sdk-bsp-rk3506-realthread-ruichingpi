@@ -4,7 +4,7 @@
 / {
     cpus {
         // /delete-node/ cpu@f00;
-        // /delete-node/ cpu@f01;
+        /delete-node/ cpu@f01;
         /delete-node/ cpu@f02;
     };
 
@@ -21,7 +21,7 @@
             operating-points-v2 = <&cpu0_opp_table>;
         };
 
-        cpu@f01 {
+        cpu_rtt:cpu@f01 {
             device_type = "cpu";
             compatible = "arm,cortex-a7";
             reg = <0xf01>;
@@ -30,7 +30,7 @@
             operating-points-v2 = <&cpu0_opp_table>;
         };
 
-        cpu2: cpu@f02 {
+        cpu_rtt2:cpu@f02 {
             device_type = "cpu";
             compatible = "arm,cortex-a7";
             reg = <0xf02>;
@@ -46,7 +46,7 @@
         mboxes = <&mailbox2_amp 0 &mailbox0_amp 0>;
         rockchip,vdev-nums = <1>;
         /* CPU2: link-id 0x02; */
-        rockchip,link-id = <0x02>;
+        rockchip,link-id = <0x01>;
         timeout-ms = <5000>;
         status = "okay,rtt";
         rockchip,rpmsg-remote;
@@ -54,6 +54,7 @@
     amp: amp@0 {
         compatible = "rockchip,amp";
         reg = <0x0 0x0 0x0 0x0>;
+        cpu = <&cpu_rtt>;
         status = "okay,rtt";
     };
     chosen-amp {
@@ -75,7 +76,7 @@
         compatible = "rockchip,rk3506-mailbox", "rockchip,rk3576-mailbox";
         reg = <0xff290000 0x20>;
         interrupts =<GIC_SPI 142 IRQ_TYPE_LEVEL_HIGH>;
-        interrupt-affinity = <&cpu2>;
+        interrupt-affinity = <&cpu_rtt>;
         clocks = <&cru PCLK_MAILBOX>;
         clock-names = "pclk_mailbox";
         #mbox-cells = <1>;
@@ -87,7 +88,7 @@
         compatible = "rockchip,rk3506-mailbox", "rockchip,rk3576-mailbox";
         reg = <0xff292000 0x20>;
         interrupts = <GIC_SPI 144 IRQ_TYPE_LEVEL_HIGH>;
-        interrupt-affinity = <&cpu2>;
+        interrupt-affinity = <&cpu_rtt>;
         clocks = <&cru PCLK_MAILBOX>;
         clock-names = "pclk_mailbox";
         #mbox-cells = <1>;
@@ -117,7 +118,7 @@
         mboxes = <&mailbox0 0 &mailbox2 0>;
         rockchip,vdev-nums = <1>;
         /* CPU2: link-id 0x02; */
-        rockchip,link-id = <0x02>;
+        rockchip,link-id = <0x01>;
         reg = <0x3a00000 0x20000>;
         memory-region = <&rpmsg_dma_reserved>;
         status = "okay";
@@ -312,6 +313,10 @@
     };
 };
 
+&arm_pmu{
+    interrupt-affinity = <&cpu0>, <&cpu_rtt>, <&cpu_rtt2>;
+};
+
 &fiq_debugger {
     status = "okay";
 };
@@ -319,7 +324,7 @@
 &uart3
 {
     status = "disabled";
-    interrupt-affinity = <&cpu2>;
+    interrupt-affinity = <&cpu_rtt>;
 };
 
 &mailbox0 {
@@ -343,6 +348,7 @@
 };
 
 &rktimer {
+    interrupt-affinity = <&cpu0>, <&cpu0>, <&cpu0>, <&cpu_rtt2>, <&cpu_rtt2>, <&cpu_rtt2>;
     status = "okay,rtt";
 };
 
@@ -370,18 +376,23 @@
 };
 
 &mmc {
-    max-frequency = <150000000>;
-    supports-sd;
-    no-sdio;
-    no-mmc;
-    bus-width = <4>;
-    cap-mmc-highspeed;
-    cap-sd-highspeed;
-    cd-gpios = <&tca9534a 6 GPIO_ACTIVE_LOW>;
-    disable-wp;
-    pinctrl-names = "default";
-    pinctrl-0 = <&sdmmc_clk_pins &sdmmc_cmd_pins &sdmmc_bus4_pins>;
-    status = "okay";
+	max-frequency = <150000000>;
+	//supports-sd;
+	no-sdio;
+	//no-mmc;
+	supports-emmc;
+	non-removable;
+	bus-width = <4>;
+	cap-mmc-highspeed;
+	cap-sd-highspeed;
+	//cd-gpios = <&gpio4 RK_PB3 GPIO_ACTIVE_LOW>;
+	disable-wp;
+	//sd-uhs-sdr104;
+	pinctrl-names = "default";
+	pinctrl-0 = <&sdmmc_clk_pins &sdmmc_cmd_pins &sdmmc_bus4_pins>;
+	//vqmmc-supply = <&vccio_sd>;
+	//vmmc-supply = <&vcc3v3_sd>;
+	status = "okay";
 };
 
 &gmac0 {
@@ -401,7 +412,7 @@
                 &eth_rmii1_tx_bus2_pins
                 &eth_rmii1_rx_bus2_pins
                 &eth_rmii1_clk_pins>;
-    interrupt-affinity = <&cpu2>, <&cpu2>;
+    interrupt-affinity = <&cpu_rtt>, <&cpu_rtt>;
     status = "okay,rtt";
 };
 
