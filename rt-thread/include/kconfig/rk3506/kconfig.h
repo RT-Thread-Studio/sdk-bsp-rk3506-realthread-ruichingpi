@@ -112,16 +112,18 @@
 #define RT_MEMHEAP_FAST_MODE
 #define RT_USING_MEMHEAP_AS_HEAP
 #define RT_USING_MEMHEAP_AUTO_BINDING
+#define RT_USING_HEAP_ISR
 #define RT_USING_HEAP
 /* end of Memory Management */
 #define RT_USING_DEVICE
 #define RT_USING_DEVICE_OPS
 #define RT_USING_CONSOLE
-#define RT_CONSOLEBUF_SIZE 256
+#define RT_CONSOLEBUF_SIZE 4096
 #define RT_CONSOLE_DEVICE_NAME "fiq_debugger"
 #define RT_VER_NUM 0x50200
 #define RT_BACKTRACE_LEVEL_MAX_NR 32
 /* end of RT-Thread Kernel */
+#define ARCH_HEAP_SIZE 0x06000000
 #define RT_USING_CACHE
 #define RT_USING_HW_ATOMIC
 #define RT_USING_CPU_FFS
@@ -197,7 +199,7 @@
 #define RT_USING_SERIAL
 #define RT_USING_SERIAL_V1
 #define RT_SERIAL_USING_DMA
-#define RT_SERIAL_RB_BUFSZ 64
+#define RT_SERIAL_RB_BUFSZ 2048
 #define RT_USING_CAN
 #define RT_USING_I2C
 #define RT_USING_PHY_V2
@@ -205,7 +207,6 @@
 #define RT_USING_DAC
 #define RT_USING_PWM
 #define RT_USING_MTD_NAND
-#define RT_USING_RTC
 #define RT_USING_SDIO
 #define RT_SDIO_STACK_SIZE 10240
 #define RT_SDIO_THREAD_PRIORITY 15
@@ -214,8 +215,8 @@
 #define RT_MMCSD_MAX_PARTITION 16
 #define RT_USING_SPI
 #define RT_USING_WDT
-#define RT_USING_TOUCH
-#define RT_TOUCH_PIN_IRQ
+#define RT_USING_MBOX
+#define RT_MBOX_PIC
 #define RT_USING_BLK
 
 /* Partition Types */
@@ -234,11 +235,11 @@
 #define MAX_HANDLERS 185
 #define RT_PIC_ARM_GIC
 #define RT_PIC_ARM_GIC_MAX_NR 1
-#define RT_USING_PIN
 #define RT_USING_PINCTRL
 #define RT_USING_KTIME
 #define RT_USING_CLK
 #define RT_USING_HWTIMER
+#define RT_USING_GPIO
 /* end of Device Drivers */
 
 /* C/C++ and POSIX layer */
@@ -281,7 +282,6 @@
 /* Network */
 
 #define RT_USING_SAL
-#define SAL_INTERNET_CHECK
 
 /* Docking with protocol stacks */
 
@@ -302,6 +302,9 @@
 #define RT_LWIP_IGMP
 #define RT_LWIP_ICMP
 #define RT_LWIP_DNS
+#define RT_LWIP_DHCP
+#define IP_SOF_BROADCAST 1
+#define IP_SOF_BROADCAST_RECV 1
 
 /* Static IPv4 Address */
 
@@ -317,9 +320,9 @@
 #define RT_LWIP_RAW
 #define RT_MEMP_NUM_NETCONN 8
 #define RT_LWIP_PBUF_NUM 64
-#define RT_LWIP_RAW_PCB_NUM 4
-#define RT_LWIP_UDP_PCB_NUM 4
-#define RT_LWIP_TCP_PCB_NUM 4
+#define RT_LWIP_RAW_PCB_NUM 256
+#define RT_LWIP_UDP_PCB_NUM 256
+#define RT_LWIP_TCP_PCB_NUM 256
 #define RT_LWIP_TCP_SEG_NUM 256
 #define RT_LWIP_TCP_SND_BUF 65535
 #define RT_LWIP_TCP_WND 20480
@@ -361,11 +364,14 @@
 
 /* end of Using USB legacy version */
 #define RT_USING_SMODULE
-#define APP_LOAD_ADDRESS 0x300000
+#define APP_LOAD_ADDRESS 0x04000000
 #define APP_LOAD_SIZE 0x1000000
 #define RT_USING_SERVICE
-#define COMP_USING_ETHERCAT
+#define COMPONENTS_ETHERCAT_ENABLE
 #define RT_USING_COREDUMP
+#define RT_USING_APP_OTA
+#define TraceAgent
+#define COMP_USING_CJSON
 /* end of RT-Thread Components */
 
 /* RT-Thread Utestcases */
@@ -485,6 +491,14 @@
 /* NXP HAL & SDK Drivers */
 
 /* end of NXP HAL & SDK Drivers */
+
+/* NUVOTON Drivers */
+
+/* end of NUVOTON Drivers */
+
+/* GD32 Drivers */
+
+/* end of GD32 Drivers */
 /* end of HAL & SDK Drivers */
 
 /* sensors drivers */
@@ -571,10 +585,29 @@
 #define RT_USING_NET_PHY
 #define RT_USING_MOTORCOMM_PHY
 #define CHERRYUSB
+#define CHERRYUSB_DEVICE
+#define CHERRYUSB_DEVICE_SPEED_FS
+#define CHERRYUSB_DEVICE_DWC2_CUSTOM
+#define CHERRYUSB_DEVICE_CDC_ACM
+#define CHERRYUSB_DEVICE_TEMPLATE_CDC_ACM
 #define CHERRYUSB_HOST
 #define CHERRYUSB_HOST_DWC2_CUSTOM
-#define CHERRYUSB_HOST_RTL8152
-#define USBHOST_PLATFORM_RTL8152
+#define CHERRYUSB_HOST_MSC
+#define CHERRYUSB_HOST_CDC_ECM
+#define CHERRYUSB_HOST_CDC_RNDIS
+#define CHERRYUSB_HOST_VIDEO
+#define USBHOST_PLATFORM_CDC_ECM
+#define USBHOST_PLATFORM_CDC_RNDIS
+
+/* RK3506 Architecture Configuration */
+
+#define ARCH_VECTOR_OFFSET 0x05000000
+#define ARCH_VECTOR_SIZE 0x1000
+#define ARCH_KPI_SIZE 0x2000
+#define ARCH_DTB_SIZE 0x19000
+#define ARCH_DRAM_SIZE 0x06000000
+/* end of RK3506 Architecture Configuration */
 #define SOC_RK3506
+#define RT_USING_FPU
 
 #endif

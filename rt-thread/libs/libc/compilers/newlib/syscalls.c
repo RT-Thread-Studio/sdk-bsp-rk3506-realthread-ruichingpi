@@ -10,9 +10,7 @@
 #include <newlib_compiler.h>
 #include <reent.h>
 #include <rtthread.h>
-#ifdef RT_USING_RTC
 #include <rtdevice.h>
-#endif /* RT_USING_RTC */
 #include <stdio.h>
 #include <string.h>
 #include <stddef.h>

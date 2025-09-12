@@ -51,62 +51,34 @@
 #include "drivers/pic.h"
 #endif /* RT_USING_PIC */
 
-#ifdef RT_USING_RTC
 #include "drivers/dev_rtc.h"
-#endif /* RT_USING_RTC */
 
-#ifdef RT_USING_SPI
 #include "drivers/dev_spi.h"
-#endif /* RT_USING_SPI */
 
-#ifdef RT_USING_SERIAL
 #include "drivers/dev_serial.h"
-#endif /* RT_USING_SERIAL */
 
-#ifdef RT_USING_I2C
 #include "drivers/dev_i2c.h"
-#endif /* RT_USING_I2C */
 
-#ifdef RT_USING_WDT
 #include "drivers/dev_watchdog.h"
-#endif /* RT_USING_WDT */
 
 #include <gpio_dev.h>
 
-#ifdef RT_USING_ADC
 #include "drivers/adc.h"
-#endif /* RT_USING_ADC */
 
-#ifdef RT_USING_DAC
 #include "drivers/dac.h"
-#endif /* RT_USING_DAC */
 
-#ifdef RT_USING_PWM
 #include "drivers/dev_pwm.h"
-#endif /* RT_USING_PWM */
 
-#ifdef RT_USING_CLK
 #include "drivers/clk.h"
-#endif /* RT_USING_CLK */
 
-#ifdef RT_USING_MTD_NAND
 #include "drivers/mtd_nand.h"
-#endif /* RT_USING_MTD_NAND */
 
-#ifdef RT_USING_CAN
 #include "drivers/can_v2.h"
-#endif /* RT_USING_CAN */
 
-#ifdef RT_USING_HWTIMER
 #include "drivers/hwtimer.h"
-#endif /* RT_USING_HWTIMER */
 
-#ifdef RT_USING_TOUCH
 #include "drivers/dev_touch.h"
-#endif /* RT_USING_TOUCH */
 
-#ifdef RT_MFD_SYSCON
 #include "drivers/syscon.h"
-#endif /* RT_MFD_SYSCON */
 
 #endif /* __RT_DEVICE_H__ */
