@@ -17,7 +17,7 @@ Import('rtconfig')
 # Package configuration
 #-------------------------------------------------------------------------------
 PKGNAME = 'DeviceDrivers'
-DEPENDS = []
+DEPENDS = ['']
 
 #-------------------------------------------------------------------------------
 # Compile the configuration

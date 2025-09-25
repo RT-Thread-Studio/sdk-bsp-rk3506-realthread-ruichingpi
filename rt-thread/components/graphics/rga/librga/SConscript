@@ -1,0 +1,109 @@
+#-*- encoding: utf-8 -*-
+#-------------------------------------------------------------------------------
+# RT-Thread RuiChing
+#
+# COPYRIGHT (C) 2024-2025 Shanghai Real-Thread Electronic Technology Co., Ltd.
+# All rights reserved.
+#
+# The license and distribution terms for this file may be
+# found in the file LICENSE in this distribution.
+#-------------------------------------------------------------------------------
+import os
+from building import *
+Import('RTT_ROOT')
+Import('rtconfig')
+
+#-------------------------------------------------------------------------------
+# Package configuration
+#-------------------------------------------------------------------------------
+PKGNAME = 'librga'
+DEPENDS = ['RT_USING_RGA']
+
+#-------------------------------------------------------------------------------
+# Compile the configuration
+#-------------------------------------------------------------------------------
+SOURCES          = [
+    'core/utils/android_utils/src/android_utils.c',
+    'core/utils/drm_utils/src/drm_utils.c',
+    'core/utils/utils.c',
+    'core/NormalRgaApi.c',
+    'core/RgaUtils.c',
+    'core/rga_sync.c',
+    'im2d_api/src/im2d_log.c',
+    'im2d_api/src/im2d_debugger.c',
+    'im2d_api/src/im2d_context.c',
+    'im2d_api/src/im2d_job.c',
+    'im2d_api/src/im2d_impl.c',
+    'im2d_api/src/im2d.c'
+]
+
+LOCAL_CPPPATH    = []
+LOCAL_CCFLAGS    = ""
+LOCAL_ASFLAGS    = ""
+
+CPPPATH = [
+    os.path.join(GetCurrentDir(), '.'),
+    os.path.join(GetCurrentDir(), 'im2d_api'),
+    os.path.join(GetCurrentDir(), 'include'),
+    os.path.join(GetCurrentDir(), 'core'),
+    os.path.join(GetCurrentDir(), 'core/hardware'),
+    os.path.join(GetCurrentDir(), 'core/utils'),
+    os.path.join(GetCurrentDir(), 'core/adapter'),
+    os.path.join(GetCurrentDir(), 'core/3rdparty/libdrm/include/drm')
+]
+CCFLAGS          = ""
+ASFLAGS          = ""
+
+CPPDEFINES       = []
+LOCAL_CPPDEFINES = []
+
+LIBS             = []
+LIBPATH          = [GetCurrentDir()]
+
+LINKFLAGS        = ""
+
+#-------------------------------------------------------------------------------
+# Feature clip configuration, optional
+#-------------------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# Compiler platform configuration, optional
+#-------------------------------------------------------------------------------
+CCFLAGS += ' -DLINUX -DRT_THREAD -DRGA_SYNC_DISABLE -DRGA_UTILS_DRM_DISABLE'
+CCFLAGS += ' -lm -D_USE_MATH_DEFINES'
+#-------------------------------------------------------------------------------
+# System variables
+#-------------------------------------------------------------------------------
+objs   = []
+root   = GetCurrentDir()
+
+#-------------------------------------------------------------------------------
+# Sub target
+#-------------------------------------------------------------------------------
+list = os.listdir(root)
+if GetDepend(DEPENDS):
+    for d in list:
+        path = os.path.join(root, d)
+        if os.path.isfile(os.path.join(path, 'SConscript')):
+            objs = objs + SConscript(os.path.join(d, 'SConscript'))
+
+#-------------------------------------------------------------------------------
+# Main target
+#-------------------------------------------------------------------------------
+objs += DefineGroup(name = PKGNAME, src = SOURCES, depend = DEPENDS,
+                    CPPPATH          = CPPPATH,
+                    CCFLAGS          = CCFLAGS,
+                    ASFLAGS          = ASFLAGS,
+                    LOCAL_CPPPATH    = LOCAL_CPPPATH,
+                    LOCAL_CCFLAGS    = LOCAL_CCFLAGS,
+                    LOCAL_ASFLAGS    = LOCAL_ASFLAGS,
+                    CPPDEFINES       = CPPDEFINES,
+                    LOCAL_CPPDEFINES = LOCAL_CPPDEFINES,
+                    LIBS             = LIBS,
+                    LIBPATH          = LIBPATH,
+                    LINKFLAGS        = LINKFLAGS)
+
+Return("objs")
+#-------------------------------------------------------------------------------
+# End
+#-------------------------------------------------------------------------------

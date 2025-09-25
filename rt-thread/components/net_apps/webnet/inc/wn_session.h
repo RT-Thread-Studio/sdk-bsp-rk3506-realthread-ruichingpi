@@ -69,7 +69,7 @@ struct webnet_session
     /* socket information */
     int socket;
     struct sockaddr_in cliaddr;
-    struct webnet_service port;
+    struct webnet_service *port;
 
     /* webnet request */
     struct webnet_request* request;

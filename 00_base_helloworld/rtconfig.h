@@ -64,16 +64,21 @@
 #define COMP_USING_LVGL
 #define RT_LVGL_THREAD_PRIO 20
 #define RT_LVGL_THREAD_STACK_SIZE 8192
-#define RT_LVGL_DISP_REFR_PERIOD 33
+#define LV_DEF_REFR_PERIOD 33
 #define RT_LVGL_VER_NUM 0x090100
 #define RT_LVGL_VER "v9.1.0"
 #define LV_CONF_SKIP
 
 /* Color Settings */
 
-#define COLOR_DEPTH_24
-#define LV_COLOR_DEPTH 24
+#define COLOR_DEPTH_16
+#define LV_COLOR_DEPTH 16
 /* end of Color Settings */
+
+/* RT-Thread rockchip rga driver */
+
+#define RT_USING_RGA
+/* end of RT-Thread rockchip rga driver */
 /* end of Graphics */
 
 /* AI */
@@ -312,4 +317,4 @@
 /* end of Arduino libraries */
 /* end of RT-Thread online packages */
 
-#endif /* __RTCONFIG_APP_H__ */ 
+#endif /* __RTCONFIG_APP_H__ */

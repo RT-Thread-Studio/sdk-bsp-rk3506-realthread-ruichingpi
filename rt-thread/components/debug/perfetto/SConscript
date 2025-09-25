@@ -12,7 +12,7 @@ Import('rtconfig')
 # Package configuration
 #-------------------------------------------------------------------------------
 PKGNAME = 'debug_apps'
-DEPENDS = []
+DEPENDS = ['COMP_USING_WEBNET']
 
 #-------------------------------------------------------------------------------
 # Compile the configuration

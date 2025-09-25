@@ -18,8 +18,8 @@ using namespace std;
 
 static int canny_example(int argc, char *argv[])
 {
-    const char *default_input = "/sdmmc/input.jpg";
-    const char *default_output = "/sdmmc/output.jpg";
+    const char *default_input = "/tmp/input.jpg";
+    const char *default_output = "/tmp/output.jpg";
 
     const char *input_path = default_input;
     const char *output_path = default_output;

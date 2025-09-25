@@ -8,21 +8,79 @@
 # The license and distribution terms for this file may be
 # found in the file LICENSE in this distribution.
 #-------------------------------------------------------------------------------
+import os
 from building import *
+Import('RTT_ROOT')
+Import('rtconfig')
 
-group = []
+#-------------------------------------------------------------------------------
+# Package configuration
+#-------------------------------------------------------------------------------
+PKGNAME = 'DeviceDrivers'
+DEPENDS = []
 
-if not GetDepend(['']):
-    Return('group')
+#-------------------------------------------------------------------------------
+# Compile the configuration
+#-------------------------------------------------------------------------------
+SOURCES          = Glob('*.c')
 
-cwd = GetCurrentDir()
-CPPPATH = [cwd + '/../include']
+LOCAL_CPPPATH    = []
+LOCAL_CCFLAGS    = ""
+LOCAL_ASFLAGS    = ""
 
-src = ['hwtimer.c']
+CPPPATH          = [os.path.join(GetCurrentDir(), '.')]
+CCFLAGS          = ""
+ASFLAGS          = ""
 
-if GetDepend(['RT_HWTIMER_ARM_ARCH']):
-    src += ['hwtimer-arm_arch.c']
+CPPDEFINES       = []
+LOCAL_CPPDEFINES = []
 
-group = DefineGroup('DeviceDrivers', src, depend = [''], CPPPATH = CPPPATH)
+LIBS             = []
+LIBPATH          = [GetCurrentDir()]
 
-Return('group')
+LINKFLAGS        = ""
+
+#-------------------------------------------------------------------------------
+# Feature clip configuration, optional
+#-------------------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# Compiler platform configuration, optional
+#-------------------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# System variables
+#-------------------------------------------------------------------------------
+objs   = []
+root   = GetCurrentDir()
+
+#-------------------------------------------------------------------------------
+# Sub target
+#-------------------------------------------------------------------------------
+list = os.listdir(root)
+if GetDepend(DEPENDS):
+    for d in list:
+        path = os.path.join(root, d)
+        if os.path.isfile(os.path.join(path, 'SConscript')):
+            objs = objs + SConscript(os.path.join(d, 'SConscript'))
+
+#-------------------------------------------------------------------------------
+# Main target
+#-------------------------------------------------------------------------------
+objs += DefineGroup(name = PKGNAME, src = SOURCES, depend = DEPENDS,
+                    CPPPATH          = CPPPATH,
+                    CCFLAGS          = CCFLAGS,
+                    ASFLAGS          = ASFLAGS,
+                    LOCAL_CPPPATH    = LOCAL_CPPPATH,
+                    LOCAL_CCFLAGS    = LOCAL_CCFLAGS,
+                    LOCAL_ASFLAGS    = LOCAL_ASFLAGS,
+                    CPPDEFINES       = CPPDEFINES,
+                    LOCAL_CPPDEFINES = LOCAL_CPPDEFINES,
+                    LIBS             = LIBS,
+                    LIBPATH          = LIBPATH,
+                    LINKFLAGS        = LINKFLAGS)
+
+Return("objs")
+#-------------------------------------------------------------------------------
+# End
+#-------------------------------------------------------------------------------

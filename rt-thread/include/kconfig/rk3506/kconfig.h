@@ -610,4 +610,6 @@
 #define SOC_RK3506
 #define RT_USING_FPU
 
+#define RT_USING_RTC
+
 #endif

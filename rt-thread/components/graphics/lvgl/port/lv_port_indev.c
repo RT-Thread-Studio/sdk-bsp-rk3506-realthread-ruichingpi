@@ -22,39 +22,49 @@ static lv_indev_state_t last_state = LV_INDEV_STATE_REL;
 static rt_int16_t last_x = 0;
 static rt_int16_t last_y = 0;
 
+static void lv_input_thread_entry(void *parameter)
+{
+    while (1)
+    {
+        if (RT_NULL == touch_dev)
+        {
+            break;
+        }
+
+        rt_device_read(touch_dev, 0, read_data, 5);
+
+        rt_device_control(touch_dev, RT_TOUCH_CTRL_ENABLE_INT, RT_NULL);
+
+        if (read_data[0].event == RT_TOUCH_EVENT_NONE)
+        {
+            rt_thread_mdelay(1);
+            continue;
+        }
+
+        last_x = read_data[0].x_coordinate;
+        last_y = read_data[0].y_coordinate;
+        if (read_data[0].event == RT_TOUCH_EVENT_DOWN)
+        {
+            last_state = LV_INDEV_STATE_PRESSED;
+        }
+        else if (read_data[0].event == RT_TOUCH_EVENT_MOVE)
+        {
+            last_state = LV_INDEV_STATE_PRESSED;
+        }
+        else if (read_data[0].event == RT_TOUCH_EVENT_UP)
+        {
+            last_state = LV_INDEV_STATE_RELEASED;
+        }
+
+        rt_thread_mdelay(1);
+    }
+}
+
 static void input_read(lv_indev_t *indev, lv_indev_data_t *data)
 {
-    if (RT_NULL == touch_dev)
-    {
-        return;
-    }
-
-    rt_device_read(touch_dev, 0, read_data, 5);
-
-    rt_device_control(touch_dev, RT_TOUCH_CTRL_ENABLE_INT, RT_NULL);
-
-    if (read_data[0].event == RT_TOUCH_EVENT_NONE)
-    {
-        return;
-    }
-
-    data->point.x = read_data[0].x_coordinate;
-    data->point.y = read_data[0].y_coordinate;
-
-    if (read_data[0].event == RT_TOUCH_EVENT_DOWN)
-    {
-        data->state = LV_INDEV_STATE_PRESSED;
-    }
-
-    if (read_data[0].event == RT_TOUCH_EVENT_MOVE)
-    {
-        data->state = LV_INDEV_STATE_PRESSED;
-    }
-
-    if (read_data[0].event == RT_TOUCH_EVENT_UP)
-    {
-        data->state = LV_INDEV_STATE_RELEASED;
-    }
+    data->point.x = last_x;
+    data->point.y = last_y;
+    data->state = last_state;
 }
 
 void lv_port_indev_input(rt_int16_t x, rt_int16_t y, lv_indev_state_t state)
@@ -95,6 +105,13 @@ int lv_port_indev_init(void)
     lv_indev_t * indev = lv_indev_create();
     lv_indev_set_type(indev, LV_INDEV_TYPE_POINTER);
     lv_indev_set_read_cb(indev, input_read);
+
+    rt_thread_t tid = rt_thread_create("lv_input", lv_input_thread_entry,
+        RT_NULL, 10240, 20, 10);
+    if (tid != RT_NULL)
+    {
+        rt_thread_startup(tid);
+    }
 
     return RT_EOK;
 }

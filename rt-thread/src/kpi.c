@@ -11,15 +11,27 @@
 #include <rtdevice.h>
 #include <dirent.h>
 #include <kpi.h>
-#include <netdb.h>
 #include <newlib_compiler.h>
-#include <posix/stdio.h>
 #include <posix/stdlib.h>
 #include <service.h>
 #include <sys/select.h>
-#include <sys/socket.h>
-#include <termios.h>
+
+#ifdef RT_USING_NETDEV
 #include <netdev.h>
+#endif /* RT_USING_NETDEV */
+
+#ifdef RT_USING_SAL
+#include <netdb.h>
+#include <sys/socket.h>
+#endif /* RT_USING_SAL */
+
+#ifdef RT_USING_POSIX_STDIO
+#include <posix/stdio.h>
+#endif /* RT_USING_POSIX_STDIO */
+
+#ifdef RT_USING_POSIX_TERMIOS
+#include <termios.h>
+#endif /* RT_USING_POSIX_TERMIOS */
 
 extern rt_uint8_t __kpi_start[];
 
@@ -235,8 +247,10 @@ KPI_DEFINED(rt_hw_us_delay);
 KPI_DEFINED(rt_hw_global_timer_get);
 
 KPI_DEFINED(__rt_libc_exit);
+#ifdef RT_USING_POSIX_STDIO
 KPI_DEFINED(rt_posix_stdio_get_console);
 KPI_DEFINED(rt_posix_stdio_set_console);
+#endif /* RT_USING_POSIX_STDIO */
 
 KPI_DEFINED(rt_creat);
 KPI_DEFINED(rt_open);
@@ -250,6 +264,8 @@ KPI_DEFINED(rt_unlink);
 KPI_DEFINED(rt_rename);
 KPI_DEFINED(rt_mkdir);
 KPI_DEFINED(rt_stat);
+
+#ifdef RT_USING_POSIX_TERMIOS
 KPI_DEFINED(cfgetospeed);
 KPI_DEFINED(cfgetispeed);
 KPI_DEFINED(cfsetospeed);
@@ -263,6 +279,9 @@ KPI_DEFINED(tcflow);
 KPI_DEFINED(tcgetsid);
 KPI_DEFINED(cfmakeraw);
 KPI_DEFINED(cfsetspeed);
+#endif /* RT_USING_POSIX_TERMIOS */
+
+#ifdef RT_USING_SAL
 KPI_DEFINED(select);
 KPI_DEFINED(accept);
 KPI_DEFINED(bind);
@@ -287,11 +306,25 @@ KPI_DEFINED(gethostbyname);
 KPI_DEFINED(gethostbyname_r);
 KPI_DEFINED(freeaddrinfo);
 KPI_DEFINED(getaddrinfo);
+#endif /* RT_USING_SAL */
+
 KPI_DEFINED(rt_opendir);
 KPI_DEFINED(rt_readdir);
 KPI_DEFINED(rt_closedir);
 KPI_DEFINED(fsync);
+KPI_DEFINED(rt_fcntl);
+KPI_DEFINED(ftruncate);
+KPI_DEFINED(rt_statfs);
+KPI_DEFINED(rt_fstatfs);
+KPI_DEFINED(rmdir);
+KPI_DEFINED(rt_telldir);
+KPI_DEFINED(rt_seekdir);
+KPI_DEFINED(rt_rewinddir);
+KPI_DEFINED(access);
+KPI_DEFINED(setcwd);
+KPI_DEFINED(getcwd);
 
+#ifdef RT_USING_NETDEV
 KPI_DEFINED(if_set_mac);
 KPI_DEFINED(if_get_mac);
 KPI_DEFINED(if_set_dns);
@@ -301,6 +334,7 @@ KPI_DEFINED(if_set_ip);
 KPI_DEFINED(if_get_ip);
 KPI_DEFINED(if_up);
 KPI_DEFINED(if_down);
+#endif /* RT_USING_NETDEV */
 
 KPI_DEFINED(service_find);
 KPI_DEFINED(service_register);
@@ -612,7 +646,6 @@ KPI_DEFINED(rt_hw_watchdog_register);
 
 KPI_DEFINED(rt_syscon_find_by_ofw_phandle);
 
-
 /* kpi addr init */
 void kpi_init(void)
 {
@@ -830,8 +863,11 @@ void kpi_init(void)
     rt_hw_global_timer_get = KPI_IMPORT(rt_hw_global_timer_get, 397);
 
     __rt_libc_exit = KPI_IMPORT(__rt_libc_exit, 428);
+
+#ifdef RT_USING_POSIX_STDIO
     rt_posix_stdio_get_console = KPI_IMPORT(rt_posix_stdio_get_console, 429);
     rt_posix_stdio_set_console = KPI_IMPORT(rt_posix_stdio_set_console, 430);
+#endif /* RT_USING_POSIX_STDIO */
 
     rt_creat = KPI_IMPORT(rt_creat, 630);
     rt_open = KPI_IMPORT(rt_open, 631);
@@ -845,6 +881,8 @@ void kpi_init(void)
     rt_rename = KPI_IMPORT(rt_rename, 639);
     rt_mkdir = KPI_IMPORT(rt_mkdir, 640);
     rt_stat = KPI_IMPORT(rt_stat, 641);
+
+#ifdef RT_USING_POSIX_TERMIOS
     cfgetospeed = KPI_IMPORT(cfgetospeed, 642);
     cfgetispeed = KPI_IMPORT(cfgetispeed, 643);
     cfsetospeed = KPI_IMPORT(cfsetospeed, 644);
@@ -858,6 +896,9 @@ void kpi_init(void)
     tcgetsid = KPI_IMPORT(tcgetsid, 652);
     cfmakeraw = KPI_IMPORT(cfmakeraw, 653);
     cfsetspeed = KPI_IMPORT(cfsetspeed, 654);
+#endif /* RT_USING_POSIX_TERMIOS */
+
+#ifdef RT_USING_SAL
     select = KPI_IMPORT(select, 655);
     accept = KPI_IMPORT(accept, 656);
     bind = KPI_IMPORT(bind, 657);
@@ -882,11 +923,25 @@ void kpi_init(void)
     gethostbyname_r = KPI_IMPORT(gethostbyname_r, 676);
     freeaddrinfo = KPI_IMPORT(freeaddrinfo, 677);
     getaddrinfo = KPI_IMPORT(getaddrinfo, 678);
+#endif /* RT_USING_SAL */
+
     rt_opendir = KPI_IMPORT(rt_opendir, 679);
     rt_readdir = KPI_IMPORT(rt_readdir, 680);
     rt_closedir = KPI_IMPORT(rt_closedir, 681);
     fsync = KPI_IMPORT(fsync, 682);
+    rt_fcntl = KPI_IMPORT(rt_fcntl, 683);
+    ftruncate = KPI_IMPORT(ftruncate, 684);
+    rt_statfs = KPI_IMPORT(rt_statfs, 685);
+    rt_fstatfs = KPI_IMPORT(rt_fstatfs, 686);
+    rmdir = KPI_IMPORT(rmdir, 687);
+    rt_telldir = KPI_IMPORT(rt_telldir, 688);
+    rt_seekdir = KPI_IMPORT(rt_seekdir, 689);
+    rt_rewinddir = KPI_IMPORT(rt_rewinddir, 690);
+    access = KPI_IMPORT(access, 691);
+    setcwd = KPI_IMPORT(setcwd, 692);
+    getcwd = KPI_IMPORT(getcwd, 693);
 
+#ifdef RT_USING_NETDEV
     if_set_mac = KPI_IMPORT(if_set_mac, 700);
     if_get_mac = KPI_IMPORT(if_get_mac, 701);
     if_set_dns = KPI_IMPORT(if_set_dns, 702);
@@ -896,6 +951,7 @@ void kpi_init(void)
     if_get_ip = KPI_IMPORT(if_get_ip, 706);
     if_up = KPI_IMPORT(if_up, 707);
     if_down = KPI_IMPORT(if_down, 708);
+#endif /* RT_USING_NETDEV */
 
     service_find = KPI_IMPORT(service_find, 1180);
     service_register = KPI_IMPORT(service_register, 1181);

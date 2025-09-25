@@ -101,6 +101,8 @@ typedef struct
     uint16_t Dtype;                  /** Device type */
     uint16_t Obits;                  /** output bits */
     uint16_t Ibits;                  /** input bits */
+    uint8_t *outputs;
+    uint8_t *inputs;
     int32_t pdelay;                  /** propagation delay */
     uint16_t DCnext;                 /** next DC slave */
     uint16_t DCprevious;             /** previous DC slave */
@@ -268,6 +270,25 @@ typedef enum
     EC_AL_STATE_OP = 0x08,     /**< Operational. */
 } ec_al_state_t;
 
+typedef enum
+{
+    /** No valid state. */
+    EC_STATE_NONE = 0x00,
+    /** Init state*/
+    EC_STATE_INIT = 0x01,
+    /** Pre-operational. */
+    EC_STATE_PRE_OP = 0x02,
+    /** Boot state*/
+    EC_STATE_BOOT = 0x03,
+    /** Safe-operational. */
+    EC_STATE_SAFE_OP = 0x04,
+    /** Operational */
+    EC_STATE_OPERATIONAL = 0x08,
+    /** Error or ACK error */
+    EC_STATE_ACK = 0x10,
+    EC_STATE_ERROR = 0x10
+} ec_state;
+
 #define EC_EVENT_RUN  (0x01)
 #define EC_EVENT_STOP (0x02)
 #define EC_EVENT_LOOP (0x04)
@@ -311,19 +332,21 @@ typedef struct ec_master
     uint8_t net_mode;
     uint8_t run;
     uint8_t priority;
-    void (*ecat_config_handler)(struct ec_master *master);
-    void (*ecat_process_data_begin_handler)(struct ec_master *master,
-        uint16_t slave,
-        uint8_t *input,
-        uint8_t *output);
-    void (*ecat_process_data_end_handler)(struct ec_master *master,
-        uint16_t slave,
-        uint8_t *input,
-        uint8_t *output);
-    void (*error_handler)(struct ec_master *master,
-        uint32_t error_code,
-        const unsigned char *error_str);
+    int64_t *dc_time;
+    float pgain;
+    float igain;
 } ec_master_t;
+
+struct _ecat_timer
+{
+    uint32_t sec;  /*< Seconds elapsed since the Epoch (Jan 1, 1970) */
+    uint32_t usec; /*< Microseconds elapsed since last second boundary */
+};
+
+struct ecat_timer
+{
+    struct _ecat_timer stop_timer;
+};
 
 rt_err_t ecat_master_init(ec_master_t *master);
 
@@ -371,26 +394,6 @@ void ecat_dc_config_ex(ec_master_t *master,
     uint32_t cycle_time0,
     uint32_t cycle_time1,
     int32_t cycle_shift);
-
-void ecat_set_config_handler(
-    ec_master_t *master, void (*ecat_config_handler)(struct ec_master *master));
-
-void ecat_set_process_data_begin_handler(ec_master_t *master,
-    void (*ecat_process_data_begin_handler)(struct ec_master *master,
-        uint16_t slave,
-        uint8_t *input,
-        uint8_t *output));
-
-void ecat_set_process_data_end_handler(ec_master_t *master,
-    void (*ecat_process_data_end_handler)(struct ec_master *master,
-        uint16_t slave,
-        uint8_t *input,
-        uint8_t *output));
-
-void ecat_set_error_handler(ec_master_t *master,
-    void (*error_handler)(struct ec_master *master,
-        uint32_t error_code,
-        const unsigned char *error_str));
 
 int ecat_slavecount(ec_master_t *master);
 
@@ -453,6 +456,30 @@ rt_inline int ecat_sdo_read_u32(ec_master_t *master,
 {
     return ecat_sdo_read(master, slave, index, subindex, 0, data, 4, timeout);
 }
+
+rt_err_t ecat_write_state(ec_master_t *master, uint16_t slave, uint16_t state);
+
+rt_err_t ecat_check_state(
+    ec_master_t *master, uint16_t slave, uint16_t *state, int timeout);
+
+rt_err_t ecat_config_init(ec_master_t *master, uint8_t usetable);
+
+rt_err_t ecat_config_dc(ec_master_t *master);
+
+rt_err_t ecat_config_map_group(ec_master_t *master, void *map, uint8_t group);
+
+rt_err_t ecat_send_processdata_group(ec_master_t *master, uint8_t group);
+
+rt_err_t ecat_receive_processdata_group(
+    ec_master_t *master, uint8_t group, int timeout);
+
+rt_err_t ecat_timer_start(struct ecat_timer *t, uint32_t timeout_us);
+
+rt_bool_t ecat_timer_is_expired(struct ecat_timer *t);
+
+rt_err_t ecat_sync_dc(ec_master_t *master);
+
+rt_err_t ecat_hwtimer_start(ec_master_t *master);
 
 int ecat_service_init(void);
 

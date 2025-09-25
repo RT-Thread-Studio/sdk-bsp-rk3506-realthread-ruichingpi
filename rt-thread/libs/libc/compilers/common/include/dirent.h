@@ -89,10 +89,16 @@ long           telldir(DIR *);
 typedef DIR *(*__kpi_rt_opendir)(const char *name);
 typedef struct dirent *(*__kpi_rt_readdir)(DIR *d);
 typedef int (*__kpi_rt_closedir)(DIR *d);
+typedef void (*__kpi_rt_rewinddir)(DIR *);
+typedef void (*__kpi_rt_seekdir)(DIR *, long);
+typedef long (*__kpi_rt_telldir)(DIR *);
 
 KPI_EXTERN(rt_opendir);
 KPI_EXTERN(rt_readdir);
 KPI_EXTERN(rt_closedir);
+KPI_EXTERN(rt_rewinddir);
+KPI_EXTERN(rt_seekdir);
+KPI_EXTERN(rt_telldir);
 
 #ifdef __cplusplus
 }

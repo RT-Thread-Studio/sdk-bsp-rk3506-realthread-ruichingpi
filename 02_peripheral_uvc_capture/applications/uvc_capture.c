@@ -31,7 +31,7 @@ char file_path[50];
 static struct rt_semaphore sem_lock;
 bool flag = false;
 //  定义回调函数
-frame_callback_t my_function(struct usbh_videoframe *frame) {
+frame_callback_t uvc_function(struct usbh_videoframe *frame) {
      int fd = -1;
      flag = true;
      if (frame->frame_format == 0 && flag) {
@@ -86,22 +86,22 @@ static int uvc_capture(int argc, char *argv[])
 	 return (-RT_ERROR);
     }
   
-    if (access(argv[2], F_OK) == 0) {  // F_OK检查文件是否存在
+    if (access(argv[2], F_OK) == 0) {  // F_OK检查文件路径是否存在
          rt_kprintf("file path exist\r\n");
     } else {
          rt_kprintf("file path does not exist\r\n");
-         return (-RT_ERROR); // 路径无效
+         return (-RT_ERROR); // 文件路径无效
     }
 
     snprintf(file_path, sizeof(file_path), "%s", argv[2]);
 
-    frame_callback_t my_callback = my_function; // 用户定义的函数
-    rt_sem_init(&sem_lock, "lock", 0, RT_IPC_FLAG_PRIO);
+    frame_callback_t uvc_callback = uvc_function; // 用户定义的UVC函数
+    rt_sem_init(&sem_lock, "uvc_lock", 0, RT_IPC_FLAG_PRIO);
 
     rt_device_init(device);
     rt_device_open(device, RT_DEVICE_FLAG_RDWR);
     
-    rt_device_control(device, RT_UVC_CTRL_SET_CALLBACK, (void *)my_callback);
+    rt_device_control(device, RT_UVC_CTRL_SET_CALLBACK, (void *)uvc_callback);
     rt_device_control(device, RT_UVC_CTRL_START_STREAM, &type);
 
     rt_sem_take(&sem_lock, RT_WAITING_FOREVER);
