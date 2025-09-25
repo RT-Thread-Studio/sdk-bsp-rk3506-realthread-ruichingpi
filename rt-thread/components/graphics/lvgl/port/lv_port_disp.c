@@ -10,6 +10,9 @@
 #include <rtthread.h>
 #include <rtdevice.h>
 #include <lvgl.h>
+#include <stdio.h>
+#include <rga.h>
+#include <im2d.h>
 
 #define DBG_TAG         "lvgl.disp"
 #define DBG_LEVEL       DBG_LOG
@@ -21,6 +24,9 @@ static void lvgl_flush_cb(lv_display_t *display, const lv_area_t *area,
     rt_uint8_t *framebuffer;
     struct rt_device_graphic_info info;
     struct rt_device *device;
+    rga_buffer_t src_img;
+    rga_buffer_t dst_img;
+    int ret;
 
     device = lv_display_get_driver_data(display);
     if (!device)
@@ -36,8 +42,27 @@ static void lvgl_flush_cb(lv_display_t *display, const lv_area_t *area,
 
     rt_device_control(device, RTGRAPHIC_CTRL_GET_INFO, &info);
 
-    rt_memcpy(info.framebuffer, framebuffer,
-        info.width * info.height * sizeof(lv_color_t));
+    rt_memset(&src_img, 0, sizeof(src_img));
+    rt_memset(&dst_img, 0, sizeof(dst_img));
+
+    src_img = wrapbuffer_physicaladdr(framebuffer, info.width, info.height,
+        RK_FORMAT_RGB_565);
+    dst_img = wrapbuffer_physicaladdr(info.framebuffer, info.width, info.height,
+        RK_FORMAT_RGB_888);
+
+    ret = imcheck(src_img, dst_img, (im_rect) {}, (im_rect) {});
+    if (IM_STATUS_NOERROR != ret)
+    {
+        LOG_E("%d, check error! %s", __LINE__, imStrError((IM_STATUS)ret));
+        return;
+    }
+
+    ret = imcopy(src_img, dst_img);
+    if (ret != IM_STATUS_SUCCESS)
+    {
+        LOG_E("%s running failed, %s", __func__, imStrError((IM_STATUS)ret));
+        return;
+    }
 
     rt_device_control(device, RTGRAPHIC_CTRL_RECT_UPDATE, RT_NULL);
 

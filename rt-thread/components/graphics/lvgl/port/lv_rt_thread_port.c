@@ -16,6 +16,8 @@
 #define DBG_LVL    DBG_INFO
 #include <rtdbg.h>
 
+#define RT_LVGL_TIMER_PERIOD 1
+
 #ifndef RT_LVGL_THREAD_STACK_SIZE
     #define RT_LVGL_THREAD_STACK_SIZE 4096
 #endif /* RT_LVGL_THREAD_STACK_SIZE */
@@ -23,10 +25,6 @@
 #ifndef RT_LVGL_THREAD_PRIO
     #define RT_LVGL_THREAD_PRIO (RT_THREAD_PRIORITY_MAX*2/3)
 #endif /* RT_LVGL_THREAD_PRIO */
-
-#ifndef RT_LVGL_DISP_REFR_PERIOD
-    #define RT_LVGL_DISP_REFR_PERIOD 33
-#endif /* RT_LVGL_DISP_REFR_PERIOD */
 
 extern void lv_port_disp_init(void);
 extern void lv_port_indev_init(void);
@@ -54,17 +52,16 @@ static void lvgl_thread_entry(void *parameter)
     lv_log_register_print_cb(lv_rt_log);
 #endif /* LV_USE_LOG */
     lv_init();
+    lv_tick_set_cb(rt_tick_get_millisecond);
     lv_port_disp_init();
     lv_port_indev_init();
     lv_user_gui_init();
-
-    lv_tick_set_cb(rt_tick_get_millisecond);
 
     /* handle the tasks of LVGL */
     while(1)
     {
         lv_task_handler();
-        rt_thread_mdelay(RT_LVGL_DISP_REFR_PERIOD);
+        rt_thread_mdelay(RT_LVGL_TIMER_PERIOD);
     }
 }
 

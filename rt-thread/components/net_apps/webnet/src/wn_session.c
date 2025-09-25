@@ -489,7 +489,7 @@ int webnet_sessions_set_fds(fd_set *readset, fd_set *writeset, rt_uint16_t port)
 
     for (session = _session_list; session; session = session->next)
     {
-        if (session->port.port != port) continue;
+        if (session->port->port != port) continue;
 
         if (maxfdp1 < session->socket + 1)
             maxfdp1 = session->socket + 1;
@@ -520,7 +520,7 @@ void webnet_sessions_handle_fds(fd_set *readset, fd_set *writeset, rt_uint16_t p
     /* Go through list of connected session and process data */
     for (session = _session_list; session; session = next_session)
     {
-        if (session->port.port != port)
+        if (session->port->port != port)
         {
             next_session = session->next;
             continue;

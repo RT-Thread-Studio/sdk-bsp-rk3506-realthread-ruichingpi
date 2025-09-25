@@ -19,7 +19,6 @@
 #ifdef RT_USING_FINSH
 #include <finsh.h>
 #endif /* RT_USING_FINSH */
-#include <netdev.h>
 
 /*
  * kernel object interface

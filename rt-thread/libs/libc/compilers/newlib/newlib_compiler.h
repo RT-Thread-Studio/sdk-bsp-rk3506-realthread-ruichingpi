@@ -15,6 +15,7 @@
 #include <sys/ioctl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/statfs.h>
 
 typedef int (*__kpi_rt_creat)(const char *path, mode_t mode);
 typedef int (*__kpi_rt_open)(const char *file, int flags, ...);
@@ -27,6 +28,10 @@ typedef int (*__kpi_rt_unlink)(const char *pathname);
 typedef int (*__kpi_rt_rename)(const char *old_file, const char *new_file);
 typedef int (*__kpi_rt_mkdir)(const char *, mode_t);
 typedef int (*__kpi_rt_stat)(const char *, struct stat *);
+typedef int (*__kpi_rt_fcntl)(int fildes, int cmd, ...);
+
+typedef int (*__kpi_rt_statfs)(const char *path, struct statfs *buf);
+typedef int (*__kpi_rt_fstatfs)(int fd, struct statfs *buf);
 
 KPI_EXTERN(rt_creat);
 KPI_EXTERN(rt_open);
@@ -39,5 +44,9 @@ KPI_EXTERN(rt_unlink);
 KPI_EXTERN(rt_rename);
 KPI_EXTERN(rt_mkdir);
 KPI_EXTERN(rt_stat);
+KPI_EXTERN(rt_fcntl);
+
+KPI_EXTERN(rt_statfs);
+KPI_EXTERN(rt_fstatfs);
 
 #endif /* __NEWLIB_COMPILER_H__ */

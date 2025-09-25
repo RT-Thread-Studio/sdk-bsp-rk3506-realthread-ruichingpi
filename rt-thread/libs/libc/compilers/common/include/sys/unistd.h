@@ -40,11 +40,12 @@ typedef int (*__kpi_fsync)(int fildes);
 long sysconf(int __name);
 int unlink(const char *pathname);
 int close(int d);
-int ftruncate(int fd, off_t length);
-int rmdir(const char *path);
+typedef int (*__kpi_ftruncate)(int fd, off_t length);
+typedef int (*__kpi_rmdir)(const char *path);
 int chdir(const char *path);
-char *getcwd(char *buf, size_t size);
-int access(const char *path, int amode);
+typedef char *(*__kpi_getcwd)(char *buf, size_t size);
+typedef void (*__kpi_setcwd)(char *buf);
+typedef int (*__kpi_access)(const char *path, int amode);
 int pipe(int fildes[2]);
 int isatty(int fd);
 char *ttyname(int desc);
@@ -59,6 +60,11 @@ gid_t getgid(void);
 gid_t getegid(void);
 
 KPI_EXTERN(fsync);
+KPI_EXTERN(ftruncate);
+KPI_EXTERN(rmdir);
+KPI_EXTERN(access);
+KPI_EXTERN(getcwd);
+KPI_EXTERN(setcwd);
 #ifdef __cplusplus
 }
 #endif

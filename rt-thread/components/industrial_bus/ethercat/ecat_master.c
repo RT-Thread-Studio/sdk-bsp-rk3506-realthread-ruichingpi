@@ -244,75 +244,188 @@ void ecat_dc_config_ex(ec_master_t *master,
     }
 }
 
-void ecat_set_config_handler(
-    ec_master_t *master, void (*ecat_config_handler)(struct ec_master *master))
-{
-    if (!master)
-    {
-        return;
-    }
-
-    master->ecat_config_handler = ecat_config_handler;
-}
-
-void ecat_set_process_data_begin_handler(ec_master_t *master,
-    void (*ecat_process_data_begin_handler)(struct ec_master *master,
-        uint16_t slave,
-        uint8_t *input,
-        uint8_t *output))
-{
-    if (!master)
-    {
-        return;
-    }
-
-    master->ecat_process_data_begin_handler = ecat_process_data_begin_handler;
-}
-
-void ecat_set_process_data_end_handler(ec_master_t *master,
-    void (*ecat_process_data_end_handler)(struct ec_master *master,
-        uint16_t slave,
-        uint8_t *input,
-        uint8_t *output))
-{
-    if (!master)
-    {
-        return;
-    }
-
-    master->ecat_process_data_end_handler = ecat_process_data_end_handler;
-}
-
-void ecat_set_error_handler(ec_master_t *master,
-    void (*error_handler)(struct ec_master *master,
-        uint32_t error_code,
-        const unsigned char *error_str))
-{
-    if (!master)
-    {
-        return;
-    }
-
-    master->error_handler = error_handler;
-}
-
 int ecat_slavecount(ec_master_t *master)
 {
-    if (!master)
+    if (!master || !service)
     {
         return -1;
     }
 
-    if (service != RT_NULL)
+    int tmp;
+
+    void *arg[] = { (void *)master, (void *)&tmp };
+    service_control(service, ECAT_SERVICE_SLAVE_COUNT, arg);
+
+    return tmp;
+}
+
+rt_err_t ecat_write_state(ec_master_t *master, uint16_t slave, uint16_t state)
+{
+    if (!master)
     {
-        struct ecat_slavecount_arg slavecount_arg;
-        slavecount_arg.master = master;
-        slavecount_arg.count = 0;
-        service_control(service, ECAT_SERVICE_SLAVE_COUNT, &slavecount_arg);
-        return slavecount_arg.count;
+        return (-RT_EINVAL);
     }
 
-    return 0;
+    if (!service)
+    {
+        return (-RT_ERROR);
+    }
+
+    struct ecat_state_arg state_arg;
+    state_arg.master = master;
+    state_arg.state = &state;
+    state_arg.slave = slave;
+    return service_control(service, ECAT_SERVICE_SET_STATE, &state_arg);
+}
+
+rt_err_t ecat_check_state(
+    ec_master_t *master, uint16_t slave, uint16_t *state, int timeout)
+{
+    if (!master)
+    {
+        return (-RT_EINVAL);
+    }
+
+    if (!service)
+    {
+        return (-RT_ERROR);
+    }
+    struct ecat_state_arg state_arg;
+    state_arg.master = master;
+    state_arg.state = state;
+    state_arg.slave = slave;
+    state_arg.timeout = timeout;
+    return service_control(service, ECAT_SERVICE_CHECT_STATE, &state_arg);
+}
+
+rt_err_t ecat_config_init(ec_master_t *master, uint8_t usetable)
+{
+    if (!master)
+    {
+        return (-RT_EINVAL);
+    }
+
+    if (!service)
+    {
+        return (-RT_ERROR);
+    }
+    void *arg[] = { (void *)master, (void *)(uintptr_t)usetable };
+    return service_control(service, ECAT_SERVICE_INIT_CONFIG, arg);
+}
+
+rt_err_t ecat_config_dc(ec_master_t *master)
+{
+    if (!master)
+    {
+        return (-RT_EINVAL);
+    }
+
+    if (!service)
+    {
+        return (-RT_ERROR);
+    }
+
+    return service_control(service, ECAT_SERVICE_CONFIG_DC, master);
+}
+
+rt_err_t ecat_config_map_group(ec_master_t *master, void *map, uint8_t group)
+{
+    if (!master)
+    {
+        return (-RT_EINVAL);
+    }
+
+    if (!service)
+    {
+        return (-RT_ERROR);
+    }
+
+    void *arg[] = { (void *)master, (void *)(uintptr_t)group };
+
+    master->process_data = map;
+
+    return service_control(service, ECAT_SERVICE_CONFIG_MAP_GROUP, arg);
+}
+
+rt_err_t ecat_send_processdata_group(ec_master_t *master, uint8_t group)
+{
+    if (!master)
+    {
+        return (-RT_EINVAL);
+    }
+
+    void *arg[] = { (void *)master, (void *)(uintptr_t)group };
+
+    return service_control(service, ECAT_SERVICE_SEND_PROCESS_DATA_GROUP, arg);
+}
+
+rt_err_t ecat_receive_processdata_group(
+    ec_master_t *master, uint8_t group, int timeout)
+{
+    if (!master)
+    {
+        return (-RT_EINVAL);
+    }
+
+    void *arg[] = {
+        (void *)master,
+        (void *)(uintptr_t)group,
+        (void *)(uintptr_t)timeout,
+    };
+
+    return service_control(service, ECAT_SERVICE_RECV_PROCESS_DATA_GROUP, arg);
+}
+
+rt_err_t ecat_timer_start(struct ecat_timer *t, uint32_t timeout_us)
+{
+    if (!t)
+    {
+        return (-RT_EINVAL);
+    }
+
+    void *arg[] = {
+        (void *)t,
+        (void *)(uintptr_t)timeout_us,
+    };
+
+    return service_control(service, ECAT_SERVICE_TIMERSTART, arg);
+}
+
+rt_bool_t ecat_timer_is_expired(struct ecat_timer *t)
+{
+    void *arg[] = {
+        (void *)t,
+    };
+
+    return service_control(service, ECAT_SERVICE_TIMER_ISEXPIRED, arg);
+}
+
+rt_err_t ecat_sync_dc(ec_master_t *master)
+{
+    if (!master)
+    {
+        return (-RT_EINVAL);
+    }
+
+    void *arg[] = {
+        (void *)master,
+    };
+
+    return service_control(service, ECAT_SERVICE_SYNC_DC, arg);
+}
+
+rt_err_t ecat_hwtimer_start(ec_master_t *master)
+{
+    if (!master)
+    {
+        return (-RT_EINVAL);
+    }
+
+    void *arg[] = {
+        (void *)master,
+    };
+
+    return service_control(service, ECAT_SERVICE_HWTIMER_START, arg);
 }
 
 int ecat_service_init(void)

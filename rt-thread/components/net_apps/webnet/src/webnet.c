@@ -53,34 +53,29 @@
 #endif /* WEBNET_USING_LOG */
 #include <rtdbg.h>
 
-struct thread_param {
-    rt_uint16_t port;
-    char root_path[64];
-};
-
 static rt_list_t port_info_list;
 static rt_mutex_t port_mutex;
 static rt_bool_t list_inited = RT_FALSE;
 
 void webnet_set_port(struct webnet_session *session, int port)
 {
-    session->port.port = port;
+    session->port->port = port;
 }
 
 int webnet_get_port(struct webnet_session *session)
 {
-    return session->port.port;
+    return session->port->port;
 }
 
 void webnet_set_root(struct webnet_session *session, const char* webroot_path)
 {
-    rt_strncpy(session->port.root_path, webroot_path, WEBNET_PATH_MAX);
-    session->port.root_path[WEBNET_PATH_MAX - 1] = '\0';
+    rt_strncpy(session->port->root_path, webroot_path, WEBNET_PATH_MAX);
+    session->port->root_path[WEBNET_PATH_MAX - 1] = '\0';
 }
 
 const char* webnet_get_root(struct webnet_session *session)
 {
-    return session->port.root_path;
+    return session->port->root_path;
 }
 
 
@@ -160,62 +155,65 @@ static rt_bool_t webnet_port_is_running(rt_uint16_t port) {
     return result;
 }
 
-static void webnet_thread_entry(void *parameter) {
-    struct thread_param *param = (struct thread_param *)parameter;
-    rt_uint16_t port = param->port;
-    char root_path[64];
-    rt_strncpy(root_path, param->root_path, sizeof(root_path)-1);
-    rt_free(param);
-
+static void webnet_thread_entry(void *parameter)
+{
     int listenfd = -1;
     fd_set readset, tempfds;
     fd_set writeset, tempwrtfds;
     int sock_fd, maxfdp1;
     struct sockaddr_in saddr;
     struct timeval rcv_to = {0, 50000};
+    struct webnet_service *param = (struct webnet_service *)parameter;
 
     listenfd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-    if (listenfd < 0) {
-        LOG_E("Port %d: Create socket failed (errno=%d)", port, errno);
+    if (listenfd < 0)
+    {
+        LOG_E("Port %d: Create socket failed (errno=%d)", param->port, errno);
         goto __exit;
     }
 
     rt_memset(&saddr, 0, sizeof(saddr));
     saddr.sin_family = AF_INET;
     saddr.sin_addr.s_addr = htonl(INADDR_ANY);
-    saddr.sin_port = htons(port);
+    saddr.sin_port = htons(param->port);
 
     int reuse = 1;
     setsockopt(listenfd, SOL_SOCKET, SO_REUSEADDR, &reuse, sizeof(reuse));
     setsockopt(listenfd, SOL_SOCKET, SO_RCVTIMEO, &rcv_to, sizeof(rcv_to));
 
-    if (bind(listenfd, (struct sockaddr *)&saddr, sizeof(saddr)) == -1) {
-        LOG_E("Port %d: Bind failed (errno=%d, maybe in use)", port, errno);
+    if (bind(listenfd, (struct sockaddr *)&saddr, sizeof(saddr)) == -1)
+    {
+        LOG_E("Port %d: Bind failed (errno=%d, maybe in use)", param->port, errno);
         goto __exit;
     }
 
-    if (listen(listenfd, WEBNET_CONN_MAX) == -1) {
-        LOG_E("Port %d: Listen failed (errno=%d)", port, errno);
+    if (listen(listenfd, WEBNET_CONN_MAX) == -1)
+    {
+        LOG_E("Port %d: Listen failed (errno=%d)", param->port, errno);
         goto __exit;
     }
 
     webnet_module_handle_event(RT_NULL, WEBNET_EVENT_INIT);
 
-    for (;;) {
+    for (;;)
+    {
         FD_ZERO(&readset);
         FD_ZERO(&writeset);
         FD_SET(listenfd, &readset);
 
-        maxfdp1 = webnet_sessions_set_fds(&readset, &writeset, port);
+        maxfdp1 = webnet_sessions_set_fds(&readset, &writeset, param->port);
         maxfdp1 = RT_MAX(maxfdp1, listenfd + 1);
 
         tempfds = readset;
         tempwrtfds = writeset;
         sock_fd = select(maxfdp1, &tempfds, &tempwrtfds, RT_NULL, &rcv_to);
-        if (sock_fd < 0) {
-            LOG_E("Port %d: Select failed (errno=%d)", port, errno);
+
+        if (sock_fd < 0)
+        {
+            LOG_E("Port %d: Select failed (errno=%d)", param->port, errno);
             continue;
         }
+
         if (sock_fd == 0)
         {
             continue;
@@ -225,69 +223,66 @@ static void webnet_thread_entry(void *parameter) {
             struct webnet_session* session = webnet_session_create(listenfd);
             if (session != RT_NULL)
             {
-                webnet_set_root(session, root_path);
-                webnet_set_port(session, port);
+                session->port = param;
                 FD_SET(session->socket, &readset);
-                LOG_D("Port %d: New connection (root: %s)", port, root_path);
+                LOG_D("Port %d: New connection (root: %s)", param->port, param->root_path);
             }
         }
 
-        webnet_sessions_handle_fds(&tempfds, &tempwrtfds, port);
+        webnet_sessions_handle_fds(&tempfds, &tempwrtfds, param->port);
     }
 
 __exit:
+    rt_free(param);
     if (listenfd >= 0) closesocket(listenfd);
-    LOG_W("Port %d: Thread exited", port);
+    LOG_W("Port %d: Thread exited", param->port);
 }
 
-int webnet_start(rt_uint16_t port, const char* root_path) {
-    if (port < 1 || port > 65535) {
+int webnet_start(rt_uint16_t port, const char* root_path)
+{
+    char thread_name[RT_NAME_MAX];
+
+    if (port < 1 || port > 65535)
+    {
         LOG_E("Invalid port %d (must be 1-65535)", port);
         return -1;
     }
 
-    if (!webnet_check_root_path(root_path)) {
+    if (!webnet_check_root_path(root_path))
+    {
         LOG_E("Invalid root path '%s' for port %d", root_path, port);
         return -3;
     }
 
     webnet_port_list_init();
 
-    if (webnet_port_is_running(port)) {
+    if (webnet_port_is_running(port))
+    {
         LOG_E("Port %d is already running", port);
         return -2;
     }
 
-    struct thread_param *param = rt_malloc(sizeof(struct thread_param));
-    if (param == RT_NULL) {
-        LOG_E("Malloc failed for port %d", port);
-        return -4;
-    }
-    param->port = port;
-    rt_strncpy(param->root_path, root_path, sizeof(param->root_path)-1);
-
-    char thread_name[RT_NAME_MAX];
     rt_snprintf(thread_name, RT_NAME_MAX, "webnet_%d", port);
+
+    struct webnet_service *node = rt_malloc(sizeof(struct webnet_service));
 
     rt_thread_t tid = rt_thread_create(
         thread_name,
         webnet_thread_entry,
-        param,
+        node,
         WEBNET_THREAD_STACKSIZE,
         WEBNET_PRIORITY,
         5
     );
 
-    if (tid == RT_NULL) {
+    if (tid == RT_NULL)
+    {
         LOG_E("Create thread failed for port %d", port);
-        rt_free(param);
         return -4;
     }
 
-    rt_thread_startup(tid);
-
-    struct webnet_service *node = rt_malloc(sizeof(struct webnet_service));
-    if (node != RT_NULL) {
+    if (node != RT_NULL)
+    {
         node->port = port;
         rt_strncpy(node->root_path, root_path, sizeof(node->root_path)-1);
         node->tid = tid;
@@ -298,10 +293,11 @@ int webnet_start(rt_uint16_t port, const char* root_path) {
         rt_mutex_release(port_mutex);
     }
 
+    rt_thread_startup(tid);
+
     LOG_I("Port %d: Started with root '%s'", port, root_path);
     return 0;
 }
-
 
 int webnet_init(void)
 {

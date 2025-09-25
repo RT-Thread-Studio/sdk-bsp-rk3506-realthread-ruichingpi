@@ -17,33 +17,32 @@
 #define EC_TIMEOUTRXM 700000
 
 #pragma pack(1)
-typedef struct
+struct rpdo_csp
 {
     uint8_t mode_byte;
     uint16_t control_word;
     int32_t dest_pos;
     int32_t dest_speed;
     int16_t dest_torque;
-} servo_data_t;
+};
 
-typedef struct
+struct tpdo_csp
 {
     uint16_t error_word;
     uint16_t status_word;
     int32_t cur_pos;
     int32_t cur_speed;
     int16_t curr_torque;
-} servo_status_t;
+} ;
 #pragma pack()
 
 static uint8_t servo_run = 0;
 static uint8_t servo_dir = 1;
 static uint8_t process_data[4096];
-static uint32_t last_ms = 0;
 
-static ec_master_t master1 = {
-    .name = "master1",
-    .nic0 = "e0",
+static ec_master_t csp_master = {
+    .name = "csp-master",
+    .nic0 = "e1",
     .main_cycletime_us = 2000,   // 2ms
     .sub_cycletime_us = 5000,    // 5ms
     .recovery_timeout_ms = 3000, // 3s
@@ -83,11 +82,11 @@ ec_sync_info_t slave_syncs[] = {
     { 1, EC_DIR_INPUT, 1, &slave_pdos[1], EC_WD_DISABLE },
 };
 
-static void servo_switch_op(uint8_t *input, uint8_t *output)
+static void servo_switch_op(struct rpdo_csp *output, struct tpdo_csp *input)
 {
     int sta;
-    servo_data_t *data = (servo_data_t *)(output);
-    servo_status_t *status = (servo_status_t *)(input);
+    struct rpdo_csp *data = (struct rpdo_csp *)(output);
+    struct tpdo_csp *status = (struct tpdo_csp *)(input);
     sta = status->status_word & 0x3ff;
     if (status->status_word & 0x8)
     {
@@ -112,7 +111,7 @@ static void servo_switch_op(uint8_t *input, uint8_t *output)
     }
 }
 
-static void process_data_config_handler(struct ec_master *master)
+static void lc_pdo_config(struct ec_master *master)
 {
     uint32_t index = 0;
     uint32_t pdo_index;
@@ -216,145 +215,184 @@ int32_t motor_current_pos = 0;
 static int32_t motor_target_pos_last = -1;
 static int32_t motor_step = 100;
 
-static void ecat_process_data_begin_handler(
-    struct ec_master *master, uint16_t slave, uint8_t *input, uint8_t *output)
+static int lc_csp_mode(const char *ifname)
 {
-    switch (slave)
-    {
-    case 1: // slave 1
-    {
-        if (master->state.al_states == EC_AL_STATE_OP)
-        {
-            servo_switch_op(input, output);
-            servo_data_t *data = (servo_data_t *)(output);
-            servo_status_t *status = (servo_status_t *)(input);
+    int slave_counts;
+    uint16_t state;
+    rt_err_t err;
 
-            if (servo_run)
-            {
-                if (data->control_word == 7)
-                {
-                    data->dest_pos = status->cur_pos;
-                }
-                else if (data->control_word == 0xf)
-                {
-                    if (motor_target_pos_last != motor_target_pos)
-                    {
-                        /* get the current position */
-                        motor_current_pos = PULSE_TO_ANGLE(status->cur_pos);
-
-                        if (abs(motor_current_pos - motor_target_pos) <= 0)
-                        {
-                            data->dest_pos = status->cur_pos;
-                            if (abs(status->cur_pos - data->dest_pos) <= 10)
-                            {
-                                motor_target_pos_last = motor_target_pos;
-                            }
-                            return;
-                        }
-
-                        if (servo_dir)
-                        {
-                            data->dest_pos -= motor_step;
-                        }
-                        else
-                        {
-                            data->dest_pos += motor_step;
-                        }
-                    }
-                }
-            }
-            else
-            {
-                /* get the current position */
-                motor_current_pos = PULSE_TO_ANGLE(status->cur_pos);
-
-                data->dest_pos = status->cur_pos;
-                data->control_word = 0x0;
-            }
-        }
-        else if (master->state.al_states == EC_AL_STATE_SAFEOP)
-        {
-            servo_data_t *data = (servo_data_t *)(output);
-            if (data->mode_byte != 0x08) /* if not in CSP mode */
-            {
-                data->mode_byte = 0x08; /* set mode to CSP */
-            }
-            servo_switch_op(input, output);
-        }
-    }
-    break;
-    case 2: // slave 2
-    {
-        if (rt_tick_get() - last_ms > RT_TICK_PER_SECOND / 4)
-        {
-            static uint8_t index = 0;
-            uint16_t *out = (uint16_t *)output;
-            last_ms = rt_tick_get();
-            *out = (0x01 << index);
-            index++;
-            if (index >= 16)
-                index = 0;
-        }
-    }
-    break;
-    default: break;
-    }
-}
-
-static void ecat_process_data_end_handler(
-    struct ec_master *master, uint16_t slave, uint8_t *input, uint8_t *output)
-{
-}
-
-static void ecat_error_handler(struct ec_master *master,
-    uint32_t error_code,
-    const unsigned char *error_str)
-{
-    rt_kprintf("error: master state=%d,error[%d]:%s\n", master->state.al_states,
-        error_code, error_str);
-}
-
-extern void ecat_config_service_init(ec_master_t *m);
-int ethercat_domain_init(void)
-{
-    rt_err_t ret = RT_EOK;
-    static uint8_t inited = 0;
-
-    rt_thread_mdelay(1000);
-    if (inited)
-    {
-        rt_kprintf("ethercat always running!\n");
-        return ret;
-    }
-    /* ethercat service init */
     ecat_service_init();
 
-    ret = ecat_master_init(&master1);
-
-    if (ret == RT_EOK)
+    if (ifname)
     {
-        rt_kprintf("ethercat master init successed!\n");
-
-        ecat_config_service_init(&master1);
-
-        ecat_set_config_handler(&master1, process_data_config_handler);
-        ecat_set_process_data_begin_handler(&master1, ecat_process_data_begin_handler);
-        ecat_set_process_data_end_handler(&master1, ecat_process_data_end_handler);
-        ecat_set_error_handler(&master1, ecat_error_handler);
-
-        rt_kprintf("ethercat master simple start!\n");
-        ecat_simple_start(&master1);
-
-        inited = 1;
+        csp_master.nic0 = ifname;
     }
-    else
+
+    err = ecat_master_init(&csp_master);
+    if (err)
     {
-        rt_kprintf("error: ethercat master init failed,ret:%d\n", ret);
+        rt_kprintf("ethercat master init failed, err:%d\n", err);
+        return err;
+    }
+
+    err = ecat_config_init(&csp_master, RT_FALSE);
+    if (err)
+    {
+        rt_kprintf("ethercat master init failed, err:%d\n", err);
+        return err;
+    }
+
+    slave_counts = ecat_slavecount(&csp_master);
+    rt_kprintf("Found slaves count:%d\n", slave_counts);
+
+    err = ecat_write_state(&csp_master, 0, EC_STATE_PRE_OP);
+    if (err)
+    {
+        rt_kprintf("ecat_write_state PRE_OP failed\n");
+        return err;
+    }
+
+    state = EC_STATE_PRE_OP;
+    err = ecat_check_state(&csp_master, 0, &state, 2000000 * 3);
+    if (err != RT_EOK)
+    {
+        rt_kprintf("Not all slaves reached PRE_OP state.\n");
+        return err;
+    }
+
+    ecat_config_dc(&csp_master);
+
+    lc_pdo_config(&csp_master);
+
+    err = ecat_config_map_group(
+        &csp_master, (void *)(csp_master.process_data), 0);
+    if (err != RT_EOK)
+    {
+        rt_kprintf("ecat_config_map_group failed\n");
+        return err;
+    }
+    
+    err = ecat_write_state(&csp_master, 0, EC_STATE_SAFE_OP);
+    if (err != RT_EOK)
+    {
+        rt_kprintf("ecat_write_state PRE_OP failed\n");
+        return err;
+    }
+
+    state = EC_STATE_SAFE_OP;
+    err = ecat_check_state(&csp_master, 0, &state, 20000000 * 3);
+    if (err != RT_EOK)
+    {
+        rt_kprintf("Not all slaves reached SAFE_OP state.%d\n", err);
+        return err;
+    }
+
+    err = ecat_write_state(&csp_master, 0, EC_STATE_OPERATIONAL);
+    if (err != RT_EOK)
+    {
+        rt_kprintf("ecat_write_state PRE_OP failed\n");
+        return err;
+    }
+
+    struct rpdo_csp *rmap = (struct rpdo_csp *)(csp_master.process_data);
+    struct tpdo_csp *tmap =
+        (struct tpdo_csp *)(csp_master.process_data + sizeof(struct rpdo_csp));
+    rmap->control_word = 0x8;
+
+    /* swith mode */
+    int _chk = 400;
+    do
+    {
+        servo_switch_op(rmap, tmap);
+        ecat_send_processdata_group(&csp_master, 0);
+        ecat_receive_processdata_group(&csp_master, 0, 2000000 * 3);
+        state = EC_STATE_OPERATIONAL;
+    } while (
+        _chk-- && (ecat_check_state(&csp_master, 0, &state, 2000) != RT_EOK));
+
+    struct ecat_timer t;
+    ecat_timer_start(&t, 1000);
+
+    while (1)
+    {
+        servo_switch_op(rmap, tmap);
+
+        if (servo_run == 0)
+        {
+            rmap->control_word = 0x2;
+            /* get the current position */
+            motor_current_pos = PULSE_TO_ANGLE(tmap->cur_pos);
+            rmap->dest_pos = tmap->cur_pos;
+            goto stop;
+        }
+
+        ecat_send_processdata_group(&csp_master, 0);
+        ecat_receive_processdata_group(&csp_master, 0, 2000 * 10);
+        if (rmap->control_word == 7)
+        {
+            rmap->mode_byte = 0x8;
+            rmap->dest_pos = tmap->cur_pos;
+        }
+        if (rmap->control_word == 0xf)
+        {
+            if (motor_target_pos_last != motor_target_pos)
+            {
+                /* get the current position */
+                motor_current_pos = PULSE_TO_ANGLE(tmap->cur_pos);
+
+                if (abs(motor_current_pos - motor_target_pos) <= 0)
+                {
+                    rmap->dest_pos = tmap->cur_pos;
+                    if (abs(tmap->cur_pos - rmap->dest_pos) <= 10)
+                    {
+                        motor_target_pos_last = motor_target_pos;
+                    }
+                    goto stop;
+                }
+                if (servo_dir)
+                {
+                    rmap->dest_pos -= motor_step;
+                }
+                else
+                {
+                    rmap->dest_pos += motor_step;
+                }
+            }  
+        }
+        while (ecat_timer_is_expired(&t) == RT_FALSE);
+        ecat_timer_start(&t, 1000);
+stop:
+        ecat_send_processdata_group(&csp_master, 0);
+        ecat_receive_processdata_group(&csp_master, 0, 2000 * 10);
+        rt_thread_delay(1);
     }
 
     return 0;
 }
-MSH_CMD_EXPORT(ethercat_domain_init, ethercat domain init);
+
+static void ethercat_entry(void *pram)
+{
+    lc_csp_mode("e1");
+}
+
+int ethercat_domain_init(void)
+{
+    rt_thread_t tid = RT_NULL;
+    rt_thread_mdelay(1000);
+    tid = rt_thread_create("Ethercat", ethercat_entry, RT_NULL, 20480, 15, 10);
+    if (tid != RT_NULL)
+    {
+        rt_thread_control(tid, RT_THREAD_CTRL_BIND_CPU, (void *)2);
+        rt_thread_startup(tid);
+    }
+    else
+    {
+        rt_kprintf("create ethercat thread fail.\n");
+    }
+
+    return 0;
+}
+MSH_CMD_EXPORT(ethercat_domain_init, ethercat_domain_init);
 
 int motor_run(void)
 {

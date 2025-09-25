@@ -18,6 +18,7 @@
 #include <unistd.h>
 #include <sys/errno.h>
 #include <sys/stat.h>
+#include <sys/time.h>
 #ifdef RT_USING_POSIX_STDIO
 #include <posix/stdio.h>
 #endif /* RT_USING_POSIX_STDIO */
@@ -328,16 +329,17 @@ _CLOCK_T_  _times_r(struct _reent *ptr, struct tms *ptms);
 int _gettimeofday(struct timeval *tv, void *tzvp)
 {
     rt_tick_t tick;
-    rt_device_t device;
     
     if (tv)
     {
-        device = rt_device_find("rtc");
+#ifdef RT_USING_RTC
+        rt_device_t device = rt_device_find("rtc");
         if (device)
         {
             rt_device_control(device, RT_DEVICE_CTRL_RTC_GET_TIME, tv);
             return 0;
         }
+#endif /* RT_USING_RTC */
 
         tick = rt_tick_get();
         tv->tv_sec = tick / RT_TICK_PER_SECOND;

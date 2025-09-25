@@ -1,0 +1,34 @@
+#-*- encoding: utf-8 -*-
+#-------------------------------------------------------------------------------
+# RT-Thread RuiChing
+# 
+# COPYRIGHT (C) 2024-2025 Shanghai Real-Thread Electronic Technology Co., Ltd.
+# All rights reserved.
+# 
+# The license and distribution terms for this file may be
+# found in the file LICENSE in this distribution.
+#-------------------------------------------------------------------------------
+import os
+from building import *
+Import('RTT_ROOT')
+Import('rtconfig')
+
+#-------------------------------------------------------------------------------
+# System variables
+#-------------------------------------------------------------------------------
+objs   = []
+root   = GetCurrentDir()
+
+#-------------------------------------------------------------------------------
+# Main target
+#-------------------------------------------------------------------------------
+list = os.listdir(root)
+for d in list:
+    path = os.path.join(root, d)
+    if os.path.isfile(os.path.join(path, 'SConscript')):
+        objs = objs + SConscript(os.path.join(d, 'SConscript'))
+
+Return("objs")
+#-------------------------------------------------------------------------------
+# End
+#-------------------------------------------------------------------------------

@@ -11,6 +11,7 @@
 #include <coredump_server.h>
 
 struct service_core *cd_service = RT_NULL;
+static struct coredump_config g_coredump_cfg;
 
 static coredump_storage_type_t _get_storage_type(void)
 {
@@ -38,7 +39,7 @@ static app_memory_regions_t _get_app_memory_regions(void)
     return regions;
 }
 
-rt_err_t coredump_service_set_config(const struct coredump_config *config)
+static rt_err_t coredump_service_set_config(const struct coredump_config *config)
 {
     if ((!config) || (!config->app_regions.data_start) ||
         (!config->app_regions.data_end) || (!config->app_regions.bss_start) ||
@@ -54,15 +55,13 @@ void app_coredump_load_config(void)
 {
     rt_err_t ret;
 
-    struct coredump_config cfg;
+    g_coredump_cfg.enabled = RT_TRUE;
+    g_coredump_cfg.max_size = COREDUMP_MAX_SIZE_KB * 1024;
+    g_coredump_cfg.storage_type = _get_storage_type();
+    g_coredump_cfg.save_path = COREDUMP_FILE_SAVE_PATH;
+    g_coredump_cfg.app_regions = _get_app_memory_regions();
 
-    cfg.enabled = RT_TRUE;
-    cfg.max_size = COREDUMP_MAX_SIZE_KB * 1024;
-    cfg.storage_type = _get_storage_type();
-    cfg.save_path = COREDUMP_FILE_SAVE_PATH;
-    cfg.app_regions = _get_app_memory_regions();
-
-    ret = coredump_service_set_config(&cfg);
+    ret = coredump_service_set_config(&g_coredump_cfg);
     if (ret != RT_EOK)
     {
         rt_kprintf("coredump_service_set_config failed\n");
