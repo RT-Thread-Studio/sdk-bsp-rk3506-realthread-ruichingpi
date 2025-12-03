@@ -179,8 +179,7 @@
     /* Use rgmii-rxid mode to disable rx delay inside Soc */
     phy-mode = "rmii";
     clock_in_out = "input";
-    snps,reset-gpio = <&tca9534a_gpio 0 GPIO_ACTIVE_LOW>;
-    phy_reset_gpio = <161>;
+    snps,reset-gpio = <&tca9534a_gpio 1 GPIO_ACTIVE_LOW>;
     snps,reset-active-low;
     /* Reset time is 20ms, 100ms for rtl8211f */
     snps,reset-delays-us = <100000 20 100000>;
@@ -200,8 +199,7 @@
 &gmac1 {
     phy-mode = "rmii";
     clock_in_out = "input";
-    // snps,reset-gpio = <&tca9534a_gpio 0 GPIO_ACTIVE_LOW>;
-    phy_reset_gpio = <161>;
+    snps,reset-gpio = <&tca9534a_gpio 1 GPIO_ACTIVE_LOW>;
     snps,reset-active-low;
     /* Reset time is 20ms, 100ms for rtl8211f */
     snps,reset-delays-us = <100000 20 100000>;

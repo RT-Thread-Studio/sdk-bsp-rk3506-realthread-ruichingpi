@@ -84,18 +84,19 @@
  * @addtogroup PWM
  * @{
  */
-#define PWM_CMD_ENABLE        (RT_DEVICE_CTRL_BASE(PWM) + 0)
-#define PWM_CMD_DISABLE       (RT_DEVICE_CTRL_BASE(PWM) + 1)
-#define PWM_CMD_SET           (RT_DEVICE_CTRL_BASE(PWM) + 2)
-#define PWM_CMD_GET           (RT_DEVICE_CTRL_BASE(PWM) + 3)
-#define PWMN_CMD_ENABLE       (RT_DEVICE_CTRL_BASE(PWM) + 4)
-#define PWMN_CMD_DISABLE      (RT_DEVICE_CTRL_BASE(PWM) + 5)
-#define PWM_CMD_SET_PERIOD    (RT_DEVICE_CTRL_BASE(PWM) + 6)
-#define PWM_CMD_SET_PULSE     (RT_DEVICE_CTRL_BASE(PWM) + 7)
-#define PWM_CMD_SET_DEAD_TIME (RT_DEVICE_CTRL_BASE(PWM) + 8)
-#define PWM_CMD_SET_PHASE     (RT_DEVICE_CTRL_BASE(PWM) + 9)
-#define PWM_CMD_ENABLE_IRQ    (RT_DEVICE_CTRL_BASE(PWM) + 10)
-#define PWM_CMD_DISABLE_IRQ   (RT_DEVICE_CTRL_BASE(PWM) + 11)
+#define PWM_CMD_ENABLE                  (RT_DEVICE_CTRL_BASE(PWM) + 0)
+#define PWM_CMD_DISABLE                 (RT_DEVICE_CTRL_BASE(PWM) + 1)
+#define PWM_CMD_SET                     (RT_DEVICE_CTRL_BASE(PWM) + 2)
+#define PWM_CMD_GET                     (RT_DEVICE_CTRL_BASE(PWM) + 3)
+#define PWMN_CMD_ENABLE                 (RT_DEVICE_CTRL_BASE(PWM) + 4)
+#define PWMN_CMD_DISABLE                (RT_DEVICE_CTRL_BASE(PWM) + 5)
+#define PWM_CMD_SET_PERIOD              (RT_DEVICE_CTRL_BASE(PWM) + 6)
+#define PWM_CMD_SET_PULSE               (RT_DEVICE_CTRL_BASE(PWM) + 7)
+#define PWM_CMD_SET_DEAD_TIME           (RT_DEVICE_CTRL_BASE(PWM) + 8)
+#define PWM_CMD_SET_PHASE               (RT_DEVICE_CTRL_BASE(PWM) + 9)
+#define PWM_CMD_ENABLE_IRQ              (RT_DEVICE_CTRL_BASE(PWM) + 10)
+#define PWM_CMD_DISABLE_IRQ             (RT_DEVICE_CTRL_BASE(PWM) + 11)
+#define PWM_CMD_CAPTURE                 (RT_DEVICE_CTRL_BASE(PWM) + 12)
 
 /**
  * @brief PWM configuration
@@ -216,6 +217,9 @@ rt_err_t rt_pwm_set_phase(
     struct rt_device_pwm *device, int channel, rt_uint32_t phase);
 
 rt_err_t rt_pwm_get(
+    struct rt_device_pwm *device, struct rt_pwm_configuration *cfg);
+
+rt_err_t rt_pwm_capture(
     struct rt_device_pwm *device, struct rt_pwm_configuration *cfg);
 
 #endif /* __DEV_PWM_H__ */

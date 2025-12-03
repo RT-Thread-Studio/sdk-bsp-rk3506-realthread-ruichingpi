@@ -18,7 +18,46 @@
 #endif /* DRV_DEBUG */
 #include <rtdbg.h>
 
-static rt_sem_t ad_sem = RT_NULL;
+static const uint32_t AD7606_SampleFreq[] = {
+    200000, /* No oversampling: 200Ksps  */
+    100000, /* 2x oversampling: 100Ksps */
+    50000,  /* 4x oversampling: 50Ksps  */
+    25000,  /* 8x oversampling: 25Ksps  */
+    12500,  /* 16x oversampling: 12.5Ksps  */
+    6250,   /* 32x oversampling: 6.25Ksps  */
+    3125,   /* 64x oversampling: 3.125Ksps */
+};
+
+static rt_err_t ad7606_hwtimer_timeout(rt_device_t dev, rt_size_t size)
+{
+    struct ad7606_device *ad_dev = (struct ad7606_device *)dev->user_data;
+
+    if (ad_dev && ad_dev->enabled)
+    {
+        rt_pin_write(ad_dev->cva_pin, PIN_LOW);
+        rt_pin_write(ad_dev->cvb_pin, PIN_LOW);
+        rt_hw_us_delay(1);
+        rt_pin_write(ad_dev->cva_pin, PIN_HIGH);
+        rt_pin_write(ad_dev->cvb_pin, PIN_HIGH);
+    }
+
+    return RT_EOK;
+}
+
+static void ad7606_busy_isr(void *args)
+{
+    struct ad7606_device *ad_dev = (struct ad7606_device *)args;
+
+    if (!ad_dev || !ad_dev->enabled)
+    {
+        return;
+    }
+
+    if (ad_dev->data_sem)
+    {
+        rt_sem_release(ad_dev->data_sem);
+    }
+}
 
 static void ad7606_set_os(struct ad7606_device *ad_dev, rt_uint8_t ad_os)
 {
@@ -66,6 +105,49 @@ static void ad7606_set_os(struct ad7606_device *ad_dev, rt_uint8_t ad_os)
 static void ad7606_set_range(struct ad7606_device *ad_dev, rt_uint8_t val)
 {
     rt_pin_write(ad_dev->range_pin, val ? PIN_HIGH : PIN_LOW);
+}
+
+static void ad7606_sample_entry(void *parameter)
+{
+    struct ad7606_device *ad_dev = (struct ad7606_device *)parameter;
+    rt_tick_t timeout = rt_tick_from_millisecond(100);
+
+    while (ad_dev->sample_run)
+    {
+        if (rt_sem_take(ad_dev->data_sem, timeout) == RT_EOK)
+        {
+            if (!ad_dev->sample_run)
+            {
+                break;
+            }
+
+            if (!ad_dev->enabled)
+            {
+                continue;
+            }
+
+            rt_pin_write(ad_dev->cs_pin, PIN_LOW);
+            for (int i = 0; i < AD7606_MAX_CHANNELS; i++)
+            {
+                rt_pin_write(ad_dev->rd_pin, PIN_LOW);
+                ad_dev->data[i] = (rt_uint16_t)rt_adc_read(ad_dev->fb_dev, i);
+
+                rt_pin_write(ad_dev->rd_pin, PIN_HIGH);
+            }
+            rt_pin_write(ad_dev->cs_pin, PIN_HIGH);
+
+            ad_dev->data_ready = RT_TRUE;
+        }
+        else
+        {
+            if (!ad_dev->sample_run)
+            {
+                break;
+            }
+        }
+    }
+
+    ad_dev->sample_tid = RT_NULL;
 }
 
 static rt_err_t ad7606_request_gpios(
@@ -149,9 +231,31 @@ static rt_err_t ad7606_request_gpios(
         return (-RT_ERROR);
     }
 
-    rt_ofw_prop_read_u32(np, "adi,oversampling_ratio", &ad_dev->oversampling);
+    if (rt_ofw_prop_read_u32(
+            np, "adi,oversampling_ratio", &ad_dev->oversampling) != RT_EOK)
+    {
+        ad_dev->oversampling = AD_OS_NO;
+        LOG_W("Using default oversampling: none");
+    }
 
-    rt_ofw_prop_read_u32(np, "adi,range", &ad_dev->range);
+    if (rt_ofw_prop_read_u32(np, "adi,range", &ad_dev->range) != RT_EOK)
+    {
+        ad_dev->range = AD_RANGE_5V;
+        LOG_W("Using default range: ±5V");
+    }
+
+    if (rt_ofw_prop_read_string(np, "hwtimer-device", &ad_dev->hwtimer_name) !=
+        RT_EOK)
+    {
+        ad_dev->hwtimer_name = "timer0";
+        LOG_I("Using default hardware timer: timer0");
+    }
+
+    if (ad_dev->oversampling > AD_OS_X64)
+    {
+        LOG_W("Invalid oversampling ratio, using default");
+        ad_dev->oversampling = AD_OS_NO;
+    }
 
     return RT_EOK;
 }
@@ -193,25 +297,174 @@ static void ad7606_hard_reset(struct ad7606_device *ad_dev)
     rt_pin_write(ad_dev->rst_pin, PIN_LOW);
 }
 
-static void ad7606_busy_isr(void *args)
+static rt_err_t ad7606_hwtimer_setup(
+    struct ad7606_device *ad_dev, rt_bool_t enable)
 {
-    rt_sem_release(ad_sem);
-}
+    rt_err_t ret;
 
-static void ad7606_start_conv(struct ad7606_device *ad_dev)
-{
-    rt_pin_write(ad_dev->cva_pin, PIN_LOW);
-    rt_pin_write(ad_dev->cvb_pin, PIN_LOW);
+    if (enable)
+    {
+        if (!ad_dev->data_sem)
+        {
+            ad_dev->data_sem = rt_sem_create("ad7606_sem", 0, RT_IPC_FLAG_FIFO);
+            if (!ad_dev->data_sem)
+            {
+                LOG_E("Create semaphore failed");
+                return (-RT_ENOMEM);
+            }
+        }
 
-    rt_thread_mdelay(1);
-    rt_pin_write(ad_dev->cva_pin, PIN_HIGH);
-    rt_pin_write(ad_dev->cvb_pin, PIN_HIGH);
+        if (!ad_dev->sample_tid)
+        {
+            ad_dev->sample_run = RT_TRUE;
+            ad_dev->data_ready = RT_FALSE;
+            ad_dev->sample_tid = rt_thread_create(
+                "ad7606_sample", ad7606_sample_entry, ad_dev, 2048, 15, 10);
+
+            if (!ad_dev->sample_tid)
+            {
+                LOG_E("Create sample thread failed");
+                rt_sem_delete(ad_dev->data_sem);
+                ad_dev->data_sem = RT_NULL;
+                return (-RT_ERROR);
+            }
+            rt_thread_startup(ad_dev->sample_tid);
+        }
+
+        ad_dev->hwtimer_dev = rt_device_find(ad_dev->hwtimer_name);
+        if (!ad_dev->hwtimer_dev)
+        {
+            LOG_E("Hardware timer '%s' not found", ad_dev->hwtimer_name);
+            goto error_cleanup;
+        }
+
+        ret = rt_device_open(ad_dev->hwtimer_dev, RT_DEVICE_OFLAG_RDWR);
+        if (ret != RT_EOK)
+        {
+            LOG_E("Open hardware timer failed: %d", ret);
+            goto error_cleanup;
+        }
+
+        ad_dev->hwtimer_dev->user_data = ad_dev;
+        rt_device_set_rx_indicate(ad_dev->hwtimer_dev, ad7606_hwtimer_timeout);
+
+        rt_hwtimer_mode_t mode = HWTIMER_MODE_PERIOD;
+        ret = rt_device_control(
+            ad_dev->hwtimer_dev, HWTIMER_CTRL_MODE_SET, &mode);
+        if (ret != RT_EOK)
+        {
+            LOG_E("Set timer mode failed: %d", ret);
+            goto error_close_timer;
+        }
+
+        rt_uint32_t freq = AD7606_SampleFreq[ad_dev->oversampling];
+        rt_hwtimerval_t timeout = { 0, 1000000 / freq };
+        ret =
+            rt_device_write(ad_dev->hwtimer_dev, 0, &timeout, sizeof(timeout));
+        if (ret != sizeof(timeout))
+        {
+            LOG_E("Set timer timeout failed");
+            goto error_close_timer;
+        }
+
+        rt_pin_attach_irq(
+            ad_dev->busy_pin, PIN_IRQ_MODE_FALLING, ad7606_busy_isr, ad_dev);
+        rt_pin_irq_enable(ad_dev->busy_pin, PIN_IRQ_ENABLE);
+
+        ad_dev->enabled = RT_TRUE;
+        return RT_EOK;
+
+error_close_timer:
+        rt_device_close(ad_dev->hwtimer_dev);
+        ad_dev->hwtimer_dev = RT_NULL;
+
+error_cleanup:
+        if (ad_dev->sample_tid)
+        {
+            ad_dev->sample_run = RT_FALSE;
+            if (ad_dev->data_sem)
+            {
+                rt_sem_release(ad_dev->data_sem);
+            }
+
+            rt_tick_t start = rt_tick_get();
+            while (ad_dev->sample_tid != RT_NULL)
+            {
+                if (rt_tick_get() - start > rt_tick_from_millisecond(100))
+                {
+                    LOG_W("sample thread exit timeout");
+                    break;
+                }
+                rt_thread_mdelay(5);
+            }
+
+            if (ad_dev->sample_tid)
+            {
+                rt_thread_delete(ad_dev->sample_tid);
+                ad_dev->sample_tid = RT_NULL;
+            }
+        }
+
+        if (ad_dev->data_sem)
+        {
+            rt_sem_delete(ad_dev->data_sem);
+            ad_dev->data_sem = RT_NULL;
+        }
+
+        return (-RT_ERROR);
+    }
+    else
+    {
+        ad_dev->enabled = RT_FALSE;
+        ad_dev->data_ready = RT_FALSE;
+
+        if (ad_dev->hwtimer_dev)
+        {
+            rt_device_control(ad_dev->hwtimer_dev, HWTIMER_CTRL_STOP, RT_NULL);
+            rt_device_close(ad_dev->hwtimer_dev);
+            ad_dev->hwtimer_dev = RT_NULL;
+        }
+
+        rt_pin_irq_enable(ad_dev->busy_pin, PIN_IRQ_DISABLE);
+        rt_pin_detach_irq(ad_dev->busy_pin);
+
+        if (ad_dev->sample_tid)
+        {
+            ad_dev->sample_run = RT_FALSE;
+            if (ad_dev->data_sem)
+            {
+                rt_sem_release(ad_dev->data_sem);
+            }
+
+            rt_tick_t start = rt_tick_get();
+            while (ad_dev->sample_tid != RT_NULL)
+            {
+                if (rt_tick_get() - start > rt_tick_from_millisecond(100))
+                {
+                    LOG_W("sample thread exit timeout, force delete");
+                    rt_thread_delete(ad_dev->sample_tid);
+                    ad_dev->sample_tid = RT_NULL;
+                    break;
+                }
+                rt_thread_mdelay(5);
+            }
+        }
+
+        if (ad_dev->data_sem)
+        {
+            rt_sem_delete(ad_dev->data_sem);
+            ad_dev->data_sem = RT_NULL;
+        }
+
+        return RT_EOK;
+    }
 }
 
 static rt_err_t ad7606_enabled(
     struct rt_adc_device *device, rt_int8_t channel, rt_bool_t enabled)
 {
     struct ad7606_device *ad_dev;
+    rt_err_t ret;
 
     ad_dev = rt_container_of(device, struct ad7606_device, adc_dev);
 
@@ -222,40 +475,21 @@ static rt_err_t ad7606_enabled(
         ad7606_set_os(ad_dev, ad_dev->oversampling);
         ad7606_set_range(ad_dev, ad_dev->range);
 
-        if (ad_sem == RT_NULL)
+        ret = rt_adc_enable(ad_dev->fb_dev, channel);
+        if (ret != RT_EOK)
         {
-            ad_sem = rt_sem_create("ad_sem", 0, RT_IPC_FLAG_FIFO);
-            if (ad_sem == RT_NULL)
-            {
-                LOG_E("sem create fail");
-                return -RT_ENOMEM;
-            }
+            LOG_E("Enable FlexBus ADC failed: %d", ret);
+            return ret;
         }
 
-        rt_adc_enable(ad_dev->fb_dev, channel);
-
-        rt_pin_attach_irq(
-            ad_dev->busy_pin, PIN_IRQ_MODE_FALLING, ad7606_busy_isr, RT_NULL);
-        rt_pin_irq_enable(ad_dev->busy_pin, PIN_IRQ_ENABLE);
+        return ad7606_hwtimer_setup(ad_dev, RT_TRUE);
     }
     else
     {
-        rt_pin_irq_enable(ad_dev->busy_pin, PIN_IRQ_DISABLE);
-        rt_pin_detach_irq(ad_dev->busy_pin);
-
+        ret = ad7606_hwtimer_setup(ad_dev, RT_FALSE);
         rt_adc_disable(ad_dev->fb_dev, channel);
-
-        if (ad_sem)
-        {
-            rt_sem_delete(ad_sem);
-            ad_sem = RT_NULL;
-        }
-
-        rt_pin_write(ad_dev->cs_pin, PIN_HIGH);
-        rt_pin_write(ad_dev->rd_pin, PIN_HIGH);
+        return ret;
     }
-
-    return RT_EOK;
 }
 
 static rt_err_t ad7606_read_raw(
@@ -264,28 +498,26 @@ static rt_err_t ad7606_read_raw(
     struct ad7606_device *ad_dev;
     ad_dev = rt_container_of(device, struct ad7606_device, adc_dev);
 
-    ad7606_start_conv(ad_dev);
-
-    if (rt_sem_take(ad_sem, RT_WAITING_FOREVER) == RT_EOK)
+    if ((channel < 1) || (channel > AD7606_MAX_CHANNELS))
     {
-        rt_pin_write(ad_dev->cs_pin, PIN_LOW);
-
-        for (int i = 0; i < 8; i++)
-        {
-            rt_pin_write(ad_dev->cs_pin, PIN_LOW);
-            rt_pin_write(ad_dev->rd_pin, PIN_LOW);
-
-            ad_dev->data[i] = rt_adc_read(ad_dev->fb_dev, i);
-
-            rt_pin_write(ad_dev->rd_pin, PIN_HIGH);
-            rt_pin_write(ad_dev->cs_pin, PIN_HIGH);
-            rt_thread_mdelay(1);
-        }
+        LOG_D("Invalid channel: %d", channel);
+        return (-RT_EINVAL);
     }
-    else
+
+    if (!ad_dev->enabled)
     {
-        LOG_E("wait busy timeout");
-        return -RT_ETIMEOUT;
+        LOG_D("AD7606 not enabled");
+    }
+
+    rt_tick_t start = rt_tick_get();
+    while (!ad_dev->data_ready)
+    {
+        if (rt_tick_get() - start > rt_tick_from_millisecond(100))
+        {
+            LOG_D("Data not ready timeout");
+            return (-RT_ETIMEOUT);
+        }
+        rt_thread_mdelay(1);
     }
 
     *value = (rt_uint32_t)ad_dev->data[channel - 1];
@@ -301,39 +533,50 @@ static const struct rt_adc_ops ad7606_adc_ops = {
 static rt_err_t ad7606_init(struct rt_device *dev)
 {
     const char *dev_name;
-    struct ad7606_device *ad7606_dev;
+    struct ad7606_device *ad_dev;
     struct rt_ofw_node *np = dev->ofw_node;
     rt_err_t ret;
 
-    ad7606_dev = rt_malloc(sizeof(struct ad7606_device));
-    if (!ad7606_dev)
+    ad_dev = rt_calloc(1, sizeof(struct ad7606_device));
+    if (!ad_dev)
     {
+        LOG_E("Memory allocation failed");
         return (-RT_ENOMEM);
     }
 
-    ad7606_dev->dev = dev;
-    ad7606_dev->adc_dev.ops = &ad7606_adc_ops;
+    ad_dev->dev = dev;
+    dev->user_data = ad_dev;
 
-    ad7606_dev->fb_dev = (rt_adc_device_t)rt_device_find("flexbus_adc0");
-    if (ad7606_dev->fb_dev == RT_NULL)
+    ad_dev->fb_dev = (rt_adc_device_t)rt_device_find("flexbus_adc0");
+    if (!ad_dev->fb_dev)
     {
-        LOG_I("flexbus adc device %s not found", "flexbus_adc0");
+        LOG_E("FlexBus ADC device not found");
+        rt_free(ad_dev);
         return (-RT_ERROR);
+    }
+
+    ret = ad7606_request_gpios(np, ad_dev);
+    if (ret != RT_EOK)
+    {
+        LOG_E("GPIO configuration failed");
+        rt_free(ad_dev);
+        return ret;
     }
 
     rt_dm_dev_set_name_auto(dev, "adc");
     dev_name = rt_dm_dev_get_name(dev);
 
-    ad7606_request_gpios(np, ad7606_dev);
-
+    ad_dev->adc_dev.ops = &ad7606_adc_ops;
     ret = rt_hw_adc_register(
-        &ad7606_dev->adc_dev, dev_name, &ad7606_adc_ops, RT_NULL);
+        &ad_dev->adc_dev, dev_name, &ad7606_adc_ops, RT_NULL);
     if (ret != RT_EOK)
     {
-        LOG_E("%s register fail", dev_name);
-        ret = (-RT_ERROR);
+        LOG_E("ADC device register failed: %d", ret);
+        rt_free(ad_dev);
+        return ret;
     }
 
+    LOG_I("AD7606 device registered: %s", dev_name);
     return RT_EOK;
 }
 

@@ -1,0 +1,28 @@
+#-------------------------------------------------------------------------------
+# RT-Thread RuiChing
+# 
+# COPYRIGHT (C) 2024-2025 Shanghai Real-Thread Electronic Technology Co., Ltd.
+# All rights reserved.
+# 
+# The license and distribution terms for this file may be
+# found in the file LICENSE in this distribution.
+#-------------------------------------------------------------------------------
+
+menuconfig COMP_USING_SQLITE
+    bool "Enable sqlite"
+    default n
+
+if COMP_USING_SQLITE
+    config COMP_USING_SQLITE_SQL_MAX_LEN
+        int "SQL statements max length"
+        default 1024
+
+    config COMP_USING_SQLITE_DB_NAME_MAX_LEN
+        int "Database filename(fullpath) length"
+        range 8 256
+        default 64
+endif
+
+#-------------------------------------------------------------------------------
+# End
+#-------------------------------------------------------------------------------

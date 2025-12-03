@@ -29,11 +29,11 @@ struct usbh_videoframe {
 typedef void (*frame_callback_t)(struct usbh_videoframe *frame);
 char file_path[50];
 static struct rt_semaphore sem_lock;
-bool flag = false;
+static bool flag = false;
 //  定义回调函数
 frame_callback_t uvc_function(struct usbh_videoframe *frame) {
      int fd = -1;
-     flag = true;
+
      if (frame->frame_format == 0 && flag) {
          flag = false;
          //yuv
@@ -95,6 +95,19 @@ static int uvc_capture(int argc, char *argv[])
 
     snprintf(file_path, sizeof(file_path), "%s", argv[2]);
 
+    if ((strcmp (file_path , "/data/") == 0) || (strcmp (file_path , "/tmp/") == 0)) {
+            rt_kprintf("file path exist\r\n");
+    }
+    else if ((strcmp (file_path , "/data") == 0) || (strcmp (file_path , "/tmp") == 0)) {
+            strncat( file_path, "/", sizeof(file_path) - strlen(file_path) -1 );
+    }
+    else {
+             rt_kprintf("file path does not exist\r\n");
+             rt_kprintf("File paths are only allowed to be created in the /tmp/ or /data/ \r\n");
+             return (-RT_ERROR); // 文件路径不存在
+    }
+
+    flag = true;
     frame_callback_t uvc_callback = uvc_function; // 用户定义的UVC函数
     rt_sem_init(&sem_lock, "uvc_lock", 0, RT_IPC_FLAG_PRIO);
 

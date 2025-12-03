@@ -301,3 +301,18 @@ rt_err_t rt_pwm_get(
 
     return result;
 }
+
+rt_err_t rt_pwm_capture(
+    struct rt_device_pwm *device, struct rt_pwm_configuration *cfg)
+{
+    rt_err_t result = RT_EOK;
+
+    if (!device)
+    {
+        return -RT_EIO;
+    }
+
+    result = rt_device_control(&device->parent, PWM_CMD_CAPTURE, cfg);
+
+    return result;
+}

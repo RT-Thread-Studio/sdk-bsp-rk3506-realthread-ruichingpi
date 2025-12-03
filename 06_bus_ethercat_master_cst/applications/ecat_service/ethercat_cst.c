@@ -87,7 +87,7 @@ ec_pdo_info_t slave_pdos[] = {
 ec_sync_info_t slave_syncs[] = {
     { 1, EC_DIR_OUTPUT, 1, &slave_pdos[0], EC_WD_DISABLE },
     { 1, EC_DIR_INPUT, 1, &slave_pdos[1], EC_WD_DISABLE },
-    { 2, EC_DIR_INPUT, 1, &slave_pdos[2], EC_WD_DISABLE },
+    { 2, EC_DIR_OUTPUT, 1, &slave_pdos[2], EC_WD_DISABLE },
     { 2, EC_DIR_INPUT, 1, &slave_pdos[3], EC_WD_DISABLE },
 };
 

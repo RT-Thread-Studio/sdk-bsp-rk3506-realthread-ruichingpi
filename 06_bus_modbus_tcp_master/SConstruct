@@ -59,8 +59,8 @@ DTCSRC = [os.path.join(GetCurrentDir(), 'board/board.dts')]
 if not os.path.isdir('rt-thread'):
     DTCPATH = [
         os.path.join(GetCurrentDir(), RTT_ROOT + '/drivers/include'),
-        os.path.join(GetCurrentDir(), RTT_ROOT + '/apps/rockchip/platform/dtsi/'),
-        os.path.join(GetCurrentDir(), RTT_ROOT + '/apps/rockchip/platform/dtsi/rockchip')
+        os.path.join(GetCurrentDir(), RTT_ROOT + '/apps/rockchip/%s/platform/dtsi/' % rtconfig.CHIP),
+        os.path.join(GetCurrentDir(), RTT_ROOT + '/apps/rockchip/%s/platform/dtsi/rockchip' % rtconfig.CHIP)
     ]
 else:
     DTCPATH = [
@@ -86,10 +86,11 @@ if not os.path.isdir('rt-thread'):
         SConscript(RTT_ROOT + '/SConscript',
             variant_dir='build/sdk/', duplicate=0)
     )
-
     objs.extend(
-        SConscript(RTT_ROOT + '/apps/rockchip/platform/drivers/SConscript',
+        SConscript(RTT_ROOT + '/apps/rockchip/%s/platform/drivers/SConscript' % rtconfig.CHIP,
             variant_dir='build/drivers/', duplicate=0))
+elif os.path.isdir('../rt-thread'):
+    pass
 else:
     objs.extend(
         SConscript('platform/drivers/SConscript',

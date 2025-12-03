@@ -99,6 +99,7 @@
         &gpio1_b4 &gpio1_b5 &gpio1_b6 &gpio1_b7>;
 
     adc@0 {
+        hwtimer-device = "timer0";
         compatible = "adi,ad7606-8";
 
         /*

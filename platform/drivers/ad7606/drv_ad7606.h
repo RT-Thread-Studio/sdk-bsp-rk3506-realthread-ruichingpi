@@ -15,14 +15,23 @@
 
 typedef enum
 {
-    AD_OS_NO = 0,
-    AD_OS_X2 = 1,
-    AD_OS_X4 = 2,
-    AD_OS_X8 = 3,
-    AD_OS_X16 = 4,
-    AD_OS_X32 = 5,
-    AD_OS_X64 = 6,
+    AD_OS_NO = 0,  /* 无过采样，200KSPS */
+    AD_OS_X2 = 1,  /* 2倍过采样，100KSPS */
+    AD_OS_X4 = 2,  /* 4倍过采样，50KSPS */
+    AD_OS_X8 = 3,  /* 8倍过采样，25KSPS */
+    AD_OS_X16 = 4, /* 16倍过采样，12.5KSPS */
+    AD_OS_X32 = 5, /* 32倍过采样，6.25KSPS */
+    AD_OS_X64 = 6, /* 64倍过采样，3.125KSPS */
 } ad7606_os_t;
+
+
+typedef enum
+{
+    AD_RANGE_5V = 0,  /* ±5V量程 */
+    AD_RANGE_10V = 1, /* ±10V量程 */
+} ad7606_range_t;
+
+#define AD7606_MAX_CHANNELS 8
 
 struct ad7606_device
 {
@@ -44,7 +53,18 @@ struct ad7606_device
     rt_uint32_t oversampling;
     rt_uint32_t range;
 
-    rt_int16_t data[8];
+    const char *hwtimer_name;
+    rt_device_t hwtimer_dev;
+
+    rt_sem_t data_sem;
+    rt_thread_t sample_tid;
+    volatile rt_bool_t sample_run;
+    volatile rt_bool_t enabled;
+    volatile rt_bool_t data_ready;
+
+    volatile rt_uint16_t data[AD7606_MAX_CHANNELS];
 };
+
+int ad7606_driver_register(void);
 
 #endif /* __DRV_AD7606_H__ */
