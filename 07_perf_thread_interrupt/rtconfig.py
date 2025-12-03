@@ -103,7 +103,7 @@ CXX_FLAGS           = ''
 #-------------------------------------------------------------------------------
 LINKER_GENERAL      = '-Wl,--gc-sections,-cref,-u,system_vectors '
 if not os.path.isdir('rt-thread'):
-    LINKER_GENERAL += '-T ../../../platform/lds/link.lds'
+    LINKER_GENERAL += '-T ../../platform/lds/link.lds'
 else:
     LINKER_GENERAL += '-T platform/lds/link.lds'
 

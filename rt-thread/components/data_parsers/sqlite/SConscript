@@ -1,0 +1,76 @@
+#-*- encoding: utf-8 -*-
+#---------------------------------------------------------------------------------
+# SConscript
+# Copyright (c) Shanghai Real-Thread Electronic Technology Co., Ltd.
+#---------------------------------------------------------------------------------
+import os
+from building import *
+Import('RTT_ROOT')
+Import('rtconfig')
+
+#---------------------------------------------------------------------------------
+# Package configuration
+#---------------------------------------------------------------------------------
+PKGNAME = 'sqlite'
+DEPENDS = ['COMP_USING_SQLITE']
+
+#---------------------------------------------------------------------------------
+# Compile the configuration
+#---------------------------------------------------------------------------------
+SOURCES = ['sqlite3.c', 'sqlite_dbhelper.c']
+
+LOCAL_CPPPATH = []
+LOCAL_CCFLAGS = ""
+LOCAL_ASFLAGS = ""
+
+CPPPATH = [GetCurrentDir()]
+
+CCFLAGS = ""
+ASFLAGS = ""
+
+CPPDEFINES = []
+LOCAL_CPPDEFINES = []
+
+LIBS = []
+LIBPATH = [GetCurrentDir()]
+
+LINKFLAGS = ""
+
+#---------------------------------------------------------------------------------
+# Feature clip configuration, optional
+#---------------------------------------------------------------------------------
+
+#---------------------------------------------------------------------------------
+# Compiler platform configuration, optional
+#---------------------------------------------------------------------------------
+
+#---------------------------------------------------------------------------------
+# System variables
+#---------------------------------------------------------------------------------
+objs = []
+root = GetCurrentDir()
+
+#---------------------------------------------------------------------------------
+# Sub target
+#---------------------------------------------------------------------------------
+
+#---------------------------------------------------------------------------------
+# Main target
+#---------------------------------------------------------------------------------
+objs += DefineGroup(name = PKGNAME, src = SOURCES, depend = DEPENDS,
+                    CPPPATH          = CPPPATH,
+                    CCFLAGS          = CCFLAGS,
+                    ASFLAGS          = ASFLAGS,
+                    LOCAL_CPPPATH    = LOCAL_CPPPATH,
+                    LOCAL_CCFLAGS    = LOCAL_CCFLAGS,
+                    LOCAL_ASFLAGS    = LOCAL_ASFLAGS,
+                    CPPDEFINES       = CPPDEFINES,
+                    LOCAL_CPPDEFINES = LOCAL_CPPDEFINES,
+                    LIBS             = LIBS,
+                    LIBPATH          = LIBPATH,
+                    LINKFLAGS        = LINKFLAGS)
+
+Return("objs")
+#---------------------------------------------------------------------------------
+# End
+#---------------------------------------------------------------------------------

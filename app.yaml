@@ -1356,6 +1356,38 @@ example_projects:
     - rtconfig.py
     - SConscript
     - SConstruct
+    source_path_offset: 03_network_opc_ua
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
+  external_files: []
+  project_description: ''
+  project_name: 03_network_opc_ua
+  project_type: bare-metal|@notUsed|@notUsed
+- builtin_files:
+  - files_and_folders:
+    - .settings
+    - applications
+    - board
+    - packages
+    - .config
+    - .cproject
+    - .project
+    - Kconfig
+    - rtconfig.h
+    - rtconfig.py
+    - SConscript
+    - SConstruct
     source_path_offset: 04_filesystem_directory
     target_path_offset: ''
   - files_and_folders:
@@ -2078,6 +2110,38 @@ example_projects:
   project_description: ''
   project_name: 11_loader_app
   project_type: bare-metal|@notUsed|@notUsed
+- builtin_files:
+  - files_and_folders:
+    - .settings
+    - applications
+    - board
+    - packages
+    - .config
+    - .cproject
+    - .project
+    - Kconfig
+    - rtconfig.h
+    - rtconfig.py
+    - SConscript
+    - SConstruct
+    source_path_offset: 12_data_parsers_sqlite
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
+  external_files: []
+  project_description: ''
+  project_name: 12_data_parsers_sqlite
+  project_type: bare-metal|@notUsed|@notUsed
 features:
 - High Real-Time RuiChing Industrial Platform: Hard real-time kernel with ≤1μs task
     response and low cycle jitter ≤±5μs cycle error
@@ -2095,7 +2159,7 @@ features_zh:
 - 革命性混合架构：RT-Thread+Linux双系统
 pkg_type: Board_Support_Packages
 pkg_vendor: Real-Thread
-pkg_version: 1.5.0
+pkg_version: 1.7.0
 template_projects:
 - builtin_files:
   - files_and_folders:

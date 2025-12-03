@@ -121,7 +121,7 @@ def MkDist(program, BSP_ROOT, RTT_ROOT, Env, project_name, project_path):
 
     if not os.path.exists(rtt_dir_path):
         print('=> platform')
-        do_copy_folder(os.path.join(BSP_ROOT, '..', '..', '..', 'platform'), os.path.join(dist_dir, '..', 'platform'))
+        do_copy_folder(os.path.join(BSP_ROOT, '..', '..', 'platform'), os.path.join(dist_dir, '..', 'platform'))
 
         # copy tools directory
         print('=> components')

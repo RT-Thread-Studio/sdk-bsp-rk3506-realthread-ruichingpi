@@ -7,6 +7,7 @@
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution.
  */
+#include <newlib_compiler.h>
 #include <sys/statfs.h>
 
 int statfs(const char *path, struct statfs *buf)
