@@ -37,6 +37,8 @@
 #define ECAT_SERVICE_HWTIMER_START           (0x20)
 #define ECAT_SERVICE_SYNC_DC                 (0x0)
 
+#define ECAT_SERVICE_SLAVE_CONFIG            (0x21)
+
 struct ecat_master_state_arg
 {
     ec_master_t *master;
@@ -62,6 +64,13 @@ struct ecat_slave_info_arg
 {
     ec_master_t *master;
     ec_slave_info_t *info;
+    uint16_t slave;
+};
+
+struct ecat_slave_config_arg
+{
+    ec_master_t *master;
+    ec_slave_config_t *config;
     uint16_t slave;
 };
 

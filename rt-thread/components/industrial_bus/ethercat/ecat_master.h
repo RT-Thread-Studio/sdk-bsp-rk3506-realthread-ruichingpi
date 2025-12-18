@@ -14,6 +14,7 @@
 
 #define EC_MAX_STRING_LENGTH (64)
 #define EC_MAX_PORTS         (4)
+
 /** Master state.
  *
  * This is used for the output parameter of ecat_master_state().
@@ -147,10 +148,8 @@ typedef struct
  */
 typedef enum
 {
-    EC_DIR_INVALID, /**< Invalid direction. Do not use this value. */
     EC_DIR_OUTPUT,  /**< Values written by the master. */
     EC_DIR_INPUT,   /**< Values read by the master. */
-    EC_DIR_COUNT    /**< Number of directions. For internal use only. */
 } ec_direction_t;
 
 /****************************************************************************/
@@ -192,7 +191,7 @@ typedef struct
 typedef struct
 {
     uint16_t index;         /**< PDO index. */
-    unsigned int n_entries; /**< Number of PDO entries in \a entries to map.
+    uint32_t n_entries; /**< Number of PDO entries in \a entries to map.
                                           Zero means, that the default mapping shall be
                                           used (this can only be done if the slave is
                                           present at configuration time). */
@@ -211,10 +210,9 @@ typedef struct
  */
 typedef struct
 {
-    uint16_t
-        slave_pos; /**< Slave Index,but can also be \a 0xffff to mark the end of the list. */
+    uint8_t    index;                /**< Sync manager index. */
     ec_direction_t dir;               /**< Sync manager direction. */
-    unsigned int n_pdos;              /**< Number of PDOs in \a pdos. */
+    uint32_t n_pdos;              /**< Number of PDOs in \a pdos. */
     ec_pdo_info_t const *pdos;        /**< Array with PDOs to assign. This must
                                         contain at least \a n_pdos PDOs. */
     ec_watchdog_mode_t watchdog_mode; /**< Watchdog mode. */
@@ -348,13 +346,37 @@ struct ecat_timer
     struct _ecat_timer stop_timer;
 };
 
+typedef void (*ec_pdo_callback_t)(uint16_t slave_index, uint8_t *output, uint8_t *input);
+
+/** EtherCAT slave sync signal configuration.
+ */
+typedef struct {
+    uint32_t cycle_time; /**< Cycle time [ns]. */
+    int32_t shift_time;  /**< Shift time [ns]. */
+} ec_sync_signal_t;
+
+#define EC_SYNC_SIGNAL_COUNT (2)
+
+typedef struct {
+    ec_sync_info_t *sync;                           /**< Sync manager configuration. */
+    uint8_t sync_count;                             /**< Number of sync managers. */
+    ec_pdo_callback_t pdo_callback;                 /**< PDO process data callback. */
+    uint16_t dc_assign_activate;                    /**< dc assign control */
+    ec_sync_signal_t dc_sync[EC_SYNC_SIGNAL_COUNT]; /**< DC sync signals. */
+} ec_slave_config_t;
+
 rt_err_t ecat_master_init(ec_master_t *master);
 
 rt_err_t ecat_master_deinit(ec_master_t *master);
 
+rt_err_t ecat_master_start(ec_master_t *master);
+
 rt_err_t ecat_simple_start(ec_master_t *master);
 
 rt_err_t ecat_simple_stop(ec_master_t *master);
+
+rt_err_t ecat_slave_config(
+    ec_master_t *master, uint16_t slave, ec_slave_config_t *config);
 
 rt_err_t ecat_master_state(ec_master_t *master, ec_master_state_t *state);
 
