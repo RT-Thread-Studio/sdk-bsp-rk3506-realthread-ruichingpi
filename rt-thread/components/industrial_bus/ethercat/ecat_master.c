@@ -46,6 +46,21 @@ rt_err_t ecat_master_deinit(ec_master_t *master)
     return (-RT_ERROR);
 }
 
+rt_err_t ecat_master_start(ec_master_t *master)
+{
+    if (!master)
+    {
+        return (-RT_EINVAL);
+    }
+
+    if (service != RT_NULL)
+    {
+        return service_control(service, ECAT_SERVICE_MASTER_START, master);
+    }
+
+    return (-RT_ERROR);
+}
+
 rt_err_t ecat_simple_start(ec_master_t *master)
 {
     if (!master)
@@ -129,6 +144,26 @@ rt_err_t ecat_slave_info(
         info_arg.info = info;
         info_arg.slave = slave;
         return service_control(service, ECAT_SERVICE_SLAVE_INFO, &info_arg);
+    }
+
+    return (-RT_ERROR);
+}
+
+rt_err_t ecat_slave_config(
+    ec_master_t *master, uint16_t slave, ec_slave_config_t *config)
+{
+    if ((!master) || (!config))
+    {
+        return (-RT_EINVAL);
+    }
+
+    if (service != RT_NULL)
+    {
+        struct ecat_slave_config_arg config_arg;
+        config_arg.master = master;
+        config_arg.config = config;
+        config_arg.slave = slave;
+        return service_control(service, ECAT_SERVICE_SLAVE_CONFIG, &config_arg);
     }
 
     return (-RT_ERROR);

@@ -49,12 +49,7 @@ static ec_master_t csp_master = {
     .recovery_timeout_ms = 3000, // 3s
     .process_data = process_data,
     .process_data_size = 4096,
-    .dc_active = 1,
-    .dc_cycltime0 = 50000000,
-    .dc_cyclshift = 10000,
-    .dc_index = 1,
     .net_mode = EC_NET_MODE_EXCLUSIVE,
-    .priority = 1,
 };
 
 static ec_pdo_entry_info_t slave1_output_pdo_entries[] = {
@@ -76,115 +71,46 @@ static ec_pdo_entry_info_t slave1_input_pdo_entries[] = {
 ec_pdo_info_t slave_pdos[] = {
     { 0x1600, 5, slave1_output_pdo_entries },
     { 0x1a00, 5, slave1_input_pdo_entries },
-    { 0x1600, 5, slave1_output_pdo_entries },
-    { 0x1a00, 5, slave1_input_pdo_entries },
 };
 
-ec_sync_info_t slave_syncs[] = {
-    { 1, EC_DIR_OUTPUT, 1, &slave_pdos[0], EC_WD_DISABLE },
-    { 1, EC_DIR_INPUT, 1, &slave_pdos[1], EC_WD_DISABLE },
-    { 2, EC_DIR_OUTPUT, 1, &slave_pdos[2], EC_WD_DISABLE },
-    { 2, EC_DIR_INPUT, 1, &slave_pdos[3], EC_WD_DISABLE },
-};
-
-static void sv660n_pdo_config(struct ec_master *master, int slave_counts)
+ec_sync_info_t cia402_syncs[] =
 {
-    uint32_t index = 0;
-    uint32_t pdo_index;
-    uint32_t i = 0;
+    { 2, EC_DIR_OUTPUT, 1, &slave_pdos[0], EC_WD_DISABLE },
+    { 3, EC_DIR_INPUT, 1, &slave_pdos[1], EC_WD_DISABLE },
+};
 
-    for (size_t i = 1; i <= slave_counts; i++)
-    {
-        if (master->dc_type)
-        {
-            ecat_dc_config_ex(master, i, master->dc_active,
-                master->dc_cycltime0, master->dc_cycltime1,
-                master->dc_cyclshift); // SYNC0 on slave 1
-        }
-        else
-        {
-            ecat_dc_config(master, i, master->dc_active,
-                master->dc_cycltime0, master->dc_cyclshift); // SYNC0 on slave 1
-        }
-    }
+static ec_pdo_entry_info_t eio_output1_pdo_entries[] =
+{
+    { 0x3101, 0x01, 8 },
+};
 
-    for (i = 0; i < sizeof(slave_syncs) / sizeof(ec_sync_info_t); i++)
-    {
-        if (slave_syncs[i].slave_pos != 0xffff)
-        {
-            if (slave_syncs[i].dir == EC_DIR_OUTPUT)
-            {
-                pdo_index = 0;
-                // 1c12.0
-                ecat_sdo_write_u32(master, slave_syncs[i].slave_pos, 0x1c12, 0,
-                    pdo_index, CSP_TIMEOUTRXM);
-                while (pdo_index < slave_syncs[i].n_pdos)
-                {
-                    const ec_pdo_info_t *pdo_info =
-                        &slave_syncs[i].pdos[pdo_index];
-                    index = 0;
-                    // 1c12.0
-                    ecat_sdo_write_u16(master, slave_syncs[i].slave_pos, 0x1c12,
-                        pdo_index + 1, pdo_info->index, CSP_TIMEOUTRXM);
-                    ecat_sdo_write_u32(master, slave_syncs[i].slave_pos,
-                        pdo_info->index, index, 0, CSP_TIMEOUTRXM);
-                    while (index < pdo_info->n_entries)
-                    {
-                        uint32_t sdo_data =
-                            (pdo_info->entries[index].index << 16) |
-                            (pdo_info->entries[index].subindex << 8) |
-                            pdo_info->entries[index].bit_length;
-                        ecat_sdo_write_u32(master, slave_syncs[i].slave_pos,
-                            pdo_info->index, index + 1, sdo_data,
-                            CSP_TIMEOUTRXM);
-                        index++;
-                    }
-                    ecat_sdo_write_u32(master, slave_syncs[i].slave_pos,
-                        pdo_info->index, 0, index, CSP_TIMEOUTRXM);
-                    pdo_index++;
-                }
-                // 1c12.0
-                ecat_sdo_write_u32(master, slave_syncs[i].slave_pos, 0x1c12, 0,
-                    pdo_index, CSP_TIMEOUTRXM);
-            }
-            else if (slave_syncs[i].dir == EC_DIR_INPUT)
-            {
-                pdo_index = 0;
-                // 1c13.0
-                ecat_sdo_write_u32(master, slave_syncs[i].slave_pos, 0x1c13, 0,
-                    pdo_index, CSP_TIMEOUTRXM);
-                while (pdo_index < slave_syncs[i].n_pdos)
-                {
-                    const ec_pdo_info_t *pdo_info =
-                        &slave_syncs[i].pdos[pdo_index];
-                    index = 0;
-                    // 1c13.0
-                    ecat_sdo_write_u16(master, slave_syncs[i].slave_pos, 0x1c13,
-                        pdo_index + 1, pdo_info->index, CSP_TIMEOUTRXM);
-                    ecat_sdo_write_u32(master, slave_syncs[i].slave_pos,
-                        pdo_info->index, index, 0, CSP_TIMEOUTRXM);
-                    while (index < pdo_info->n_entries)
-                    {
-                        uint32_t sdo_data =
-                            (pdo_info->entries[index].index << 16) |
-                            (pdo_info->entries[index].subindex << 8) |
-                            pdo_info->entries[index].bit_length;
-                        ecat_sdo_write_u32(master, slave_syncs[i].slave_pos,
-                            pdo_info->index, index + 1, sdo_data,
-                            CSP_TIMEOUTRXM);
-                        index++;
-                    }
-                    ecat_sdo_write_u32(master, slave_syncs[i].slave_pos,
-                        pdo_info->index, 0, index, CSP_TIMEOUTRXM);
-                    pdo_index++;
-                }
-                // 1c13.0
-                ecat_sdo_write_u32(master, slave_syncs[i].slave_pos, 0x1c13, 0,
-                    pdo_index, CSP_TIMEOUTRXM);
-            }
-        }
-    }
-}
+static ec_pdo_entry_info_t eio_output2_pdo_entries[] =
+{
+    { 0x3101, 0x02, 8 },
+};
+
+static ec_pdo_entry_info_t eio_input1_pdo_entries[] =
+{
+    { 0x3001, 0x01, 8 },
+};
+static ec_pdo_entry_info_t eio_input2_pdo_entries[] =
+{
+    { 0x3001, 0x02, 8 },
+};
+
+ec_pdo_info_t eio_pdos[] = {
+    { 0x1a00, 1, eio_output1_pdo_entries },
+    { 0x1a01, 1, eio_output2_pdo_entries },
+    { 0x1600, 1, eio_input1_pdo_entries },
+    { 0x1601, 1, eio_input2_pdo_entries },
+};
+
+ec_sync_info_t eio_syncs[] =
+{
+    { 0, EC_DIR_OUTPUT, 1, &eio_pdos[0], EC_WD_DISABLE },
+    { 1, EC_DIR_OUTPUT, 1, &eio_pdos[1], EC_WD_DISABLE },
+    { 2, EC_DIR_INPUT, 2, &eio_pdos[2], EC_WD_DISABLE },
+};
 
 static void servo_switch_op(struct rpdo_csp *rmap, struct tpdo_csp *tmap)
 {
@@ -208,19 +134,6 @@ static void servo_switch_op(struct rpdo_csp *rmap, struct tpdo_csp *tmap)
     }
 }
 
-rt_inline struct rpdo_csp *servo_rpdo_get(ec_master_t *mater, int slave)
-{
-    return (struct rpdo_csp *)(mater->process_data +
-        sizeof(struct rpdo_csp) * (slave - 1));
-}
-
-rt_inline struct tpdo_csp *servo_tpdo_get(
-    ec_master_t *mater, int slave_count, int slave)
-{
-    return (struct tpdo_csp *)(mater->process_data +
-        sizeof(struct rpdo_csp) * slave_count +
-        sizeof(struct tpdo_csp) * (slave - 1));
-}
 
 static int sv660n_csp_mode(const char *ifname)
 {
@@ -242,114 +155,71 @@ static int sv660n_csp_mode(const char *ifname)
         return err;
     }
 
-    err = ecat_config_init(&csp_master, RT_FALSE);
-    if (err)
-    {
-        rt_kprintf("ethercat master init failed, err:%d\n", err);
-        return err;
-    }
-
     slave_counts = ecat_slavecount(&csp_master);
     rt_kprintf("Found slaves count:%d\n", slave_counts);
 
-    err = ecat_write_state(&csp_master, 0, EC_STATE_PRE_OP);
-    if (err)
-    {
-        rt_kprintf("ecat_write_state PRE_OP failed\n");
-        return err;
-    }
+    static ec_slave_config_t slave_cia402_config;
 
-    state = EC_STATE_PRE_OP;
-    err = ecat_check_state(&csp_master, 0, &state, 2000000 * 3);
-    if (err != RT_EOK)
-    {
-        rt_kprintf("Not all slaves reached PRE_OP state.\n");
-        return err;
-    }
+    slave_cia402_config.dc_assign_activate = 0x300;
+    slave_cia402_config.dc_sync[0].cycle_time = csp_master.main_cycletime_us * 1000;
+    slave_cia402_config.dc_sync[0].shift_time = 500000;
+    slave_cia402_config.dc_sync[1].cycle_time = 0;
+    slave_cia402_config.dc_sync[1].shift_time = 0;
+    slave_cia402_config.sync = cia402_syncs;
+    slave_cia402_config.sync_count = sizeof(cia402_syncs) / sizeof(ec_sync_info_t);
 
-    ecat_config_dc(&csp_master);
+    static ec_slave_config_t slave_eio_config;
 
-    sv660n_pdo_config(&csp_master, MOTOR_NUM);
-
-    err = ecat_config_map_group(
-        &csp_master, (void *)(csp_master.process_data), 0);
-    if (err != RT_EOK)
-    {
-        rt_kprintf("ecat_config_map_group failed\n");
-        return err;
-    }
+    slave_eio_config.dc_assign_activate = 0x300;
+    slave_eio_config.dc_sync[0].cycle_time = csp_master.main_cycletime_us * 1000;
+    slave_eio_config.dc_sync[0].shift_time = 500000;
+    slave_eio_config.dc_sync[1].cycle_time = 0;
+    slave_eio_config.dc_sync[1].shift_time = 0;
+    slave_eio_config.sync = eio_syncs;
+    slave_eio_config.sync_count = sizeof(eio_syncs) / sizeof(ec_sync_info_t);
 
     for(int i = 0; i < slave_counts; i++)
     {
-        ecat_slave_info(&csp_master, i+1, &info[i]);
+        ecat_slave_info(&csp_master, i, &info[i]);
+        if(info[i].vendor_id == 0xee000002) {
+		    // IO
+            ecat_slave_config(&csp_master, i, &slave_eio_config);
+        }else {
+		    // cia402
+            ecat_slave_config(&csp_master, i, &slave_cia402_config);
+        }
     }
 
-    err = ecat_write_state(&csp_master, 0, EC_STATE_SAFE_OP);
+    ecat_master_start(&csp_master);
+
+    for(int i = 0; i < slave_counts; i++)
+    {
+        ecat_slave_info(&csp_master, i, &info[i]);
+    }
+
+    state = EC_STATE_OPERATIONAL;
+    err = ecat_check_state(&csp_master, slave_counts - 1, &state, 20000000 * 3);
     if (err != RT_EOK)
     {
-        rt_kprintf("ecat_write_state PRE_OP failed\n");
+        rt_kprintf("Not all slaves reached operational mode.\n");
         return err;
     }
 
-    state = EC_STATE_SAFE_OP;
-    err = ecat_check_state(&csp_master, 0, &state, 20000000 * 3);
-    if (err != RT_EOK)
-    {
-        rt_kprintf("Not all slaves reached SAFE_OP state.%d\n", err);
-        return err;
-    }
-
-    err = ecat_write_state(&csp_master, 0, EC_STATE_OPERATIONAL);
-    if (err != RT_EOK)
-    {
-        rt_kprintf("ecat_write_state PRE_OP failed\n");
-        return err;
-    }
+    rt_kprintf("Motor CSP mode control started...\n");
 
     struct rpdo_csp *rmap;
     struct tpdo_csp *tmap;
-
-    /* swith mode */
-    int _chk = 400;
-    do
-    {
-        for (size_t slave = 1; slave <= slave_counts; slave++)
-        {
-            rmap = (struct rpdo_csp *)(info[slave - 1].outputs);
-            tmap = (struct tpdo_csp *)(info[slave - 1].inputs);
-
-            if (slave != 3)
-            {
-                rmap->mode_byte = 0x8;
-                servo_switch_op(rmap, tmap);
-
-            }
-        }
-
-        ecat_send_processdata_group(&csp_master, 0);
-        ecat_receive_processdata_group(&csp_master, 0, 2000000 * 3);
-        state = EC_STATE_OPERATIONAL;
-    } while (
-        _chk-- && (ecat_check_state(&csp_master, 0, &state, 2000) != RT_EOK));
-    if (_chk < 0)
-    {
-        rt_kprintf("Not all slaves reached operational mode.\n");
-        return _chk;
-    }
-
-    struct ecat_timer t;
-    ecat_timer_start(&t, 1000);
 
     while (1)
     {
         if (servo_run == 0)
         {
-            for (size_t slave = 1; slave <= slave_counts; slave++)
+            for (size_t slave = 0; slave < slave_counts; slave++)
             {
-                rmap = (struct rpdo_csp *)(info[slave - 1].outputs);
-                tmap = (struct tpdo_csp *)(info[slave - 1].inputs);
+                rmap = (struct rpdo_csp *)(info[slave].outputs);
+                tmap = (struct tpdo_csp *)(info[slave].inputs);
 
-                if (slave != 3)
+                if (info[slave].vendor_id != 0xee000002)
                 {
                     servo_switch_op(rmap, tmap);
                     rmap->control_word = 0x2;
@@ -358,19 +228,17 @@ static int sv660n_csp_mode(const char *ifname)
             goto stop;
         }
 
-        ecat_send_processdata_group(&csp_master, 0);
-        ecat_receive_processdata_group(&csp_master, 0, 2000 * 10);
-    
-        for (size_t slave = 1; slave <= slave_counts; slave++)
+        for (size_t slave = 0; slave < slave_counts; slave++)
         {
-            rmap = (struct rpdo_csp *)(info[slave - 1].outputs);
-            tmap = (struct tpdo_csp *)(info[slave - 1].inputs);
+            rmap = (struct rpdo_csp *)(info[slave].outputs);
+            tmap = (struct tpdo_csp *)(info[slave].inputs);
 
-            if (slave != 3)
+            if (info[slave].vendor_id != 0xee000002)
             {
                 servo_switch_op(rmap, tmap);
                 if (rmap->control_word == 7)
                 {
+                    rmap->mode_byte = 0x8;
                     rmap->dest_pos = tmap->cur_pos;
                 }
                 if (rmap->control_word == 0xf)
@@ -401,12 +269,8 @@ static int sv660n_csp_mode(const char *ifname)
             }
         }
 
-        while (ecat_timer_is_expired(&t) == RT_FALSE);
-        ecat_timer_start(&t, 1000);
 stop:
-        ecat_send_processdata_group(&csp_master, 0);
-        ecat_receive_processdata_group(&csp_master, 0, 2000 * 10);
-        rt_thread_delay(1);
+        rt_thread_mdelay(10);
     }
 
     return 0;

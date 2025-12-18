@@ -106,10 +106,15 @@ def MkDist(program, BSP_ROOT, RTT_ROOT, Env, project_name, project_path):
 
     # copy .settings .cproject .project directory
     print('=> .settings')
-    if "amp" in os.path.basename(BSP_ROOT):
-        do_copy_folder(os.path.join(BSP_ROOT, '..', '..', '.ide', '.settings-amp'), os.path.join(dist_dir, '.settings'))
+
+    if Env['chip'] == 'rk3506':
+        if "amp" in os.path.basename(BSP_ROOT):
+            do_copy_folder(os.path.join(BSP_ROOT, '..', '..', '.ide', '.settings-amp'), os.path.join(dist_dir, '.settings'))
+        else:
+            do_copy_folder(os.path.join(BSP_ROOT, '..', '..', '.ide', '.settings-smp'), os.path.join(dist_dir, '.settings'))
     else:
-        do_copy_folder(os.path.join(BSP_ROOT, '..', '..', '.ide', '.settings-smp'), os.path.join(dist_dir, '.settings'))
+        do_copy_folder(os.path.join(BSP_ROOT, '..', '..', '.ide', '.settings-amp'), os.path.join(dist_dir, '.settings'))
+
     do_copy_file(os.path.join(BSP_ROOT, '..', '..', '.ide', '.cproject'), os.path.join(dist_dir, '.cproject'))
     do_copy_file(os.path.join(BSP_ROOT, '..', '..', '.ide', '.project'), os.path.join(dist_dir, '.project'))
 

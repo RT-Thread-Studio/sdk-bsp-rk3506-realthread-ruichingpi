@@ -78,8 +78,8 @@ ec_pdo_info_t slave_pdos[] = {
 };
 
 ec_sync_info_t slave_syncs[] = {
-    { 1, EC_DIR_OUTPUT, 1, &slave_pdos[0], EC_WD_DISABLE },
-    { 1, EC_DIR_INPUT, 1, &slave_pdos[1], EC_WD_DISABLE },
+    { 2, EC_DIR_OUTPUT, 1, &slave_pdos[0], EC_WD_DISABLE },
+    { 3, EC_DIR_INPUT, 1, &slave_pdos[1], EC_WD_DISABLE },
 };
 
 static void servo_switch_op(struct rpdo_csp *output, struct tpdo_csp *input)
@@ -107,102 +107,6 @@ static void servo_switch_op(struct rpdo_csp *output, struct tpdo_csp *input)
         default:
             // data->control_word = 0x6;
             break;
-        }
-    }
-}
-
-static void lc_pdo_config(struct ec_master *master)
-{
-    uint32_t index = 0;
-    uint32_t pdo_index;
-    uint32_t i = 0;
-
-    if (master->dc_type)
-    {
-        ecat_dc_config_ex(master, master->dc_index, master->dc_active,
-            master->dc_cycltime0, master->dc_cycltime1,
-            master->dc_cyclshift); // SYNC0 on slave 1
-    }
-    else
-    {
-        ecat_dc_config(master, master->dc_index, master->dc_active,
-            master->dc_cycltime0, master->dc_cyclshift); // SYNC0 on slave 1
-    }
-
-    for (i = 0; i < sizeof(slave_syncs) / sizeof(ec_sync_info_t); i++)
-    {
-        if (slave_syncs[i].slave_pos != 0xffff)
-        {
-            if (slave_syncs[i].dir == EC_DIR_OUTPUT)
-            {
-                pdo_index = 0;
-                // 1c12.0
-                ecat_sdo_write_u32(master, slave_syncs[i].slave_pos, 0x1c12, 0,
-                    pdo_index, EC_TIMEOUTRXM);
-                while (pdo_index < slave_syncs[i].n_pdos)
-                {
-                    const ec_pdo_info_t *pdo_info =
-                        &slave_syncs[i].pdos[pdo_index];
-                    index = 0;
-                    // 1c12.0
-                    ecat_sdo_write_u16(master, slave_syncs[i].slave_pos, 0x1c12,
-                        pdo_index + 1, pdo_info->index, EC_TIMEOUTRXM);
-                    ecat_sdo_write_u32(master, slave_syncs[i].slave_pos,
-                        pdo_info->index, index, 0, EC_TIMEOUTRXM);
-                    while (index < pdo_info->n_entries)
-                    {
-                        uint32_t sdo_data =
-                            (pdo_info->entries[index].index << 16) |
-                            (pdo_info->entries[index].subindex << 8) |
-                            pdo_info->entries[index].bit_length;
-                        ecat_sdo_write_u32(master, slave_syncs[i].slave_pos,
-                            pdo_info->index, index + 1, sdo_data,
-                            EC_TIMEOUTRXM);
-                        index++;
-                    }
-                    ecat_sdo_write_u32(master, slave_syncs[i].slave_pos,
-                        pdo_info->index, 0, index, EC_TIMEOUTRXM);
-                    pdo_index++;
-                }
-                // 1c12.0
-                ecat_sdo_write_u32(master, slave_syncs[i].slave_pos, 0x1c12, 0,
-                    pdo_index, EC_TIMEOUTRXM);
-            }
-            else if (slave_syncs[i].dir == EC_DIR_INPUT)
-            {
-                pdo_index = 0;
-                // 1c13.0
-                ecat_sdo_write_u32(master, slave_syncs[i].slave_pos, 0x1c13, 0,
-                    pdo_index, EC_TIMEOUTRXM);
-                while (pdo_index < slave_syncs[i].n_pdos)
-                {
-                    const ec_pdo_info_t *pdo_info =
-                        &slave_syncs[i].pdos[pdo_index];
-                    index = 0;
-                    // 1c13.0
-                    ecat_sdo_write_u16(master, slave_syncs[i].slave_pos, 0x1c13,
-                        pdo_index + 1, pdo_info->index, EC_TIMEOUTRXM);
-                    ecat_sdo_write_u32(master, slave_syncs[i].slave_pos,
-                        pdo_info->index, index, 0, EC_TIMEOUTRXM);
-                    while (index < pdo_info->n_entries)
-                    {
-                        uint32_t sdo_data =
-                            (pdo_info->entries[index].index << 16) |
-                            (pdo_info->entries[index].subindex << 8) |
-                            pdo_info->entries[index].bit_length;
-                        ecat_sdo_write_u32(master, slave_syncs[i].slave_pos,
-                            pdo_info->index, index + 1, sdo_data,
-                            EC_TIMEOUTRXM);
-                        index++;
-                    }
-                    ecat_sdo_write_u32(master, slave_syncs[i].slave_pos,
-                        pdo_info->index, 0, index, EC_TIMEOUTRXM);
-                    pdo_index++;
-                }
-                // 1c13.0
-                ecat_sdo_write_u32(master, slave_syncs[i].slave_pos, 0x1c13, 0,
-                    pdo_index, EC_TIMEOUTRXM);
-            }
         }
     }
 }
@@ -235,83 +139,33 @@ static int lc_csp_mode(const char *ifname)
         return err;
     }
 
-    err = ecat_config_init(&csp_master, RT_FALSE);
-    if (err)
-    {
-        rt_kprintf("ethercat master init failed, err:%d\n", err);
-        return err;
-    }
-
     slave_counts = ecat_slavecount(&csp_master);
     rt_kprintf("Found slaves count:%d\n", slave_counts);
 
-    err = ecat_write_state(&csp_master, 0, EC_STATE_PRE_OP);
-    if (err)
-    {
-        rt_kprintf("ecat_write_state PRE_OP failed\n");
-        return err;
-    }
+    static ec_slave_config_t slave_cia402_config;
 
-    state = EC_STATE_PRE_OP;
-    err = ecat_check_state(&csp_master, 0, &state, 2000000 * 3);
-    if (err != RT_EOK)
-    {
-        rt_kprintf("Not all slaves reached PRE_OP state.\n");
-        return err;
-    }
+    slave_cia402_config.dc_assign_activate = 0x300;
+    slave_cia402_config.dc_sync[0].cycle_time = csp_master.main_cycletime_us * 1000;
+    slave_cia402_config.dc_sync[0].shift_time = 500000;
+    slave_cia402_config.dc_sync[1].cycle_time = 0;
+    slave_cia402_config.dc_sync[1].shift_time = 0;
+    slave_cia402_config.sync = slave_syncs;
+    slave_cia402_config.sync_count = sizeof(slave_syncs) / sizeof(ec_sync_info_t);
+    ecat_slave_config(&csp_master, 0, &slave_cia402_config);
+    ecat_master_start(&csp_master);
 
-    ecat_config_dc(&csp_master);
-
-    lc_pdo_config(&csp_master);
-
-    err = ecat_config_map_group(
-        &csp_master, (void *)(csp_master.process_data), 0);
-    if (err != RT_EOK)
-    {
-        rt_kprintf("ecat_config_map_group failed\n");
-        return err;
-    }
-    
-    err = ecat_write_state(&csp_master, 0, EC_STATE_SAFE_OP);
-    if (err != RT_EOK)
-    {
-        rt_kprintf("ecat_write_state PRE_OP failed\n");
-        return err;
-    }
-
-    state = EC_STATE_SAFE_OP;
+    state = EC_STATE_OPERATIONAL;
     err = ecat_check_state(&csp_master, 0, &state, 20000000 * 3);
     if (err != RT_EOK)
     {
-        rt_kprintf("Not all slaves reached SAFE_OP state.%d\n", err);
+        rt_kprintf("Not all slaves reached operational mode.\n");
         return err;
     }
 
-    err = ecat_write_state(&csp_master, 0, EC_STATE_OPERATIONAL);
-    if (err != RT_EOK)
-    {
-        rt_kprintf("ecat_write_state PRE_OP failed\n");
-        return err;
-    }
-
-    struct rpdo_csp *rmap = (struct rpdo_csp *)(csp_master.process_data);
+    struct rpdo_csp* rmap = (struct rpdo_csp*)(csp_master.process_data);
     struct tpdo_csp *tmap =
         (struct tpdo_csp *)(csp_master.process_data + sizeof(struct rpdo_csp));
     rmap->control_word = 0x8;
-
-    /* swith mode */
-    int _chk = 400;
-    do
-    {
-        servo_switch_op(rmap, tmap);
-        ecat_send_processdata_group(&csp_master, 0);
-        ecat_receive_processdata_group(&csp_master, 0, 2000000 * 3);
-        state = EC_STATE_OPERATIONAL;
-    } while (
-        _chk-- && (ecat_check_state(&csp_master, 0, &state, 2000) != RT_EOK));
-
-    struct ecat_timer t;
-    ecat_timer_start(&t, 1000);
 
     while (1)
     {
@@ -326,8 +180,6 @@ static int lc_csp_mode(const char *ifname)
             goto stop;
         }
 
-        ecat_send_processdata_group(&csp_master, 0);
-        ecat_receive_processdata_group(&csp_master, 0, 2000 * 10);
         if (rmap->control_word == 7)
         {
             rmap->mode_byte = 0x8;
@@ -359,12 +211,8 @@ static int lc_csp_mode(const char *ifname)
                 }
             }  
         }
-        while (ecat_timer_is_expired(&t) == RT_FALSE);
-        ecat_timer_start(&t, 1000);
 stop:
-        ecat_send_processdata_group(&csp_master, 0);
-        ecat_receive_processdata_group(&csp_master, 0, 2000 * 10);
-        rt_thread_delay(1);
+        rt_thread_delay(5);
     }
 
     return 0;

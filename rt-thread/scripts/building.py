@@ -1145,6 +1145,7 @@ def EndBuilding(target, program = None):
     config_name = GetOption('gen-sdk')
     Env['config_name'] = config_name
     Env['project_name'] = project_name
+    Env['chip'] = rtconfig.CHIP
 
     if config_name:
         print(target)
