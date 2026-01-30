@@ -1,0 +1,61 @@
+/{
+    mailbox1_amp: mailbox-amp@ff291000 {
+        compatible = "rockchip,rk3506-mailbox", "rockchip,rk3576-mailbox";
+        reg = <0xff291000 0x20>;
+        interrupts = <GIC_SPI 143 IRQ_TYPE_LEVEL_HIGH>;
+        interrupt-affinity = <&cpu_rtt>;
+        clocks = <&cru PCLK_MAILBOX>;
+        clock-names = "pclk_mailbox";
+        #mbox-cells = <1>;
+        status = "okay,rtt";
+        rtthread,tx-direction-b2a;
+    };
+
+    mailbox3_amp: mailbox-amp@ff293000 {
+        compatible = "rockchip,rk3506-mailbox", "rockchip,rk3576-mailbox";
+        reg = <0xff293000 0x20>;
+        interrupts = <GIC_SPI 145 IRQ_TYPE_LEVEL_HIGH>;
+        interrupt-affinity = <&cpu_rtt>;
+        clocks = <&cru PCLK_MAILBOX>;
+        clock-names = "pclk_mailbox";
+        #mbox-cells = <1>;
+        status = "okay,rtt";
+        rtthread,tx-direction-b2a;
+    };
+
+    shm: shm@3900000 {
+        compatible = "amp-shm-device";
+        mbox-names = "shm-rx", "shm-tx";
+        mboxes = <&mailbox1 0 &mailbox3 0>;
+        reg = <0x3900000 0x100000>;
+        memory-region = <&amp_shmem_reserved_1>;
+        status = "okay";
+    };
+
+    rtt_shm: rtt-shm@3900000 {
+        compatible = "amp-shm-device";
+        reg = <0x3900000 0x0100000>;
+        mbox-names = "shm-rx", "shm-tx";
+        mboxes = <&mailbox3_amp 0 &mailbox1_amp 0>;
+        status = "okay,rtt";
+    };
+};
+
+&reserved_memory {
+    amp_shmem_reserved_1: amp_shm@3900000 {
+        reg = <0x03900000 0x100000>;
+        no-map;
+    };  
+};
+
+&mailbox1 {
+    rockchip,txpoll-period-ms = <1>;
+    interrupts = <GIC_SPI 139 IRQ_TYPE_LEVEL_HIGH>;
+    status = "okay";
+};
+
+&mailbox3 {
+    rockchip,txpoll-period-ms = <1>;
+    interrupts = <GIC_SPI 141 IRQ_TYPE_LEVEL_HIGH>;
+    status = "okay";
+};

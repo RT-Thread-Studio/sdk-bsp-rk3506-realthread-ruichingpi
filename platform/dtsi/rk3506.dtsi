@@ -322,6 +322,27 @@
         gpio0_d0: gpio0_d0@24 {
             gpio-num = <RK_GPIO0_D0>;
         };
+        gpio0_d1: gpio0_d1@25 {
+            gpio-num = <RK_GPIO0_D1>;
+        };
+        gpio0_d2: gpio0_d2@26 {
+            gpio-num = <RK_GPIO0_D2>;
+        };
+        gpio0_d3: gpio0_d3@27 {
+            gpio-num = <RK_GPIO0_D3>;
+        };
+        gpio0_d4: gpio0_d4@28 {
+            gpio-num = <RK_GPIO0_D4>;
+        };
+        gpio0_d5: gpio0_d5@29 {
+            gpio-num = <RK_GPIO0_D5>;
+        };
+        gpio0_d6: gpio0_d6@30 {
+            gpio-num = <RK_GPIO0_D6>;
+        };
+        gpio0_d7: gpio0_d7@31 {
+            gpio-num = <RK_GPIO0_D7>;
+        };
         gpio1_a0: gpio1_a0@32 {
             gpio-num = <RK_GPIO1_A0>;
         };
@@ -414,6 +435,18 @@
             gpio-num = <RK_GPIO1_D3>;
             rmio-index = <31>;
         };
+        gpio1_d4: gpio1_d4@60 {
+            gpio-num = <RK_GPIO1_D4>;
+        };
+        gpio1_d5: gpio1_d5@61 {
+            gpio-num = <RK_GPIO1_D5>;
+        };
+        gpio1_d6: gpio1_d6@62 {
+            gpio-num = <RK_GPIO1_D6>;
+        };
+        gpio1_d7: gpio1_d7@63 {
+            gpio-num = <RK_GPIO1_D7>;
+        };
         gpio2_a0: gpio2_a0@64 {
             gpio-num = <RK_GPIO2_A0>;
         };
@@ -431,6 +464,12 @@
         };
         gpio2_a5: gpio2_a5@69 {
             gpio-num = <RK_GPIO2_A5>;
+        };
+        gpio2_a6: gpio2_a6@70 {
+            gpio-num = <RK_GPIO2_A6>;
+        };
+        gpio2_a7: gpio2_a7@71 {
+            gpio-num = <RK_GPIO2_A7>;
         };
         gpio2_b0: gpio2_b0@72 {
             gpio-num = <RK_GPIO2_B0>;
@@ -458,6 +497,52 @@
         };
         gpio2_c0: gpio2_c0@80 {
             gpio-num = <RK_GPIO2_C0>;
+        };
+        gpio2_c1: gpio2_c1@81 {
+            gpio-num = <RK_GPIO2_C1>;
+        };
+        gpio2_c2: gpio2_c2@82 {
+            gpio-num = <RK_GPIO2_C2>;
+        };
+        gpio2_c3: gpio2_c3@83 {
+            gpio-num = <RK_GPIO2_C3>;
+        };
+        gpio2_c4: gpio2_c4@84 {
+            gpio-num = <RK_GPIO2_C4>;
+        };
+        gpio2_c5: gpio2_c5@85 {
+            gpio-num = <RK_GPIO2_C5>;
+        };
+        gpio2_c6: gpio2_c6@86 {
+            gpio-num = <RK_GPIO2_C6>;
+        };
+        gpio2_c7: gpio2_c7@87 {
+            gpio-num = <RK_GPIO2_C7>;
+        };
+        gpio2_d0: gpio2_d0@88 {
+            gpio-num = <RK_GPIO2_D0>;
+        };
+        gpio2_d1: gpio2_d1@89 {
+            gpio-num = <RK_GPIO2_D1>;
+        };
+        gpio2_d2: gpio2_d2@90 {
+            gpio-num = <RK_GPIO2_D2>;
+        };
+        gpio2_d3: gpio2_d3@91 {
+            gpio-num = <RK_GPIO2_D3>;
+        };
+        gpio2_d4: gpio2_d4@92 {
+            gpio-num = <RK_GPIO2_D4>;
+        };
+
+        gpio2_d5: gpio2_d5@93 {
+            gpio-num = <RK_GPIO2_D5>;
+        };
+        gpio2_d6: gpio2_d6@94 {
+            gpio-num = <RK_GPIO2_D6>;
+        };
+        gpio2_d7: gpio2_d7@95 {
+            gpio-num = <RK_GPIO2_D7>;
         };
         gpio3_a0: gpio3_a0@96 {
             gpio-num = <RK_GPIO3_A0>;
@@ -504,6 +589,81 @@
         gpio3_b6: gpio3_b6@110 {
             gpio-num = <RK_GPIO3_B6>;
         };
+        gpio3_b7: gpio3_b7@111 {
+            gpio-num = <RK_GPIO3_B7>;
+        };
+        gpio3_c0: gpio3_c0@112 {
+            gpio-num = <RK_GPIO3_C0>;
+        };
+        gpio3_c1: gpio3_c1@113 {
+            gpio-num = <RK_GPIO3_C1>;
+        };
+        gpio3_c2: gpio3_c2@114 {
+            gpio-num = <RK_GPIO3_C2>;
+        };
+        gpio3_c3: gpio3_c3@115 {
+            gpio-num = <RK_GPIO3_C3>;
+        };
+        gpio3_c4: gpio3_c4@116 {
+            gpio-num = <RK_GPIO3_C4>;
+        };
+        gpio3_c5: gpio3_c5@117 {
+            gpio-num = <RK_GPIO3_C5>;
+        };
+        gpio3_c6: gpio3_c6@118 {
+            gpio-num = <RK_GPIO3_C6>;
+        };
+        gpio3_c7: gpio3_c7@119 {
+            gpio-num = <RK_GPIO3_C7>;
+        };
+        gpio3_d0: gpio3_d0@120 {
+            gpio-num = <RK_GPIO3_D0>;
+        };
+        gpio3_d1: gpio3_d1@121 {
+            gpio-num = <RK_GPIO3_D1>;
+        };
+        gpio3_d2: gpio3_d2@122 {
+            gpio-num = <RK_GPIO3_D2>;
+        };
+        gpio3_d3: gpio3_d3@123 {
+            gpio-num = <RK_GPIO3_D3>;
+        };
+        gpio3_d4: gpio3_d4@124 {
+            gpio-num = <RK_GPIO3_D4>;
+        };
+        gpio3_d5: gpio3_d5@125 {
+            gpio-num = <RK_GPIO3_D5>;
+        };
+        gpio3_d6: gpio3_d6@126 {
+            gpio-num = <RK_GPIO3_D6>;
+        };
+        gpio3_d7: gpio3_d7@127 {
+            gpio-num = <RK_GPIO3_D7>;
+        };
+        gpio4_a0: gpio4_a0@128 {
+            gpio-num = <RK_GPIO4_A0>;
+        };
+        gpio4_a1: gpio4_a1@129 {
+            gpio-num = <RK_GPIO4_A1>;
+        };
+        gpio4_a2: gpio4_a2@130 {
+            gpio-num = <RK_GPIO4_A2>;
+        };
+        gpio4_a3: gpio4_a3@131 {
+            gpio-num = <RK_GPIO4_A3>;
+        };
+        gpio4_a4: gpio4_a4@132 {
+            gpio-num = <RK_GPIO4_A4>;
+        };
+        gpio4_a5: gpio4_a5@133 {
+            gpio-num = <RK_GPIO4_A5>;
+        };
+        gpio4_a6: gpio4_a6@134 {
+            gpio-num = <RK_GPIO4_A6>;
+        };
+        gpio4_a7: gpio4_a7@135 {
+            gpio-num = <RK_GPIO4_A7>;
+        };
         gpio4_b0: gpio4_b0@136 {
             gpio-num = <RK_GPIO4_B0>;
         };
@@ -515,6 +675,18 @@
         };
         gpio4_b3: gpio4_b3@139 {
             gpio-num = <RK_GPIO4_B3>;
+        };
+        gpio4_b4: gpio4_b4@140 {
+            gpio-num = <RK_GPIO4_B4>;
+        };
+        gpio4_b5: gpio4_b5@141 {
+            gpio-num = <RK_GPIO4_B5>;
+        };
+        gpio4_b6: gpio4_b6@142 {
+            gpio-num = <RK_GPIO4_B6>;
+        };
+        gpio4_b7: gpio4_b7@143 {
+            gpio-num = <RK_GPIO4_B7>;
         };
     };
 

@@ -1612,6 +1612,38 @@ example_projects:
     - rtconfig.py
     - SConscript
     - SConstruct
+    source_path_offset: 06_bus_ethercat_master_motor_2asix
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
+  external_files: []
+  project_description: ''
+  project_name: 06_bus_ethercat_master_motor_2asix
+  project_type: bare-metal|@notUsed|@notUsed
+- builtin_files:
+  - files_and_folders:
+    - .settings
+    - applications
+    - board
+    - packages
+    - .config
+    - .cproject
+    - .project
+    - Kconfig
+    - rtconfig.h
+    - rtconfig.py
+    - SConscript
+    - SConstruct
     source_path_offset: 06_bus_ethercat_master_csp
     target_path_offset: ''
   - files_and_folders:
@@ -2159,7 +2191,7 @@ features_zh:
 - 革命性混合架构：RT-Thread+Linux双系统
 pkg_type: Board_Support_Packages
 pkg_vendor: Real-Thread
-pkg_version: 1.7.2
+pkg_version: 1.7.5
 template_projects:
 - builtin_files:
   - files_and_folders:
