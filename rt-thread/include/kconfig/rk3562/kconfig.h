@@ -65,7 +65,7 @@
 /* end of klibc options */
 #define RT_NAME_MAX 32
 #define RT_USING_SMP
-#define RT_CPUS_NR 4
+#define RT_CPUS_NR 1
 #define RT_ALIGN_SIZE 8
 #define RT_THREAD_PRIORITY_32
 #define RT_THREAD_PRIORITY_MAX 32
@@ -180,7 +180,28 @@
 #define RT_USING_SERIAL_V1
 #define RT_SERIAL_USING_DMA
 #define RT_SERIAL_RB_BUFSZ 64
+#define RT_USING_CAN
+#define RT_USING_I2C
+#define RT_USING_I2C_BITOPS
+#define RT_USING_PHY
 #define RT_USING_MTD_NAND
+#define RT_USING_SDIO
+#define RT_SDIO_STACK_SIZE 2048
+#define RT_SDIO_THREAD_PRIORITY 15
+#define RT_MMCSD_STACK_SIZE 4096
+#define RT_MMCSD_THREAD_PREORITY 22
+#define RT_MMCSD_MAX_PARTITION 16
+#define RT_USING_SPI
+#define RT_USING_WDT
+#define RT_USING_MBOX
+#define RT_MBOX_PIC
+#define RT_USING_BLK
+
+/* Partition Types */
+
+#define RT_BLK_PARTITION_DFS
+#define RT_BLK_PARTITION_EFI
+/* end of Partition Types */
 #define RT_USING_DMA
 #define RT_USING_MFD
 #define RT_MFD_SYSCON
@@ -230,6 +251,68 @@
 
 /* Network */
 
+#define RT_USING_SAL
+
+/* Docking with protocol stacks */
+
+#define SAL_USING_LWIP
+/* end of Docking with protocol stacks */
+#define SAL_USING_POSIX
+#define RT_USING_NETDEV
+#define NETDEV_USING_IFCONFIG
+#define NETDEV_USING_PING
+#define NETDEV_USING_NETSTAT
+#define NETDEV_USING_AUTO_DEFAULT
+#define NETDEV_IPV4 1
+#define NETDEV_IPV6 0
+#define RT_USING_LWIP
+#define RT_USING_LWIP203
+#define RT_USING_LWIP_VER_NUM 0x20003
+#define RT_LWIP_MEM_ALIGNMENT 8
+#define RT_LWIP_IGMP
+#define RT_LWIP_ICMP
+#define RT_LWIP_DNS
+#define RT_LWIP_DHCP
+#define IP_SOF_BROADCAST 1
+#define IP_SOF_BROADCAST_RECV 1
+
+/* Static IPv4 Address */
+
+#define RT_LWIP_IPADDR "192.168.1.30"
+#define RT_LWIP_GWADDR "192.168.1.1"
+#define RT_LWIP_MSKADDR "255.255.255.0"
+#define RT_LWIP_IPADDR1 "192.168.1.30"
+#define RT_LWIP_GWADDR1 "192.168.1.1"
+#define RT_LWIP_MSKADDR1 "255.255.255.0"
+/* end of Static IPv4 Address */
+#define RT_LWIP_UDP
+#define RT_LWIP_TCP
+#define RT_LWIP_RAW
+#define RT_MEMP_NUM_NETCONN 8
+#define RT_LWIP_PBUF_NUM 64
+#define RT_LWIP_RAW_PCB_NUM 256
+#define RT_LWIP_UDP_PCB_NUM 256
+#define RT_LWIP_TCP_PCB_NUM 256
+#define RT_LWIP_TCP_SEG_NUM 256
+#define RT_LWIP_TCP_SND_BUF 65535
+#define RT_LWIP_TCP_WND 20480
+#define RT_LWIP_TCPTHREAD_PRIORITY 10
+#define RT_LWIP_TCPTHREAD_MBOX_SIZE 32
+#define RT_LWIP_TCPTHREAD_STACKSIZE 10240
+#define LWIP_NO_TX_THREAD
+#define RT_LWIP_ETHTHREAD_PRIORITY 12
+#define RT_LWIP_ETHTHREAD_STACKSIZE 20240
+#define RT_LWIP_ETHTHREAD_MBOX_SIZE 10
+#define LWIP_NETIF_STATUS_CALLBACK 1
+#define LWIP_NETIF_LINK_CALLBACK 1
+#define RT_LWIP_NETIF_NAMESIZE 6
+#define SO_REUSE 1
+#define LWIP_SO_RCVTIMEO 1
+#define LWIP_SO_SNDTIMEO 1
+#define LWIP_SO_RCVBUF 1
+#define LWIP_SO_LINGER 0
+#define LWIP_NETIF_LOOPBACK 0
+#define RT_LWIP_USING_PING
 /* end of Network */
 
 /* Memory protection */
@@ -253,6 +336,10 @@
 #define APP_LOAD_ADDRESS 0x04000000
 #define APP_LOAD_SIZE 0x1000000
 #define RT_USING_SERVICE
+#define RT_USING_CHERRYECAT
+#define RT_CHERRYECAT_NETDEV_RUICHING
+#define SERVER_ETHERCAT_ENABLE
+#define RT_USING_RPMSG
 /* end of RT-Thread Components */
 
 /* RT-Thread Utestcases */
@@ -380,6 +467,10 @@
 /* GD32 Drivers */
 
 /* end of GD32 Drivers */
+
+/* HPMicro SDK */
+
+/* end of HPMicro SDK */
 /* end of HAL & SDK Drivers */
 
 /* sensors drivers */

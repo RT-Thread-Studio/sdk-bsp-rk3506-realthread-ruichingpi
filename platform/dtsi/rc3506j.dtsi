@@ -44,6 +44,7 @@
 };
 
 &mmc {
+    detect-gpio = <&tca9534a_gpio 6 GPIO_ACTIVE_LOW>;
     pinctrl = <&gpio3_a0 &gpio3_a1 &gpio3_a2 &gpio3_a3 &gpio3_a4 &gpio3_a5>;
 	status = "okay";
 };
@@ -118,6 +119,8 @@
 
     usb4g: usb4g@2 {
         compatible = "usb4g,module";
+        snps,reset-gpio = <&tca9534a_gpio 4 GPIO_ACTIVE_LOW>;
+        snps,power-gpio = <&tca9534a_gpio 5 GPIO_ACTIVE_LOW>;
         vendor_id = <0x2c7c>;
         product_id = <0x0120>;
 

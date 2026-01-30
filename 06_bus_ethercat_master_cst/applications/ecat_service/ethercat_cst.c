@@ -23,8 +23,8 @@ struct rpdo_cst
 
     uint16_t max_torque;       // 0x6072 最大允许转矩 (百分比/额定)
     uint32_t max_motor_speed;  // 0x607F 最大转速 (rpm)
-    uint32_t torque_limit_pos; // 0x60E0 正向转矩限制
-    uint32_t torque_limit_neg; // 0x60E1 反向转矩限制
+    uint16_t torque_limit_pos; // 0x60E0 正向转矩限制
+    uint16_t torque_limit_neg; // 0x60E1 反向转矩限制
 };
 
 struct tpdo_cst
@@ -67,8 +67,8 @@ static ec_pdo_entry_info_t slave1_rxpdo_entries[] = {
     { 0x6060, 0x00, 8 },
     { 0x6072, 0x00, 16 },
     { 0x607F, 0x00, 32 },
-    { 0x60E0, 0x00, 32 },
-    { 0x60E1, 0x00, 32 },
+    { 0x60E0, 0x00, 16 },
+    { 0x60E1, 0x00, 16 },
 };
 
 static ec_pdo_entry_info_t slave1_txpdo_entries[] = {
