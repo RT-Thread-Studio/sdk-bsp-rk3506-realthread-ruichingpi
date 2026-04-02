@@ -246,6 +246,13 @@ KPI_DEFINED(rt_spin_unlock_irqrestore);
 KPI_DEFINED(rt_hw_us_delay);
 KPI_DEFINED(rt_hw_global_timer_get);
 
+KPI_DEFINED(rt_mp_init);
+KPI_DEFINED(rt_mp_detach);
+KPI_DEFINED(rt_mp_create);
+KPI_DEFINED(rt_mp_delete);
+KPI_DEFINED(rt_mp_alloc);
+KPI_DEFINED(rt_mp_free);
+
 KPI_DEFINED(__rt_libc_exit);
 #ifdef RT_USING_POSIX_STDIO
 KPI_DEFINED(rt_posix_stdio_get_console);
@@ -861,6 +868,13 @@ void kpi_init(void)
 
     rt_hw_us_delay = KPI_IMPORT(rt_hw_us_delay, 396);
     rt_hw_global_timer_get = KPI_IMPORT(rt_hw_global_timer_get, 397);
+
+    rt_mp_init = KPI_IMPORT(rt_mp_init, 408);
+    rt_mp_detach = KPI_IMPORT(rt_mp_detach, 409);
+    rt_mp_create = KPI_IMPORT(rt_mp_create, 410);
+    rt_mp_delete = KPI_IMPORT(rt_mp_delete, 411);
+    rt_mp_alloc = KPI_IMPORT(rt_mp_alloc, 412);
+    rt_mp_free = KPI_IMPORT(rt_mp_free, 413);
 
     __rt_libc_exit = KPI_IMPORT(__rt_libc_exit, 428);
 

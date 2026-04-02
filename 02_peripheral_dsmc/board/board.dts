@@ -1,0 +1,170 @@
+/**
+ * RT-Thread RuiChing
+ *
+ * COPYRIGHT (C) 2024-2025 Shanghai Real-Thread Electronic Technology Co., Ltd.
+ * All rights reserved.
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution.
+ */
+/dts-v1/;
+#include "rc3506j.dtsi"
+#include "ruiching-lcd-mipi-4_3-480x800.dtsi"
+
+&gpio1_a0 {
+    mux = <0x02>;
+};
+
+&gpio1_a1 {
+    mux = <0x04>;
+};
+
+&gpio1_a2 {
+    mux = <0x02>;
+};
+
+&gpio1_a3 {
+    mux = <0x02>;
+};
+
+&gpio1_a4 {
+    mux = <0x02>;
+};
+
+&gpio1_a5 {
+    mux = <0x02>;
+};
+
+&gpio1_a6 {
+    mux = <0x02>;
+};
+
+&gpio1_a7 {
+    mux = <0x02>;
+};
+
+&gpio1_b0 {
+    mux = <0x02>;
+};
+
+&gpio1_b1 {
+    mux = <0x02>;
+};
+
+&gpio1_b2 {
+    mux = <0x02>;
+};
+
+&gpio1_b3 {
+    mux = <0x02>;
+};
+
+&gpio1_b4 {
+    mux = <0x02>;
+};
+
+&gpio1_b5 {
+    mux = <0x02>;
+};
+
+&gpio1_b6 {
+    mux = <0x02>;
+};
+
+&gpio1_b7 {
+    mux = <0x02>;
+};
+
+&gpio1_c0 {
+    mux = <0x04>;
+};
+
+&gpio1_c1 {
+    mux = <0x02>;
+};
+
+&gpio1_c2 {
+    mux = <0x02>;
+};
+
+&gpio1_c3 {
+    mux = <0x02>;
+};
+
+&gpio1_c4 {
+    mux = <0x02>;
+};
+
+&gpio1_c5 {
+    mux = <0x02>;
+};
+
+&gpio1_c6 {
+    mux = <0x02>;
+};
+
+&gpio1_c7 {
+    mux = <0x02>;
+};
+
+&gpio1_d0 {
+    mux = <0x02>;
+};
+
+&gpio1_d1 {
+    mux = <0x02>;
+};
+
+&gpio1_d2 {
+    mux = <0x02>;
+};
+
+&gpio1_d3 {
+    mux = <0x02>;
+};
+
+&dsmc {
+    status = "okay";
+    pinctrl = <
+        &gpio1_a0
+        &gpio1_a1
+        &gpio1_a2
+        &gpio1_a3
+        &gpio1_a4
+        &gpio1_a5
+        &gpio1_a6
+        &gpio1_a7
+
+        &gpio1_b0
+        &gpio1_b1
+        &gpio1_b2
+        &gpio1_b3
+        &gpio1_b4
+        &gpio1_b5
+        &gpio1_b6
+        &gpio1_b7
+
+        &gpio1_c0
+        &gpio1_c1
+        &gpio1_c2
+        &gpio1_c3
+        &gpio1_c4
+        &gpio1_c5
+        &gpio1_c6
+        &gpio1_c7
+
+        &gpio1_d0
+        &gpio1_d1
+        &gpio1_d2
+        &gpio1_d3
+    >;
+    clock-frequency = <12000000>;
+};
+
+&dsmc_slave{
+    status = "okay";
+};
+
+&dsmc_p0_region0{
+    status = "okay";
+};
