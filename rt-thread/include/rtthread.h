@@ -218,6 +218,15 @@ typedef void *(*__kpi_rt_realloc)(void *ptr, rt_size_t newsize);
 typedef void *(*__kpi_rt_calloc)(rt_size_t count, rt_size_t size);
 typedef void *(*__kpi_rt_malloc_align)(rt_size_t size, rt_size_t align);
 typedef void (*__kpi_rt_free_align)(void *ptr);
+typedef rt_err_t (*__kpi_rt_mp_init)(struct rt_mempool *mp, const char *name,
+    void *start, rt_size_t size, rt_size_t block_size);
+typedef rt_err_t (*__kpi_rt_mp_detach)(struct rt_mempool *mp);
+typedef rt_mp_t (*__kpi_rt_mp_create)(const char *name, rt_size_t block_count,
+    rt_size_t block_size);
+typedef rt_err_t (*__kpi_rt_mp_delete)(rt_mp_t mp);
+typedef void *(*__kpi_rt_mp_alloc)(rt_mp_t mp, rt_int32_t time);
+typedef void (*__kpi_rt_mp_free)(void *block);
+
 #if 0
 #ifdef RT_USING_MEMPOOL
 /*
@@ -861,6 +870,13 @@ KPI_EXTERN(rt_kprintf);
 KPI_EXTERN(rt_kputs);
 
 KPI_EXTERN(rt_assert_handler);
+
+KPI_EXTERN(rt_mp_init);
+KPI_EXTERN(rt_mp_detach);
+KPI_EXTERN(rt_mp_create);
+KPI_EXTERN(rt_mp_delete);
+KPI_EXTERN(rt_mp_alloc);
+KPI_EXTERN(rt_mp_free);
 
 
 
