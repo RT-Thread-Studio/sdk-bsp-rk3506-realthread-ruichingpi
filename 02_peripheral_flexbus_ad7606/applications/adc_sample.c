@@ -12,7 +12,7 @@
 
 #define ADC_DEV_NAME        "adc0"
 #define ADC_CH              5
-#define REFER_VOLTAGE       2500 /* 参考电压2.5v */
+#define REFER_VOLTAGE       0 /* 参考电压(mv) */
 
 #define AD7606_RANGE_IS_10V 0 /* 根据硬件RANGE引脚设定：1=±10V，0=±5V */
 
