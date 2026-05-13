@@ -440,7 +440,12 @@ static rt_err_t ad7606_hwtimer_setup(
         }
 
         rt_uint32_t freq = AD7606_SampleFreq[ad_dev->oversampling];
+        if (freq > 10000)
+        {
+            freq = 10000;
+        }
         rt_hwtimerval_t timeout = { 0, 1000000 / freq };
+
         ret =
             rt_device_write(ad_dev->hwtimer_dev, 0, &timeout, sizeof(timeout));
         if (ret != sizeof(timeout))
