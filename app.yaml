@@ -396,6 +396,38 @@ example_projects:
     - rtconfig.py
     - SConscript
     - SConstruct
+    source_path_offset: 02_peripheral_cpuid_read
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
+  external_files: []
+  project_description: ''
+  project_name: 02_peripheral_cpuid_read
+  project_type: bare-metal|@notUsed|@notUsed
+- builtin_files:
+  - files_and_folders:
+    - .settings
+    - applications
+    - board
+    - packages
+    - .config
+    - .cproject
+    - .project
+    - Kconfig
+    - rtconfig.h
+    - rtconfig.py
+    - SConscript
+    - SConstruct
     source_path_offset: 02_peripheral_flexbus_ad7606
     target_path_offset: ''
   - files_and_folders:
@@ -413,6 +445,38 @@ example_projects:
   external_files: []
   project_description: ''
   project_name: 02_peripheral_flexbus_ad7606
+  project_type: bare-metal|@notUsed|@notUsed
+- builtin_files:
+  - files_and_folders:
+    - .settings
+    - applications
+    - board
+    - packages
+    - .config
+    - .cproject
+    - .project
+    - Kconfig
+    - rtconfig.h
+    - rtconfig.py
+    - SConscript
+    - SConstruct
+    source_path_offset: 02_peripheral_flexbus_ad7606_dma
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
+  external_files: []
+  project_description: ''
+  project_name: 02_peripheral_flexbus_ad7606_dma
   project_type: bare-metal|@notUsed|@notUsed
 - builtin_files:
   - files_and_folders:
@@ -1996,6 +2060,38 @@ example_projects:
     - rtconfig.py
     - SConscript
     - SConstruct
+    source_path_offset: 08_misc_amp_virtual_eth
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
+  external_files: []
+  project_description: ''
+  project_name: 08_misc_amp_virtual_eth
+  project_type: bare-metal|@notUsed|@notUsed
+- builtin_files:
+  - files_and_folders:
+    - .settings
+    - applications
+    - board
+    - packages
+    - .config
+    - .cproject
+    - .project
+    - Kconfig
+    - rtconfig.h
+    - rtconfig.py
+    - SConscript
+    - SConstruct
     source_path_offset: 09_ai_mobilenetv2_yolov3
     target_path_offset: ''
   - files_and_folders:
@@ -2255,7 +2351,7 @@ features_zh:
 - 革命性混合架构：RT-Thread+Linux双系统
 pkg_type: Board_Support_Packages
 pkg_vendor: Real-Thread
-pkg_version: 1.7.6
+pkg_version: 1.8.0
 template_projects:
 - builtin_files:
   - files_and_folders:

@@ -18,6 +18,8 @@
 #endif /* DRV_DEBUG */
 #include <rtdbg.h>
 
+#define EVENT_DMA_DONE               (1 << 0)
+
 static const uint32_t AD7606_SampleFreq[] = {
     200000, /* No oversampling: 200Ksps  */
     100000, /* 2x oversampling: 100Ksps */
@@ -27,6 +29,8 @@ static const uint32_t AD7606_SampleFreq[] = {
     6250,   /* 32x oversampling: 6.25Ksps  */
     3125,   /* 64x oversampling: 3.125Ksps */
 };
+
+static rt_event_t _ad7606_dma_event = RT_NULL;
 
 static rt_err_t ad7606_hwtimer_timeout(rt_device_t dev, rt_size_t size)
 {
@@ -56,6 +60,14 @@ static void ad7606_busy_isr(void *args)
     if (ad_dev->data_sem)
     {
         rt_sem_release(ad_dev->data_sem);
+    }
+}
+
+static void ad7606_dma_isr(struct rt_dma_chan *chan, rt_size_t size)
+{
+    if (_ad7606_dma_event != RT_NULL)
+    {
+        rt_event_send(_ad7606_dma_event, EVENT_DMA_DONE);
     }
 }
 
@@ -111,6 +123,9 @@ static void ad7606_sample_entry(void *parameter)
 {
     struct ad7606_device *ad_dev = (struct ad7606_device *)parameter;
     rt_tick_t timeout = rt_tick_from_millisecond(100);
+    rt_uint32_t dma_index = 0;
+    rt_err_t ret = RT_EOK;
+    struct rt_dma_slave_transfer dma_trans = {0};
 
     while (ad_dev->sample_run)
     {
@@ -133,10 +148,61 @@ static void ad7606_sample_entry(void *parameter)
                 ad_dev->data[i] = (rt_uint16_t)rt_adc_read(ad_dev->fb_dev, i);
 
                 rt_pin_write(ad_dev->rd_pin, PIN_HIGH);
+
+                if (ad_dev->dma_enable == RT_TRUE && ad_dev->dma_data != RT_NULL)
+                {
+                    if (ad_dev->dma_cfg.use_channels & AD7606_CHANNEL(i + 1))
+                    {
+                        ad_dev->dma_data[dma_index++] = (rt_uint16_t)ad_dev->data[i];
+                    }
+                    if (dma_index >= (ad_dev->dma_cfg.buf_len / sizeof(rt_uint16_t)))
+                    {
+                        dma_index = 0;
+                    }
+                }
             }
             rt_pin_write(ad_dev->cs_pin, PIN_HIGH);
 
             ad_dev->data_ready = RT_TRUE;
+
+            if (ad_dev->dma_enable == RT_TRUE && dma_index == 0 && ad_dev->dma_data != RT_NULL)
+            {
+                dma_trans.src_addr = (rt_ubase_t)ad_dev->dma_data;
+                dma_trans.dst_addr = (rt_ubase_t)ad_dev->dma_cfg.dst_addr;
+                dma_trans.buffer_len = ad_dev->dma_cfg.buf_len;
+                ret = rt_dma_prep_memcpy(ad_dev->dma_chan, &dma_trans);
+                if (ret != RT_EOK)
+                {
+                    LOG_E("DMA prep memcpy failed");
+                    continue;
+                }
+
+                rt_hw_cpu_dcache_ops(RT_HW_CACHE_FLUSH,
+                                    (void*)ad_dev->dma_data,
+                                    dma_trans.buffer_len);
+                rt_hw_cpu_dcache_ops(RT_HW_CACHE_INVALIDATE,
+                                    (void*)ad_dev->dma_cfg.dst_addr,
+                                    dma_trans.buffer_len);
+
+                ret = rt_dma_chan_start(ad_dev->dma_chan);
+                if (ret != RT_EOK)
+                {
+                    LOG_E("DMA start failed");
+                    continue;
+                }
+
+                ret = rt_event_recv(_ad7606_dma_event, EVENT_DMA_DONE,
+                                    RT_EVENT_FLAG_AND | RT_EVENT_FLAG_CLEAR, timeout, RT_NULL);
+                if (ret != RT_EOK)
+                {
+                    LOG_E("wait event fail: %d\n", ret);
+                    continue;
+                }
+
+                rt_hw_cpu_dcache_ops(RT_HW_CACHE_INVALIDATE,
+                                    (void*)ad_dev->dma_cfg.dst_addr,
+                                    dma_trans.buffer_len);
+            }
         }
         else
         {
@@ -147,6 +213,21 @@ static void ad7606_sample_entry(void *parameter)
         }
     }
 
+    if (ad_dev->dma_chan != RT_NULL)
+    {
+        rt_dma_chan_release(ad_dev->dma_chan);
+        ad_dev->dma_chan = RT_NULL;
+    }
+    if (_ad7606_dma_event != RT_NULL)
+    {
+        rt_event_delete(_ad7606_dma_event);
+        _ad7606_dma_event = RT_NULL;
+    }
+    if (ad_dev->dma_data != RT_NULL)
+    {
+        rt_free(ad_dev->dma_data);
+        ad_dev->dma_data = RT_NULL;
+    }
     ad_dev->sample_tid = RT_NULL;
 }
 
@@ -318,6 +399,7 @@ static rt_err_t ad7606_hwtimer_setup(
         {
             ad_dev->sample_run = RT_TRUE;
             ad_dev->data_ready = RT_FALSE;
+            ad_dev->dma_enable = RT_FALSE;
             ad_dev->sample_tid = rt_thread_create(
                 "ad7606_sample", ad7606_sample_entry, ad_dev, 2048, 15, 10);
 
@@ -417,6 +499,7 @@ error_cleanup:
     {
         ad_dev->enabled = RT_FALSE;
         ad_dev->data_ready = RT_FALSE;
+        ad_dev->dma_enable = RT_FALSE;
 
         if (ad_dev->hwtimer_dev)
         {
@@ -525,9 +608,114 @@ static rt_err_t ad7606_read_raw(
     return RT_EOK;
 }
 
+static rt_err_t ad7606_control(struct rt_adc_device *device, int cmd, void *args)
+{
+    rt_err_t ret = RT_EOK;
+    struct ad7606_device *ad_dev = rt_container_of(device, struct ad7606_device, adc_dev);
+    struct rt_dma_slave_config dma_cfg = {0};
+    rt_adc_dma_cfg_t adc_dma_cfg = (rt_adc_dma_cfg_t)args;
+
+    if (ad_dev->enabled != RT_TRUE)
+    {
+        LOG_W("AD7606 not enabled");
+        return -RT_ERROR;
+    }
+
+    switch (cmd)
+    {
+        case RT_ADC_CMD_DMA_START:
+        {
+            if (ad_dev->dma_enable == RT_TRUE)
+            {
+                LOG_I("DMA already enabled, skipping initialization");
+                break;
+            }
+
+            if (ad_dev->dma_chan == RT_NULL)
+            {
+                ad_dev->dma_chan = rt_dma_chan_request(ad_dev->dev, RT_NULL);
+                if (ad_dev->dma_chan == RT_NULL)
+                {
+                    LOG_E("DMA channel request failed");
+                    ret = -RT_ERROR;
+                    break;
+                }
+                ad_dev->dma_chan->callback = ad7606_dma_isr;
+            }
+
+            if (_ad7606_dma_event == RT_NULL)
+            {
+                _ad7606_dma_event = rt_event_create("ad7606_event", RT_IPC_FLAG_FIFO);
+                if (_ad7606_dma_event == RT_NULL)
+                {
+                    LOG_E("DMA event create failed");
+                    ret = -RT_ERROR;
+                    goto cleanup_dma_chan;
+                }
+            }
+
+            if (ad_dev->dma_data == RT_NULL)
+            {
+                ad_dev->dma_data = (rt_uint16_t *)rt_calloc(1, adc_dma_cfg->buf_len);
+                if (ad_dev->dma_data == RT_NULL)
+                {
+                    LOG_E("DMA memory alloc failed");
+                    ret = -RT_ENOMEM;
+                    goto cleanup_event;
+                }
+            }
+
+            ad_dev->dma_cfg = *adc_dma_cfg;
+
+            dma_cfg.direction = RT_DMA_MEM_TO_MEM;
+            dma_cfg.src_addr = (rt_ubase_t)ad_dev->dma_data;
+            dma_cfg.dst_addr = (rt_ubase_t)adc_dma_cfg->dst_addr;
+            ret = rt_dma_chan_config(ad_dev->dma_chan, &dma_cfg);
+            if (ret != RT_EOK)
+            {
+                LOG_E("DMA config failed");
+                ret = -RT_ERROR;
+                goto cleanup_dma_data;
+            }
+
+            ad_dev->dma_enable = RT_TRUE;
+            break;
+
+cleanup_dma_data:
+            rt_free(ad_dev->dma_data);
+            ad_dev->dma_data = RT_NULL;
+cleanup_event:
+            rt_event_delete(_ad7606_dma_event);
+            _ad7606_dma_event = RT_NULL;
+cleanup_dma_chan:
+            rt_dma_chan_release(ad_dev->dma_chan);
+            ad_dev->dma_chan = RT_NULL;
+            ad_dev->dma_enable = RT_FALSE;
+            break;
+        }
+        case RT_ADC_CMD_DMA_STOP:
+        {
+            ad_dev->dma_enable = RT_FALSE;
+            if (ad_dev->dma_chan != RT_NULL)
+            {
+                rt_dma_chan_stop(ad_dev->dma_chan);
+            }
+            break;
+        }
+        default:
+        {
+            LOG_E("Invalid command");
+            break;
+        }
+    }
+
+    return ret;
+}
+
 static const struct rt_adc_ops ad7606_adc_ops = {
     .enabled = ad7606_enabled,
     .convert = ad7606_read_raw,
+    .control = ad7606_control,
 };
 
 static rt_err_t ad7606_init(struct rt_device *dev)

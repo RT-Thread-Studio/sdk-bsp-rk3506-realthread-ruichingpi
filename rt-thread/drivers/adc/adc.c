@@ -39,6 +39,8 @@ static rt_ssize_t _adc_read(
 
 static rt_err_t _adc_control(rt_device_t dev, int cmd, void *args)
 {
+    RT_ASSERT(dev != RT_NULL);
+
     rt_adc_device_t adc = (struct rt_adc_device *)dev;
     rt_err_t result = -1;
 
@@ -69,6 +71,11 @@ static rt_err_t _adc_control(rt_device_t dev, int cmd, void *args)
             *((rt_int16_t *)args) = value;
             result = RT_EOK;
         }
+    }
+    else if (((cmd == RT_ADC_CMD_DMA_START) | (cmd == RT_ADC_CMD_DMA_STOP)) &&
+            adc->ops->control)
+    {
+        result = adc->ops->control(adc, cmd, args);
     }
 
     return result;
@@ -162,6 +169,24 @@ rt_err_t rt_adc_disable(rt_adc_device_t dev, rt_int8_t channel)
 
     return result;
 }
+
+rt_err_t rt_adc_control(rt_adc_device_t dev, int cmd, void *args)
+{
+    RT_ASSERT(dev);
+    rt_err_t result = RT_EOK;
+
+    if (dev->ops->control != RT_NULL)
+    {
+        result = dev->ops->control(dev, cmd, args);
+    }
+    else
+    {
+        result = -RT_ENOSYS;
+    }
+
+    return result;
+}
+
 
 rt_int16_t rt_adc_voltage(rt_adc_device_t dev, rt_int8_t channel)
 {

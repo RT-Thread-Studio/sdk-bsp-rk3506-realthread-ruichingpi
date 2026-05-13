@@ -9,10 +9,10 @@
  */
 /dts-v1/;
 #include "rc3506j.dtsi"
-#include "ruiching-lcd-mipi-4_3-480x800.dtsi"
 
 &gpio1_a0 {
     mux = <0x02>;
+    drive-strength = <0x3f>;
 };
 
 &gpio1_a1 {

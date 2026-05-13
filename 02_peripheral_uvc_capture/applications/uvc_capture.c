@@ -14,22 +14,23 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <stdio.h>
-
+#include <uvc_buffer.h>
 #define RT_UVC_CTRL_SET_CALLBACK          0x0             /**< set callback control command */
 #define RT_UVC_CTRL_START_STREAM          0x1             /**< set start stream control command */
 #define RT_UVC_CTRL_STOP_STREAM           0x2             /**< set stop stream control command */
 
 struct usbh_videoframe {
-     uint8_t *frame_buf; 
-     uint32_t frame_bufsize; 
-     uint32_t frame_format; 
-     uint32_t frame_size; 
+     uint8_t *frame_buf;
+     uint32_t frame_bufsize;
+     uint32_t frame_format;
+     uint32_t frame_size;
 };
 
 typedef void (*frame_callback_t)(struct usbh_videoframe *frame);
 char file_path[50];
 static struct rt_semaphore sem_lock;
 static bool flag = false;
+struct rt_uvc_resolution res;
 //  定义回调函数
 frame_callback_t uvc_function(struct usbh_videoframe *frame) {
      int fd = -1;
@@ -39,14 +40,14 @@ frame_callback_t uvc_function(struct usbh_videoframe *frame) {
          //yuv
          char *file = "output.yuv";
          strncat( file_path, file, sizeof(file_path) - strlen(file_path) -1 );
-         fd = open(file_path, O_RDWR | O_CREAT);
+         fd = open(file_path, O_RDWR | O_CREAT | O_TRUNC, 0);
          rt_kprintf("YUV data saved to %s\r\n",file_path);
     } else if (frame->frame_format == 1 && flag){
         flag = false;
           //mjpeg
          char* file = "output.jpg";
          strncat( file_path, file, sizeof(file_path) - strlen(file_path) -1 );
-         fd = open(file_path, O_RDWR | O_CREAT);
+         fd = open(file_path, O_RDWR | O_CREAT | O_TRUNC, 0);
          rt_kprintf("MJPEG data saved to %s\r\n",file_path);
     }
     if (!fd){
@@ -82,10 +83,10 @@ static int uvc_capture(int argc, char *argv[])
     } else if(type == 1) {
          rt_kprintf("uvc capture mjpeg type picture\r\n");
     } else {
-	 rt_kprintf("uvc capture type is unsupport!\r\n");
-	 return (-RT_ERROR);
+     rt_kprintf("uvc capture type is unsupport!\r\n");
+     return (-RT_ERROR);
     }
-  
+
     if (access(argv[2], F_OK) == 0) {  // F_OK检查文件路径是否存在
          rt_kprintf("file path exist\r\n");
     } else {
@@ -113,14 +114,14 @@ static int uvc_capture(int argc, char *argv[])
 
     rt_device_init(device);
     rt_device_open(device, RT_DEVICE_FLAG_RDWR);
-    
+
     rt_device_control(device, RT_UVC_CTRL_SET_CALLBACK, (void *)uvc_callback);
     rt_device_control(device, RT_UVC_CTRL_START_STREAM, &type);
 
     rt_sem_take(&sem_lock, RT_WAITING_FOREVER);
     rt_device_control(device, RT_UVC_CTRL_STOP_STREAM, NULL);
 
-    rt_sem_detach(&sem_lock);    
+    rt_sem_detach(&sem_lock);
     return RT_EOK;
 }
 

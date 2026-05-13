@@ -31,13 +31,15 @@ typedef enum
     AD_RANGE_10V = 1, /* ±10V量程 */
 } ad7606_range_t;
 
-#define AD7606_MAX_CHANNELS 8
+#define AD7606_MAX_CHANNELS          (8)
+#define AD7606_CHANNEL(ch)           (1 << (ch - 1))
 
 struct ad7606_device
 {
     struct rt_adc_device adc_dev;
     rt_adc_device_t fb_dev;
     struct rt_device *dev;
+    struct rt_dma_chan *dma_chan;
 
     rt_uint32_t cs_pin;
     rt_uint32_t rd_pin;
@@ -63,6 +65,10 @@ struct ad7606_device
     volatile rt_bool_t data_ready;
 
     volatile rt_uint16_t data[AD7606_MAX_CHANNELS];
+
+    struct rt_adc_dma_cfg dma_cfg;
+    rt_bool_t dma_enable;
+    rt_uint16_t *dma_data;
 };
 
 int ad7606_driver_register(void);
