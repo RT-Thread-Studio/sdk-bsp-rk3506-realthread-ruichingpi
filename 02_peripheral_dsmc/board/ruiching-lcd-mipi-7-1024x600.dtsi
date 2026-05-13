@@ -62,3 +62,15 @@
     hsync-len = <70>;
     vsync-len = <10>;
 };
+
+&dsi {
+    status = "okay";
+};
+
+&dsi_dphy {
+    status = "okay";
+};
+
+&dsi_in_vop {
+    status = "okay";
+};

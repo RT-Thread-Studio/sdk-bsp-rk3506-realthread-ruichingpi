@@ -121,7 +121,6 @@ static rt_err_t rockchip_flexbus_adc_read_raw(
     *value = pBuf[0] & val_mask;
 
     rockchip_flexbus_writel(rkfb_adc->rkfb, FLEXBUS_ENR, FLEXBUS_RX_DIS);
-    rt_mutex_release(&rkfb_adc->lock);
 
     return RT_EOK;
 }

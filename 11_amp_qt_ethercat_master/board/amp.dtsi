@@ -58,7 +58,12 @@
         status = "okay,rtt";
     };
     chosen-amp {
-        bootargs = "earlycon=uart8250,mmio32,0xff0d0000 console=ttyFIQ0 ubi.mtd=5 root=ubi0:rootfs rw rootfstype=ubifs rootwait snd_aloop.index=7 snd_aloop.use_raw_jiffies=1";
+        bootargs = "earlycon=uart8250,mmio32,0xff0a0000 console=ttyFIQ0 ubi.mtd=5 root=ubi0:rootfs rw rootfstype=ubifs rootwait snd_aloop.index=7 snd_aloop.use_raw_jiffies=1";
+        status = "okay,rtt";
+    };
+    memory-amp{
+        device_type = "memory-amp";
+        reg = <0x04000000 0x08000000>;
         status = "okay,rtt";
     };
 

@@ -1,0 +1,70 @@
+&i2c1 {
+    status = "okay";
+    pinctrl-names = "default";
+
+    sitronix@55 {
+        status = "okay";
+        compatible = "sitronix_ts_i2c";
+        reg = <0x55>;
+        resolution_x = <480>;
+        resolution_y = <800>;
+
+        sitronix_rst_gpio = <&gpio0 162 GPIO_ACTIVE_HIGH>;
+        sitronix_irq_gpio = <&gpio0 RK_PC0 IRQ_TYPE_EDGE_FALLING>;
+    };
+};
+
+&backlight {
+    pwms = <&pwm0_4ch_2 0 500000 0>;
+};
+
+&pwm0_4ch_2 {
+    status = "okay";
+};
+
+&display_subsystem {
+    status = "okay";
+};
+
+&dsi_panel {
+    status = "okay";
+
+    prepare-delay-ms = <20>;
+    reset-delay-ms = <80>;
+    init-delay-ms = <240>;
+
+    panel-init-sequence = [
+        29 00 04 99 71 02 a2
+        29 00 04 99 71 02 a3
+        29 00 04 99 71 02 a4
+        15 00 02 a4 31
+        39 00 08 b0 22 57 1e 61 2f 57 61
+        39 00 03 b7 64 64
+        39 00 03 bf b4 b4
+        29 00 26 C8 00 00 0F 1C 34 00 60 03 A0 06 10 FE 06 74 03 21 C4 00 08 00 22 46 0F 8F 0A 32 F2 0C 42 0C F3 80 00 AB C0 03 C4
+        29 00 26 C9 00 00 0F 1C 34 00 60 03 A0 06 10 FE 06 74 03 21 C4 00 08 00 22 46 0F 8F 0A 32 F2 0C 42 0C F3 80 00 AB C0 03 C4
+        39 00 07 d7 10 0c 36 19 90 90
+        39 00 21 A3 51 03 80 CF 44 00 00 00 00 04 78 78 00 1A 00 45 05 00 00 00 00 46 00 00 02 20 52 00 05 00 00 FF
+        39 00 2d A6 02 00 24 55 35 00 38 00 78 78 00 24 55 36 00 37 00 78 78 02 AC 51 3A 00 00 00 78 78 03 AC 21 00 04 00 00 78 78 3e 00 06 00 00 00 00
+        39 00 31 A7 19 19 00 64 40 07 16 40 00 04 03 78 78 00 64 40 25 34 00 00 02 01 78 78 00 64 40 4B 5A 00 00 02 01 78 78 00 24 40 69 78 00 00 00 00 78 78 00 44
+        39 00 26 AC 08 0A 11 00 13 03 1B 18 06 1A 19 1B 1B 1B 18 1B 09 0B 10 02 12 01 1B 18 06 1A 19 1B 1B 1B 18 1B FF 67 FF 67 00
+        39 00 08 ad cc 40 46 11 04 78 78
+        39 00 0f e8 30 07 00 94 94 9c 00 e2 04 00 00 00 00 ef
+        39 00 22 E7 8B 3C 00 0C F0 5D 00 5D 00 5D 00 5D 00 FF 00 08 7B 00 00 C8 6A 5A 08 1A 3C 00 81 01 CC 01 7F F0 22
+        05 14 01 11
+        05 14 01 29
+        15 00 02 35 00
+    ];
+};
+
+&dsi_timing0 {
+    clock-frequency = <33300000>;
+    hactive = <480>;
+    vactive = <800>;
+    hback-porch = <40>;
+    hfront-porch = <40>;
+    vback-porch = <10>;
+    vfront-porch = <180>;
+    hsync-len = <2>;
+    vsync-len = <2>;
+};

@@ -81,4 +81,6 @@
 
 #include "drivers/syscon.h"
 
+#include "drivers/dma.h"
+
 #endif /* __RT_DEVICE_H__ */

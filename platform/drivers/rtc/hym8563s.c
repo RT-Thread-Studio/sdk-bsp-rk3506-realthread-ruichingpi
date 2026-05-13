@@ -38,7 +38,8 @@ void hym8563s_get_time(struct rt_i2c_bus_device *i2c_dev, rt_uint32_t addr,
         time.tm_wday = hym8563s_bcd_to_dec(rec_data[4] & 0x07);
         time.tm_mon = hym8563s_bcd_to_dec(rec_data[5] & 0x1f) - 1;
         time.tm_year = hym8563s_bcd_to_dec(rec_data[6]) + 100;
-        *r_time = mktime(&time);
+        extern time_t rt_mktime(struct tm * const t);
+        *r_time = rt_mktime(&time);
     }
 }
 
@@ -47,8 +48,8 @@ void hym8563s_set_time(struct rt_i2c_bus_device *i2c_dev, rt_uint32_t addr,
 {
     rt_uint8_t write_buf[8] = {0};
     struct tm time = {0};
-
-    time = *localtime(r_time);
+    extern struct tm* rt_localtime(const time_t* t);
+    time = *rt_localtime(r_time);
 
     write_buf[0] = 0x02;
     write_buf[1] = hym8563s_dec_to_bcd(time.tm_sec);

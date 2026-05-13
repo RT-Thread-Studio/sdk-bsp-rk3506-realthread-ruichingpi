@@ -11,6 +11,7 @@
 #include <drivers/dev_rtc.h>
 #include <stdlib.h>
 #include <string.h>
+#include "sys/rt_time.h"
 
 static rt_device_t _rtc_device;
 /*
@@ -288,7 +289,7 @@ static void date(int argc, char **argv)
 
         abs_tz_offset_sec = tz_offset_sec > 0 ? tz_offset_sec : -tz_offset_sec;
         /* output current time */
-        rt_kprintf("local time: %.*s", 25U, ctime(&now));
+        rt_kprintf("local time: %.*s", 25U, rt_ctime(&now));
         rt_kprintf("timestamps: %ld\n", (long)tv.tv_sec);
         rt_kprintf("timezone: UTC%c%02d:%02d:%02d\n",
             tz_offset_sec > 0 ? '+' : '-', abs_tz_offset_sec / 3600U,
@@ -353,8 +354,8 @@ static void date(int argc, char **argv)
             return;
         }
         get_timestamp(&now); /* get new timestamp */
-        rt_kprintf("old: %.*s", 25, ctime(&old));
-        rt_kprintf("now: %.*s", 25, ctime(&now));
+        rt_kprintf("old: %.*s", 25, rt_ctime(&old));
+        rt_kprintf("now: %.*s", 25, rt_ctime(&now));
     }
     else
     {

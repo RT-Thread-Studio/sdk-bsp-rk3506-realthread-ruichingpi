@@ -158,20 +158,8 @@
 	status = "okay";
 };
 
-&vop {
-    status = "disabled";
-};
-
 &rga2 {
 	status = "okay";
-};
-
-&dsi {
-	status = "disabled";
-};
-
-&dsi_dphy {
-	status = "disabled";
 };
 
 &display_subsystem {
@@ -626,9 +614,9 @@
 };
 
 &dsi {
-    status = "okay";
+    status = "disabled";
     dsi_panel: panel@0 {
-        status = "okay";
+        status = "disabled";
         compatible = "simple-panel-dsi";
         reg = <0>;
         backlight = <&backlight>;
@@ -682,9 +670,9 @@
 };
 
 &dsi_dphy {
-    status = "okay";
+    status = "disabled";
 };
 
 &dsi_in_vop {
-    status = "okay";
+    status = "disabled";
 };

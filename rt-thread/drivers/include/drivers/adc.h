@@ -72,6 +72,7 @@ struct rt_adc_ops
         struct rt_adc_device *device, rt_int8_t channel, rt_bool_t enabled);
     rt_err_t (*convert)(
         struct rt_adc_device *device, rt_int8_t channel, rt_uint32_t *value);
+    rt_err_t (*control)(struct rt_adc_device *device, int cmd, void *arg);
     rt_uint8_t (*get_resolution)(struct rt_adc_device *device);
     rt_int16_t (*get_vref)(struct rt_adc_device *device);
 };
@@ -85,6 +86,14 @@ struct rt_adc_device
 };
 typedef struct rt_adc_device *rt_adc_device_t;
 
+struct rt_adc_dma_cfg
+{
+    rt_uint16_t *dst_addr;
+    rt_size_t buf_len;
+    rt_uint16_t use_channels;
+};
+typedef struct rt_adc_dma_cfg *rt_adc_dma_cfg_t;
+
 typedef enum
 {
     RT_ADC_CMD_ENABLE = RT_DEVICE_CTRL_BASE(ADC) + 1,
@@ -93,6 +102,8 @@ typedef enum
         RT_DEVICE_CTRL_BASE(ADC) + 3, /* get the resolution in bits */
     RT_ADC_CMD_GET_VREF =
         RT_DEVICE_CTRL_BASE(ADC) + 4, /* get reference voltage */
+    RT_ADC_CMD_DMA_START = RT_DEVICE_CTRL_BASE(ADC) + 5, /* start dma */
+    RT_ADC_CMD_DMA_STOP = RT_DEVICE_CTRL_BASE(ADC) + 6,  /* stop dma */
 } rt_adc_cmd_t;
 
 /**
@@ -135,6 +146,15 @@ rt_err_t rt_adc_enable(rt_adc_device_t dev, rt_int8_t channel);
  * @ingroup  ADC
  */
 rt_err_t rt_adc_disable(rt_adc_device_t dev, rt_int8_t channel);
+
+/**
+ * @brief control the adc device
+ * @param  dev adc device
+ * @param  cmd adc cmd
+ * @param  args ctrl args
+ * @return rt_err_t error code
+ */
+rt_err_t rt_adc_control(rt_adc_device_t dev, int cmd, void *args);
 
 /**
  * @brief get the adc resolution

@@ -204,4 +204,10 @@ KPI_EXTERN(rt_hw_us_delay);
 
 KPI_EXTERN(rt_hw_global_timer_get);
 
+/*
+ * Rockchip CPUID interface
+ */
+typedef rt_err_t (*__kpi_rt_cpuid_read)(rt_uint8_t *buffer, rt_size_t size);
+KPI_EXTERN(rt_cpuid_read);
+
 #endif /* __RTHW_H__ */

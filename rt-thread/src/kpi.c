@@ -653,6 +653,13 @@ KPI_DEFINED(rt_hw_watchdog_register);
 
 KPI_DEFINED(rt_syscon_find_by_ofw_phandle);
 
+KPI_DEFINED(rt_dma_chan_start);
+KPI_DEFINED(rt_dma_chan_stop);
+KPI_DEFINED(rt_dma_chan_config);
+KPI_DEFINED(rt_dma_prep_memcpy);
+KPI_DEFINED(rt_dma_chan_request);
+KPI_DEFINED(rt_dma_chan_release);
+
 /* kpi addr init */
 void kpi_init(void)
 {
@@ -1307,4 +1314,11 @@ void kpi_init(void)
 
     rt_syscon_find_by_ofw_phandle =
         KPI_IMPORT(rt_syscon_find_by_ofw_phandle, 1779);
+
+    rt_dma_chan_start = KPI_IMPORT(rt_dma_chan_start, 1780);
+    rt_dma_chan_stop = KPI_IMPORT(rt_dma_chan_stop, 1781);
+    rt_dma_chan_config = KPI_IMPORT(rt_dma_chan_config, 1782);
+    rt_dma_prep_memcpy = KPI_IMPORT(rt_dma_prep_memcpy, 1783);
+    rt_dma_chan_request = KPI_IMPORT(rt_dma_chan_request, 1784);
+    rt_dma_chan_release = KPI_IMPORT(rt_dma_chan_release, 1785);
 }
