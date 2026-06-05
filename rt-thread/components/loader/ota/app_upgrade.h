@@ -12,7 +12,9 @@
 
 #include <rtthread.h>
 
-#define UPGRADE_CTRL_EXECUTE 0x01
+#define UPGRADE_CTRL_EXECUTE             0x01
+#define UPGRADE_CTRL_CLEAR_APP_BOOT_FLAG 0x02
+#define UPGRADE_CTRL_UPDATE_APP_BACK     0x03
 
 typedef enum
 {
@@ -24,7 +26,10 @@ typedef struct
 {
     upgrade_target_t target;
     const char *app_path;
+    const char *app_back_path;
     const char *dtb_path;
 } upgrade_request_t;
+
+rt_err_t app_upgrade_boot_ok(void);
 
 #endif /* __APP_UPGRADE_H__ */
