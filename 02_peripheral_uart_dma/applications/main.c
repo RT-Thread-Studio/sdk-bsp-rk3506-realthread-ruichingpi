@@ -7,5 +7,11 @@
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution.
  */
-/dts-v1/;
-#include "rc3506j.dtsi"
+#include <rtthread.h>
+
+int main(void)
+{
+    rt_kprintf("Hello, RT-Thread app\n");
+
+    return 0;
+}

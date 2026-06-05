@@ -38,7 +38,7 @@
     prepare-delay-ms = <20>;
     reset-delay-ms = <80>;
     init-delay-ms = <240>;
-    
+
     panel-init-sequence = [
         15 00 02 b2 10
         15 00 02 80 ac
@@ -61,4 +61,16 @@
     vfront-porch = <12>;
     hsync-len = <70>;
     vsync-len = <10>;
+};
+
+&dsi {
+    status = "okay";
+};
+
+&dsi_dphy {
+    status = "okay";
+};
+
+&dsi_in_vop {
+    status = "okay";
 };
