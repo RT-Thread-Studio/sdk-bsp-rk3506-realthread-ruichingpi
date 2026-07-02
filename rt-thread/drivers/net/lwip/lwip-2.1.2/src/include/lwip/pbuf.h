@@ -269,14 +269,14 @@ void pbuf_free_ooseq(void);
 /* Initializes the pbuf module. This call is empty for now, but may not be in future. */
 #define pbuf_init()
 
-struct pbuf *pbuf_alloc(pbuf_layer l, u16_t length, pbuf_type type);
+typedef struct pbuf *(*__kpi_pbuf_alloc)(pbuf_layer l, u16_t length, pbuf_type type);
 struct pbuf *pbuf_alloc_reference(void *payload, u16_t length, pbuf_type type);
 #if LWIP_SUPPORT_CUSTOM_PBUF
 struct pbuf *pbuf_alloced_custom(pbuf_layer l, u16_t length, pbuf_type type,
                                  struct pbuf_custom *p, void *payload_mem,
                                  u16_t payload_mem_len);
 #endif /* LWIP_SUPPORT_CUSTOM_PBUF */
-void pbuf_realloc(struct pbuf *p, u16_t size);
+typedef void (*__kpi_pbuf_realloc)(struct pbuf *p, u16_t size);
 #define pbuf_get_allocsrc(p)          ((p)->type_internal & PBUF_TYPE_ALLOC_SRC_MASK)
 #define pbuf_match_allocsrc(p, type)  (pbuf_get_allocsrc(p) == ((type) & PBUF_TYPE_ALLOC_SRC_MASK))
 #define pbuf_match_type(p, type)      pbuf_match_allocsrc(p, type)
@@ -287,13 +287,13 @@ u8_t pbuf_add_header_force(struct pbuf *p, size_t header_size_increment);
 u8_t pbuf_remove_header(struct pbuf *p, size_t header_size);
 struct pbuf *pbuf_free_header(struct pbuf *q, u16_t size);
 void pbuf_ref(struct pbuf *p);
-u8_t pbuf_free(struct pbuf *p);
+typedef u8_t (*__kpi_pbuf_free)(struct pbuf *p);
 u16_t pbuf_clen(const struct pbuf *p);
 void pbuf_cat(struct pbuf *head, struct pbuf *tail);
 void pbuf_chain(struct pbuf *head, struct pbuf *tail);
 struct pbuf *pbuf_dechain(struct pbuf *p);
 err_t pbuf_copy(struct pbuf *p_to, const struct pbuf *p_from);
-u16_t pbuf_copy_partial(const struct pbuf *p, void *dataptr, u16_t len, u16_t offset);
+typedef u16_t (*__kpi_pbuf_copy_partial)(const struct pbuf *p, void *dataptr, u16_t len, u16_t offset);
 void *pbuf_get_contiguous(const struct pbuf *p, void *buffer, size_t bufsize, u16_t len, u16_t offset);
 err_t pbuf_take(struct pbuf *buf, const void *dataptr, u16_t len);
 err_t pbuf_take_at(struct pbuf *buf, const void *dataptr, u16_t len, u16_t offset);
@@ -314,6 +314,11 @@ void pbuf_put_at(struct pbuf* p, u16_t offset, u8_t data);
 u16_t pbuf_memcmp(const struct pbuf* p, u16_t offset, const void* s2, u16_t n);
 u16_t pbuf_memfind(const struct pbuf* p, const void* mem, u16_t mem_len, u16_t start_offset);
 u16_t pbuf_strstr(const struct pbuf* p, const char* substr);
+
+KPI_EXTERN(pbuf_alloc);
+KPI_EXTERN(pbuf_realloc);
+KPI_EXTERN(pbuf_free);
+KPI_EXTERN(pbuf_copy_partial);
 
 #ifdef __cplusplus
 }

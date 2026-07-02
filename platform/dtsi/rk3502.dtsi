@@ -1390,6 +1390,7 @@
 &reserved_memory{
     app@4000000 {
         reg = <0x04000000 0x01000000>;
+        no-map;
     };
     device@ff000000 {
         reg = <0xff000000 0x00f00000>;
