@@ -25,6 +25,11 @@
 #include <sys/socket.h>
 #endif /* RT_USING_SAL */
 
+#ifdef RT_USING_LWIP
+#include <netif/eth_device.h>
+#include <lwip/pbuf.h>
+#endif /* RT_USING_LWIP */
+
 #ifdef RT_USING_POSIX_STDIO
 #include <posix/stdio.h>
 #endif /* RT_USING_POSIX_STDIO */
@@ -342,6 +347,18 @@ KPI_DEFINED(if_get_ip);
 KPI_DEFINED(if_up);
 KPI_DEFINED(if_down);
 #endif /* RT_USING_NETDEV */
+
+#ifdef RT_USING_LWIP
+KPI_DEFINED(rt_eth_device_init);
+KPI_DEFINED(rt_eth_device_deinit);
+KPI_DEFINED(rt_eth_device_ready);
+KPI_DEFINED(rt_eth_device_init_with_flag);
+KPI_DEFINED(rt_eth_device_linkchange);
+KPI_DEFINED(pbuf_alloc);
+KPI_DEFINED(pbuf_realloc);
+KPI_DEFINED(pbuf_free);
+KPI_DEFINED(pbuf_copy_partial);
+#endif /* RT_USING_LWIP */
 
 KPI_DEFINED(service_find);
 KPI_DEFINED(service_register);
@@ -973,6 +990,18 @@ void kpi_init(void)
     if_up = KPI_IMPORT(if_up, 707);
     if_down = KPI_IMPORT(if_down, 708);
 #endif /* RT_USING_NETDEV */
+
+#ifdef RT_USING_LWIP
+    rt_eth_device_init = KPI_IMPORT(rt_eth_device_init, 720);
+    rt_eth_device_deinit = KPI_IMPORT(rt_eth_device_deinit, 721);
+    rt_eth_device_ready = KPI_IMPORT(rt_eth_device_ready, 722);
+    rt_eth_device_init_with_flag = KPI_IMPORT(rt_eth_device_init_with_flag, 723);
+    rt_eth_device_linkchange = KPI_IMPORT(rt_eth_device_linkchange, 724);
+    pbuf_alloc = KPI_IMPORT(pbuf_alloc, 725);
+    pbuf_realloc = KPI_IMPORT(pbuf_realloc, 726);
+    pbuf_free = KPI_IMPORT(pbuf_free, 727);
+    pbuf_copy_partial = KPI_IMPORT(pbuf_copy_partial, 728);
+#endif /* RT_USING_LWIP */
 
     service_find = KPI_IMPORT(service_find, 1180);
     service_register = KPI_IMPORT(service_register, 1181);

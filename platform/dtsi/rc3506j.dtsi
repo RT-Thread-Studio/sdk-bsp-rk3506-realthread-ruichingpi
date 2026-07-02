@@ -122,7 +122,7 @@
         snps,reset-gpio = <&tca9534a_gpio 4 GPIO_ACTIVE_LOW>;
         snps,power-gpio = <&tca9534a_gpio 5 GPIO_ACTIVE_LOW>;
         vendor_id = <0x2c7c>;
-        product_id = <0x0120>;
+        product_id = <0x0125>;
 
         at_port: at_port@4{
             compatible = "usb4g,at_port";
@@ -130,7 +130,7 @@
             bInterfaceClass = <0xff>;
             bInterfaceSubClass = <0x00>;
             bInterfaceProtocol = <0x00>;
-            bNumInterfaces = <4>; /* USB 转 AT 接口 */
+            bNumInterfaces = <2>; /* EC20 的 AT 接口索引为 2 */
             protocol_switch_cmd = "AT+QCFG=\"usbnet\",1\r\n"; /* USB 切换协议命令 */
         };
 
