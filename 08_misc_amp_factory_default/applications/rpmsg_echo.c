@@ -30,13 +30,32 @@ struct rt_rpmsg_ep_addr rpmsg_remote_echo = {
 
 static void rpmsg_echo_thread(void *parameter)
 {
-    rt_uint32_t len = 0;
+    rt_ssize_t len;
+    rt_ssize_t written;
     rt_uint8_t buff[BUFF_SIZE];
-    while ((len = rt_device_read(rpmsg, rpmsg_remote_echo.src, buff, BUFF_SIZE - 1)) >= 0)
+
+    while (1)
     {
+        len = rt_device_read(rpmsg, rpmsg_remote_echo.src, buff, BUFF_SIZE - 1);
+        if (len == -RT_ETIMEOUT)
+        {
+            continue;
+        }
+        if (len < 0)
+        {
+            rt_kprintf("rpmsg read failed: %d\r\n", (int)len);
+            break;
+        }
+
         buff[len] = 0;
-        rt_kprintf("message:%s len:%d\r\n", buff, len);
-        rt_device_write(rpmsg, rpmsg_remote_echo.dst, buff, len);
+        rt_kprintf("message:%s len:%d\r\n", buff, (int)len);
+
+        written = rt_device_write(rpmsg, rpmsg_remote_echo.dst, buff, len);
+        if (written < 0)
+        {
+            rt_kprintf("rpmsg write failed: %d\r\n", (int)written);
+            break;
+        }
     }
 }
 

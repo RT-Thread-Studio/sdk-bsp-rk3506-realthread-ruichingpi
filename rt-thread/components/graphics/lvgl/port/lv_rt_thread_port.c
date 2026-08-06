@@ -26,7 +26,7 @@
     #define RT_LVGL_THREAD_PRIO (RT_THREAD_PRIORITY_MAX*2/3)
 #endif /* RT_LVGL_THREAD_PRIO */
 
-extern void lv_port_disp_init(void);
+extern rt_err_t lv_port_disp_init(void);
 extern void lv_port_indev_init(void);
 extern void lv_user_gui_init(void);
 
@@ -53,7 +53,11 @@ static void lvgl_thread_entry(void *parameter)
 #endif /* LV_USE_LOG */
     lv_init();
     lv_tick_set_cb(rt_tick_get_millisecond);
-    lv_port_disp_init();
+    rt_err_t ret = lv_port_disp_init();
+    if(ret != RT_EOK)
+    {
+        return;
+    }
     lv_port_indev_init();
     lv_user_gui_init();
 

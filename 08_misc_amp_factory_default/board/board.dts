@@ -11,3 +11,222 @@
 #include "rc3506j.dtsi"
 #include "amp.dtsi"
 #include "amp_shm.dtsi"
+
+&gpio1_a0 { /* dsmc_clkp */
+	mux = <0x02>;
+	drive-strength = <0x3f>;
+};
+
+&gpio1_a1 { /* dsmc_clkn */
+	mux = <0x04>;
+	drive-strength = <0x3f>;
+};
+
+&gpio1_a2 { /* dsmc_dqs0 */
+	mux = <0x02>;
+	drive-strength = <0x3f>;
+};
+
+&gpio1_a3 { /* dsmc_d0 */
+	mux = <0x02>;
+	drive-strength = <0x3f>;
+};
+
+&gpio1_a4 { /* dsmc_d1 */
+	mux = <0x02>;
+	drive-strength = <0x3f>;
+};
+
+&gpio1_a5 { /* dsmc_d2 */
+	mux = <0x02>;
+	drive-strength = <0x3f>;
+};
+
+&gpio1_a6 { /* dsmc_d3 */
+	mux = <0x02>;
+	drive-strength = <0x3f>;
+};
+
+&gpio1_a7 { /* dsmc_d4 */
+	mux = <0x02>;
+	drive-strength = <0x3f>;
+};
+
+&gpio1_b0 { /* dsmc_d5 */
+	mux = <0x02>;
+	drive-strength = <0x3f>;
+};
+
+&gpio1_b1 { /* dsmc_csn1 */
+	mux = <0x02>;
+	drive-strength = <0x3f>;
+};
+
+&gpio1_b2 { /* dsmc_int2 */
+	mux = <0x02>;
+	drive-strength = <0x3f>;
+};
+
+&gpio1_b3 { /* dsmc_int3 */
+	mux = <0x02>;
+	drive-strength = <0x3f>;
+};
+
+&gpio1_b4 { /* dsmc_d6 */
+	mux = <0x02>;
+	drive-strength = <0x3f>;
+};
+
+&gpio1_b5 { /* dsmc_d7 */
+	mux = <0x02>;
+	drive-strength = <0x3f>;
+};
+
+&gpio1_b6 { /* dsmc_csn0 */
+	mux = <0x02>;
+	drive-strength = <0x3f>;
+};
+
+&gpio1_b7 { /* dsmc_rdyn */
+	mux = <0x02>;
+	drive-strength = <0x3f>;
+};
+
+&gpio1_c0 { /* reset */
+	mux = <0x04>;
+	drive-strength = <0x3f>;
+};
+
+&gpio1_c1 { /* dsmc_d8 */
+	mux = <0x02>;
+	drive-strength = <0x3f>;
+};
+
+&gpio1_c2 { /* dsmc_d9 */
+	mux = <0x02>;
+	drive-strength = <0x3f>;
+};
+
+&gpio1_c3 { /* dsmc_d10 */
+	mux = <0x02>;
+	drive-strength = <0x3f>;
+};
+
+&gpio1_c4 { /* dsmc_d11 */
+	mux = <0x02>;
+	drive-strength = <0x3f>;
+};
+
+&gpio1_c5 { /* dsmc_d12 */
+	mux = <0x02>;
+	drive-strength = <0x3f>;
+};
+
+&gpio1_c6 { /* dsmc_d13 */
+	mux = <0x02>;
+	drive-strength = <0x3f>;
+};
+
+&gpio1_c7 { /* dsmc_d14 */
+	mux = <0x02>;
+	drive-strength = <0x3f>;
+};
+
+&gpio1_d0 { /* dsmc_d15 */
+	mux = <0x02>;
+	drive-strength = <0x3f>;
+};
+
+&gpio1_d1 { /* dsmc_dqs1 */
+	mux = <0x02>;
+	drive-strength = <0x3f>;
+};
+
+&gpio1_d2 { /* dsmc_csn2 */
+	mux = <0x02>;
+	drive-strength = <0x3f>;
+};
+
+&gpio1_d3 { /* dsmc_csn3 */
+	mux = <0x02>;
+	drive-strength = <0x3f>;
+};
+
+&dmac0 {
+	interrupt-affinity = <&cpu_rtt>, <&cpu_rtt>;
+	status = "okay,rtt";
+};
+
+&dmac1 {
+	status = "disabled";
+};
+
+&dsmc {
+        clock-frequency = <25000000>;
+        //clock-frequency = <10000000>;
+        pinctrl = <
+                &gpio1_a0
+                &gpio1_a1
+                &gpio1_a2
+                &gpio1_a3
+                &gpio1_a4
+                &gpio1_a5
+                &gpio1_a6
+                &gpio1_a7
+
+                &gpio1_b0
+                &gpio1_b1
+                &gpio1_b2
+                &gpio1_b3
+                &gpio1_b4
+                &gpio1_b5
+                &gpio1_b6
+                &gpio1_b7
+
+                &gpio1_c0
+                &gpio1_c1
+                &gpio1_c2
+                &gpio1_c3
+                &gpio1_c4
+                &gpio1_c5
+                &gpio1_c6
+                &gpio1_c7
+
+                &gpio1_d0
+                &gpio1_d1
+                &gpio1_d2
+                &gpio1_d3
+        >;
+        status = "okay,rtt";
+
+	slave {
+		rockchip,dqs-dll = <0x80 0x80
+							0x20 0x20
+							0x20 0x20
+							0x20 0x20>;
+	};
+
+};
+
+&dsmc_slave {
+	status = "okay,rtt";
+
+	rockchip,clk-mode = <2>;
+
+	lb-slave {
+	        dsmc_lb_slave0: lb-slave0 {
+		        rockchip,mtr-timing = <3 3 1 1 0 0 2 3>;
+		        status = "okay,rtt";
+				dsmc_p0_region: region {
+					dsmc_p0_region0: region0 {
+					rockchip,attribute = "Merged FIFO";
+					rockchip,ca-addr-width = <0>;
+					rockchip,dummy-clk-num = <3>;
+					rockchip,cs0-be-ctrled = <0>;
+					rockchip,cs0-ctrl = <0>;
+					status = "okay,rtt";
+					};
+				};
+			};
+	};
+};

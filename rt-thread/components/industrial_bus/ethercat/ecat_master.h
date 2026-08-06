@@ -36,6 +36,9 @@ typedef struct
                                       - Bit 3: \a OP */
     unsigned int link_up   : 1; /**< \a true, if at least one Ethernet link is
                                       up. */
+    unsigned int scan_busy : 1; /**< true if slave scan is running. */
+    unsigned int scan_done : 1; /**< true if initial or latest scan is done. */
+    unsigned int topology_generation; /**< Increased after a successful bus scan. */
 } ec_master_state_t;
 
 /****************************************************************************/
@@ -86,6 +89,13 @@ typedef struct
     int16_t current_on_ebus;  /**< Used current in mA. */
     struct
     {
+        uint8_t desc;             /**< Port descriptor. */
+        struct
+        {
+            uint8_t link_up;         /**< Link detected. */
+            uint8_t loop_closed;     /**< Loop closed. */
+            uint8_t signal_detected; /**< Signal detected on RX port. */
+        } link;
         uint32_t receive_time;     /**< Receive time on DC transmission delay
                                  measurement. */
         uint16_t next_slave;       /**< Ring position of next DC slave on that
@@ -141,6 +151,128 @@ typedef struct
     ec_wc_state_t wc_state;       /**< Working counter interpretation. */
     unsigned int redundancy_active; /**< Redundant link is in use. */
 } ec_domain_state_t;
+
+/****************************************************************************/
+
+#define EC_FAULT_VERSION        1
+#define EC_FAULT_REASON_LEN     80
+#define EC_FAULT_PORT_COUNT     4
+#define EC_FAULT_HISTORY_COUNT  32
+#define EC_FAULT_NO_SLAVE       0xffffU
+
+typedef enum
+{
+    EC_FAULT_NONE = 0,
+
+    EC_FAULT_TOPOLOGY_MISMATCH,
+    EC_FAULT_PORT_LINK_ABNORMAL,
+    EC_FAULT_SLAVE_LOST,
+
+    EC_FAULT_SLAVE_STATE_CHANGED,
+    EC_FAULT_SLAVE_STATE_ABNORMAL,
+    EC_FAULT_SLAVE_AL_ERROR,
+
+    EC_FAULT_SLAVE_WKC_LOW,
+    EC_FAULT_MASTER_WKC_LOW,
+    EC_FAULT_DATAGRAM_TIMEOUT,
+    EC_FAULT_DATAGRAM_ERROR,
+
+    EC_FAULT_MASTER_LINK_DOWN,
+    EC_FAULT_MASTER_LINK_UP,
+
+    EC_FAULT_COMM_QUALITY_WARNING,
+    EC_FAULT_COMM_QUALITY_ERROR,
+} ec_fault_type_t;
+
+typedef enum
+{
+    EC_FAULT_LEVEL_INFO = 0,
+    EC_FAULT_LEVEL_WARNING,
+    EC_FAULT_LEVEL_ERROR,
+    EC_FAULT_LEVEL_FATAL,
+    EC_FAULT_LEVEL_COUNT,
+} ec_fault_level_t;
+
+typedef enum
+{
+    EC_FAULT_SOURCE_MASTER = 0,
+    EC_FAULT_SOURCE_SLAVE,
+    EC_FAULT_SOURCE_DATAGRAM,
+    EC_FAULT_SOURCE_TOPOLOGY,
+    EC_FAULT_SOURCE_COMM_STAT,
+} ec_fault_source_t;
+
+#define EC_FAULT_ACTION_RECORD       (1U << 0)
+#define EC_FAULT_ACTION_SIGNAL       (1U << 1)
+#define EC_FAULT_ACTION_LATCH        (1U << 2)
+#define EC_FAULT_ACTION_STOP_MASTER  (1U << 3)
+#define EC_FAULT_ACTION_BLOCK_START  (1U << 4)
+
+typedef struct
+{
+    uint8_t desc;
+    uint8_t link_up;
+    uint8_t loop_closed;
+    uint8_t signal_detected;
+    uint16_t next_slave;
+    uint32_t receive_time;
+    uint32_t delay_to_next_dc;
+} ec_fault_port_snapshot_t;
+
+typedef struct
+{
+    uint16_t rx_error_count[EC_FAULT_PORT_COUNT];
+    uint8_t forwarded_rx_error_count[EC_FAULT_PORT_COUNT];
+    uint8_t lost_link_count[EC_FAULT_PORT_COUNT];
+    uint8_t ecat_pu_error_count;
+    uint8_t pdi_error_count;
+} ec_comm_stat_t;
+
+typedef struct
+{
+    uint16_t version;
+    uint16_t size;
+
+    uint32_t fault_id;
+    uint32_t timestamp_ms;
+    uint32_t sequence;
+
+    uint16_t type;
+    uint16_t level;
+    uint16_t source;
+    uint16_t action;
+
+    uint16_t slave_index;
+    uint16_t alias;
+    uint32_t vendor_id;
+    uint32_t product_code;
+    uint32_t revision_number;
+    uint32_t serial_number;
+
+    uint8_t requested_state;
+    uint8_t current_state;
+    uint16_t al_status_code;
+
+    uint32_t actual_wkc;
+    uint32_t expected_wkc;
+    uint32_t error_code;
+
+    ec_fault_port_snapshot_t ports[EC_FAULT_PORT_COUNT];
+    ec_comm_stat_t comm;
+
+    char reason[EC_FAULT_REASON_LEN];
+} ec_fault_record_t;
+
+typedef struct
+{
+    uint16_t version;
+    uint16_t size;
+
+    uint32_t action_by_level[EC_FAULT_LEVEL_COUNT];
+    uint32_t duplicate_window_ms;
+    uint32_t wkc_error_threshold;
+    uint32_t timeout_error_threshold;
+} ec_fault_policy_t;
 
 /****************************************************************************/
 
@@ -287,10 +419,11 @@ typedef enum
     EC_STATE_ERROR = 0x10
 } ec_state;
 
-#define EC_EVENT_RUN  (0x01)
-#define EC_EVENT_STOP (0x02)
-#define EC_EVENT_LOOP (0x04)
-#define EC_EVENT_EXIT (0x08)
+/* Forward declaration for ec_master_t structure */
+struct ec_master;
+typedef struct ec_master ec_master_t;
+
+/****************************************************************************/
 
 typedef enum
 {
@@ -333,6 +466,10 @@ typedef struct ec_master
     int64_t *dc_time;
     float pgain;
     float igain;
+    void (*ecat_config_handler)(struct ec_master *master);
+    void (*ecat_process_data_begin_handler)(struct ec_master *master, uint16_t slave, uint8_t *input, uint8_t *output);
+    void (*ecat_process_data_end_handler)(struct ec_master *master, uint16_t slave, uint8_t *input, uint8_t *output);
+    void (*error_handler)(struct ec_master *master, uint32_t error_code, const unsigned char *error_str);
 } ec_master_t;
 
 struct _ecat_timer
@@ -374,6 +511,8 @@ rt_err_t ecat_master_start(ec_master_t *master);
 rt_err_t ecat_simple_start(ec_master_t *master);
 
 rt_err_t ecat_simple_stop(ec_master_t *master);
+
+rt_err_t ecat_master_stop(ec_master_t *master);
 
 rt_err_t ecat_slave_config(
     ec_master_t *master, uint16_t slave, ec_slave_config_t *config);
@@ -418,6 +557,22 @@ void ecat_dc_config_ex(ec_master_t *master,
     int32_t cycle_shift);
 
 int ecat_slavecount(ec_master_t *master);
+
+rt_err_t ecat_fault_get_current(ec_master_t *master, ec_fault_record_t *record);
+rt_err_t ecat_fault_get_history(ec_master_t *master,
+                                uint32_t start_fault_id,
+                                ec_fault_record_t *records,
+                                uint32_t max_count,
+                                uint32_t *actual_count);
+rt_err_t ecat_fault_get_sequence(ec_master_t *master, uint32_t *sequence);
+rt_err_t ecat_fault_wait(ec_master_t *master,
+                         uint32_t last_sequence,
+                         uint32_t timeout_ms,
+                         uint32_t *new_sequence);
+rt_err_t ecat_fault_clear(ec_master_t *master, uint32_t fault_id);
+rt_err_t ecat_fault_clear_all(ec_master_t *master);
+rt_err_t ecat_fault_set_policy(ec_master_t *master, const ec_fault_policy_t *policy);
+rt_err_t ecat_fault_get_policy(ec_master_t *master, ec_fault_policy_t *policy);
 
 rt_inline int ecat_sdo_write_u8(ec_master_t *master,
     uint16_t slave,

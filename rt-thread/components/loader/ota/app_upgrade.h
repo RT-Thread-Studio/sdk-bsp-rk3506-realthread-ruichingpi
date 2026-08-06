@@ -22,14 +22,21 @@ typedef enum
     UPGRADE_TGT_DTB = 1,
 } upgrade_target_t;
 
-typedef struct
+typedef struct upgrade_request
 {
     upgrade_target_t target;
+
     const char *app_path;
     const char *app_back_path;
     const char *dtb_path;
-} upgrade_request_t;
 
+    rt_uint8_t *app_dst_base;
+    rt_size_t app_dst_max;
+
+    rt_uint8_t *dtb_dst_base;
+    rt_size_t dtb_dst_max;
+
+} upgrade_request_t;
 rt_err_t app_upgrade_boot_ok(void);
 
 #endif /* __APP_UPGRADE_H__ */

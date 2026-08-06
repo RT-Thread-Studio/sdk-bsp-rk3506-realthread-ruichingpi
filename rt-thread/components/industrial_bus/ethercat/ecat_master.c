@@ -91,6 +91,21 @@ rt_err_t ecat_simple_stop(ec_master_t *master)
     return (-RT_ERROR);
 }
 
+rt_err_t ecat_master_stop(ec_master_t *master)
+{
+    if (!master)
+    {
+        return (-RT_EINVAL);
+    }
+
+    if (service != RT_NULL)
+    {
+        return service_control(service, ECAT_SERVICE_MASTER_STOP, master);
+    }
+
+    return (-RT_ERROR);
+}
+
 rt_err_t ecat_master_state(ec_master_t *master, ec_master_state_t *state)
 {
     if ((!master) || (!state))
@@ -292,6 +307,165 @@ int ecat_slavecount(ec_master_t *master)
     service_control(service, ECAT_SERVICE_SLAVE_COUNT, arg);
 
     return tmp;
+}
+
+rt_err_t ecat_fault_get_current(ec_master_t *master, ec_fault_record_t *record)
+{
+    struct ecat_fault_current_arg arg;
+
+    if (!master || !record)
+    {
+        return -RT_EINVAL;
+    }
+    if (!service)
+    {
+        return -RT_ERROR;
+    }
+
+    arg.master = master;
+    arg.record = record;
+
+    return service_control(service, ECAT_SERVICE_FAULT_GET_CURRENT, &arg);
+}
+
+rt_err_t ecat_fault_get_history(ec_master_t *master,
+                                uint32_t start_fault_id,
+                                ec_fault_record_t *records,
+                                uint32_t max_count,
+                                uint32_t *actual_count)
+{
+    struct ecat_fault_history_arg arg;
+
+    if (!master || !records || !actual_count)
+    {
+        return -RT_EINVAL;
+    }
+    if (!service)
+    {
+        return -RT_ERROR;
+    }
+
+    arg.master = master;
+    arg.records = records;
+    arg.start_fault_id = start_fault_id;
+    arg.max_count = max_count;
+    arg.actual_count = actual_count;
+
+    return service_control(service, ECAT_SERVICE_FAULT_GET_HISTORY, &arg);
+}
+
+rt_err_t ecat_fault_get_sequence(ec_master_t *master, uint32_t *sequence)
+{
+    struct ecat_fault_sequence_arg arg;
+
+    if (!master || !sequence)
+    {
+        return -RT_EINVAL;
+    }
+    if (!service)
+    {
+        return -RT_ERROR;
+    }
+
+    arg.master = master;
+    arg.sequence = sequence;
+
+    return service_control(service, ECAT_SERVICE_FAULT_GET_SEQUENCE, &arg);
+}
+
+rt_err_t ecat_fault_wait(ec_master_t *master,
+                         uint32_t last_sequence,
+                         uint32_t timeout_ms,
+                         uint32_t *new_sequence)
+{
+    struct ecat_fault_wait_arg arg;
+
+    if (!master || !new_sequence)
+    {
+        return -RT_EINVAL;
+    }
+    if (!service)
+    {
+        return -RT_ERROR;
+    }
+
+    arg.master = master;
+    arg.last_sequence = last_sequence;
+    arg.timeout_ms = timeout_ms;
+    arg.new_sequence = new_sequence;
+
+    return service_control(service, ECAT_SERVICE_FAULT_WAIT, &arg);
+}
+
+rt_err_t ecat_fault_clear(ec_master_t *master, uint32_t fault_id)
+{
+    struct ecat_fault_clear_arg arg;
+
+    if (!master)
+    {
+        return -RT_EINVAL;
+    }
+    if (!service)
+    {
+        return -RT_ERROR;
+    }
+
+    arg.master = master;
+    arg.fault_id = fault_id;
+
+    return service_control(service, ECAT_SERVICE_FAULT_CLEAR, &arg);
+}
+
+rt_err_t ecat_fault_clear_all(ec_master_t *master)
+{
+    if (!master)
+    {
+        return -RT_EINVAL;
+    }
+    if (!service)
+    {
+        return -RT_ERROR;
+    }
+
+    return service_control(service, ECAT_SERVICE_FAULT_CLEAR_ALL, master);
+}
+
+rt_err_t ecat_fault_set_policy(ec_master_t *master, const ec_fault_policy_t *policy)
+{
+    struct ecat_fault_policy_arg arg;
+
+    if (!master || !policy)
+    {
+        return -RT_EINVAL;
+    }
+    if (!service)
+    {
+        return -RT_ERROR;
+    }
+
+    arg.master = master;
+    arg.policy = (ec_fault_policy_t *)policy;
+
+    return service_control(service, ECAT_SERVICE_FAULT_SET_POLICY, &arg);
+}
+
+rt_err_t ecat_fault_get_policy(ec_master_t *master, ec_fault_policy_t *policy)
+{
+    struct ecat_fault_policy_arg arg;
+
+    if (!master || !policy)
+    {
+        return -RT_EINVAL;
+    }
+    if (!service)
+    {
+        return -RT_ERROR;
+    }
+
+    arg.master = master;
+    arg.policy = policy;
+
+    return service_control(service, ECAT_SERVICE_FAULT_GET_POLICY, &arg);
 }
 
 rt_err_t ecat_write_state(ec_master_t *master, uint16_t slave, uint16_t state)

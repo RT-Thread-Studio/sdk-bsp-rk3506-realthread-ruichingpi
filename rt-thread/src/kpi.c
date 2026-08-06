@@ -30,6 +30,10 @@
 #include <lwip/pbuf.h>
 #endif /* RT_USING_LWIP */
 
+#ifdef RT_USING_DFS
+#include <dfs_fs.h>
+#endif /* RT_USING_DFS */
+
 #ifdef RT_USING_POSIX_STDIO
 #include <posix/stdio.h>
 #endif /* RT_USING_POSIX_STDIO */
@@ -38,7 +42,7 @@
 #include <termios.h>
 #endif /* RT_USING_POSIX_TERMIOS */
 
-extern rt_uint8_t __kpi_start[];
+extern rt_ubase_t __kpi_start[];
 
 /* kpi defined */
 KPI_DEFINED(rt_thread_init);
@@ -335,6 +339,7 @@ KPI_DEFINED(rt_rewinddir);
 KPI_DEFINED(access);
 KPI_DEFINED(setcwd);
 KPI_DEFINED(getcwd);
+KPI_DEFINED(chdir);
 
 #ifdef RT_USING_NETDEV
 KPI_DEFINED(if_set_mac);
@@ -359,6 +364,14 @@ KPI_DEFINED(pbuf_realloc);
 KPI_DEFINED(pbuf_free);
 KPI_DEFINED(pbuf_copy_partial);
 #endif /* RT_USING_LWIP */
+
+#ifdef RT_USING_DFS
+KPI_DEFINED(dfs_register);
+KPI_DEFINED(dfs_filesystem_lookup);
+KPI_DEFINED(dfs_mount);
+KPI_DEFINED(dfs_unmount);
+KPI_DEFINED(dfs_mkfs);
+#endif /* RT_USING_DFS */
 
 KPI_DEFINED(service_find);
 KPI_DEFINED(service_register);
@@ -978,6 +991,7 @@ void kpi_init(void)
     access = KPI_IMPORT(access, 691);
     setcwd = KPI_IMPORT(setcwd, 692);
     getcwd = KPI_IMPORT(getcwd, 693);
+    chdir = KPI_IMPORT(chdir, 694);
 
 #ifdef RT_USING_NETDEV
     if_set_mac = KPI_IMPORT(if_set_mac, 700);
@@ -1017,6 +1031,14 @@ void kpi_init(void)
     service_set_tx_complete = KPI_IMPORT(service_set_tx_complete, 1191);
     service_lock = KPI_IMPORT(service_lock, 1192);
     service_unlock = KPI_IMPORT(service_unlock, 1193);
+
+#ifdef RT_USING_DFS
+    dfs_register = KPI_IMPORT(dfs_register, 1205);
+    dfs_filesystem_lookup = KPI_IMPORT(dfs_filesystem_lookup, 1206);
+    dfs_mount = KPI_IMPORT(dfs_mount, 1207);
+    dfs_unmount = KPI_IMPORT(dfs_unmount, 1208);
+    dfs_mkfs = KPI_IMPORT(dfs_mkfs, 1209);
+#endif /* RT_USING_DFS */
 
     rt_bus_for_each_dev = KPI_IMPORT(rt_bus_for_each_dev, 1306);
     rt_bus_for_each_drv = KPI_IMPORT(rt_bus_for_each_drv, 1307);
