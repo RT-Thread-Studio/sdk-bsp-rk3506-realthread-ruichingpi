@@ -21,6 +21,13 @@
 #include <sys/statfs.h>
 #include <sys/time.h>
 
+#ifndef DFS_PATH_MAX
+#define DFS_PATH_MAX             DIRENT_NAME_MAX
+#endif
+
+#define DFS_FS_FLAG_DEFAULT     0x00    /* default flag */
+#define DFS_FS_FLAG_FULLPATH    0x01    /* set full path to underlaying file system */
+
 struct dfs_fdtable
 {
     uint32_t maxfd;

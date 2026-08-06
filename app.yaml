@@ -492,6 +492,38 @@ example_projects:
     - rtconfig.py
     - SConscript
     - SConstruct
+    source_path_offset: 02_peripheral_fw_version
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
+  external_files: []
+  project_description: ''
+  project_name: 02_peripheral_fw_version
+  project_type: bare-metal|@notUsed|@notUsed
+- builtin_files:
+  - files_and_folders:
+    - .settings
+    - applications
+    - board
+    - packages
+    - .config
+    - .cproject
+    - .project
+    - Kconfig
+    - rtconfig.h
+    - rtconfig.py
+    - SConscript
+    - SConstruct
     source_path_offset: 02_peripheral_gpio_input
     target_path_offset: ''
   - files_and_folders:
@@ -1644,6 +1676,38 @@ example_projects:
     - rtconfig.py
     - SConscript
     - SConstruct
+    source_path_offset: 04_filesystem_register
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
+  external_files: []
+  project_description: ''
+  project_name: 04_filesystem_register
+  project_type: bare-metal|@notUsed|@notUsed
+- builtin_files:
+  - files_and_folders:
+    - .settings
+    - applications
+    - board
+    - packages
+    - .config
+    - .cproject
+    - .project
+    - Kconfig
+    - rtconfig.h
+    - rtconfig.py
+    - SConscript
+    - SConstruct
     source_path_offset: 05_gui_lvgl_ethercat_motor_control_7in_1024_600
     target_path_offset: ''
   - files_and_folders:
@@ -1917,6 +1981,38 @@ example_projects:
   external_files: []
   project_description: ''
   project_name: 06_bus_ethercat_master_csv
+  project_type: bare-metal|@notUsed|@notUsed
+- builtin_files:
+  - files_and_folders:
+    - .settings
+    - applications
+    - board
+    - packages
+    - .config
+    - .cproject
+    - .project
+    - Kconfig
+    - rtconfig.h
+    - rtconfig.py
+    - SConscript
+    - SConstruct
+    source_path_offset: 06_bus_ethercat_master_fault_recovery
+    target_path_offset: ''
+  - files_and_folders:
+    - rt-thread
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - platform
+    source_path_offset: .
+    target_path_offset: ''
+  - files_and_folders:
+    - rk3506.svd
+    source_path_offset: debug/svd/
+    target_path_offset: .settings
+  external_files: []
+  project_description: ''
+  project_name: 06_bus_ethercat_master_fault_recovery
   project_type: bare-metal|@notUsed|@notUsed
 - builtin_files:
   - files_and_folders:
@@ -2415,7 +2511,7 @@ features_zh:
 - 革命性混合架构：RT-Thread+Linux双系统
 pkg_type: Board_Support_Packages
 pkg_vendor: Real-Thread
-pkg_version: 1.8.2
+pkg_version: V1.8.3
 template_projects:
 - builtin_files:
   - files_and_folders:

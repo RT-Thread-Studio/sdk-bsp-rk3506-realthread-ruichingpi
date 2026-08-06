@@ -1,0 +1,1072 @@
+uart_config: &uart_config
+  display:
+    zh: 串口配置
+    en: UART configuration
+  type: configuration
+  baudrate:
+    display:
+      zh: 波特率
+      en: baudrate
+    input_type: choise_and_input  # 支持自定义参数输入
+    choise:
+      default: 115200
+      9600:
+        display:
+          zh: 9600
+          en: 9600
+      115200:
+        display:
+          zh: 115200
+          en: 115200
+  data_bits:
+    display:
+      zh: 数据位
+      en: data bits
+    input_type: choise  # 不支持自定义参数输入
+    choise:
+      default: 8
+      5:
+        display:
+          zh: 5
+          en: 5
+      6:
+        display:
+          zh: 6
+          en: 6
+      7:
+        display:
+          zh: 7
+          en: 7
+      8:
+        display:
+          zh: 8
+          en: 8
+  stop_bits:
+    display:
+      zh: 停止位
+      en: stop bits
+    input_type: choise  # 不支持自定义参数输入
+    choise:
+      default: 1
+      1:
+        display:
+          zh: 1
+          en: 1
+      1.5:
+        display:
+          zh: 1.5
+          en: 1.5
+      2:
+        display:
+          zh: 2
+          en: 2
+  parity:
+    display:
+      zh: 奇偶校验
+      en: parity
+    input_type: choise
+    choise:
+      default: none
+      none:
+        display:
+          zh: 关闭校验
+          en: none
+      odd:
+        display:
+          zh: 奇检验
+          en: odd
+      even:
+        display:
+          zh: 偶校验
+          en: even
+  flow_control:
+    display:
+      zh: 流控
+      en: flow control
+    input_type: choise
+    choise:
+      default: none
+      none:
+        display:
+          ch:关闭流控
+          en:none
+      rts/cts:
+        display:
+          ch:rts/cts
+          en:rts/cts
+      xon/xoff:
+        display:
+          ch:xon/xoff
+          en:xon/xoff
+  interrupt_affinity:
+    display:
+      zh: 中断亲和性
+      en: interrupt affinity
+    input_type: choise
+    choise:
+      default: cpu0
+      cpu0:
+        display:
+          zh: cpu0
+          en: cpu0
+      cpu1:
+        display:
+          zh: cpu1
+          en: cpu1
+      cpu2:
+        display:
+          zh: cpu2
+          en: cpu2
+  clock:
+    display:
+      zh: 时钟配置
+      en: clock config
+    input_type: input
+    choise:
+      default: 24000000
+
+i2c_config: &i2c_config
+  display:
+    zh: I2C 配置
+    en: I2C configuration
+  type: configuration
+  speed:
+    display:
+      zh: I2C 速度
+      en: I2C speed
+    input_type: choise_and_input # 支持自定义参数输入
+    choise:
+      default: 100000
+      100000:
+        display:
+          zh: 100KHz
+          en: 100KHz
+      400000:
+        display:
+          zh: 400KHz
+          en: 400KHz
+  interrupt_affinity:
+    display:
+      zh: 中断亲和性
+      en: interrupt affinity
+    input_type: choise
+    choise:
+      default: cpu0
+      cpu0:
+        display:
+          zh: cpu0
+          en: cpu0
+      cpu1:
+        display:
+          zh: cpu1
+          en: cpu1
+      cpu2:
+        display:
+          zh: cpu2
+          en: cpu2
+  clock:
+    display:
+      zh: 时钟配置
+      en: clock config
+    input_type: input
+    choise:
+      default: 24000000
+
+can_config: &can_config
+  display:
+    zh: CAN 配置
+    en: CAN configuration
+  type: configuration
+  interrupt_affinity:
+    display:
+      zh: 中断亲和性
+      en: interrupt affinity
+    input_type: choise
+    choise:
+      default: cpu0
+      cpu0:
+        display:
+          zh: cpu0
+          en: cpu0
+      cpu1:
+        display:
+          zh: cpu1
+          en: cpu1
+      cpu2:
+        display:
+          zh: cpu2
+          en: cpu2
+
+spi_config: &spi_config
+  display:
+    zh: SPI 配置
+    en: SPI configuration
+  type: configuration
+  interrupt_affinity:
+    display:
+      zh: 中断亲和性
+      en: interrupt affinity
+    input_type: choise
+    choise:
+      default: cpu0
+      cpu0:
+        display:
+          zh: cpu0
+          en: cpu0
+      cpu1:
+        display:
+          zh: cpu1
+          en: cpu1
+      cpu2:
+        display:
+          zh: cpu2
+          en: cpu2
+
+gmac_config: &gmac_config
+  display:
+    zh: GMAC 配置
+    en: GMAC configuration
+  type: configuration
+  interrupt_affinity:
+    display:
+      zh: 中断亲和性
+      en: interrupt affinity
+    input_type: choise
+    choise:
+      default: cpu0
+      cpu0:
+        display:
+          zh: cpu0
+          en: cpu0
+      cpu1:
+        display:
+          zh: cpu1
+          en: cpu1
+      cpu2:
+        display:
+          zh: cpu2
+          en: cpu2
+  mac-addr0:
+    display:
+      zh: mac 地址
+      en: mac addr
+    input_type: input
+    choise:
+      default: 08:00:27:ae:56:87
+  mac-addr1:
+    display:
+      zh: mac 地址
+      en: mac addr
+    input_type: input
+    choise:
+      default: 08:00:27:ae:56:88
+  static-ip-addr0:
+    display:
+      zh: 静态 ip 地址
+      en: static ip addr
+    input_type: input
+    choise:
+      default: 192.168.2.100
+  static-ip-addr1:
+    display:
+      zh: 静态 ip 地址
+      en: static ip addr
+    input_type: input
+    choise:
+      default: 192.168.3.100
+  gateway0:
+    display:
+      zh: 网关
+      en: gateway
+    input_type: input
+    choise:
+      default: 192.168.2.1
+  gateway1:
+    display:
+      zh: 网关
+      en: gateway
+    input_type: input
+    choise:
+      default: 192.168.3.1
+  netmask0:
+    display:
+      zh: 子网掩码
+      en: netmask
+    input_type: input
+    choise:
+      default: 255.255.255.0
+  netmask1:
+    display:
+      zh: 子网掩码
+      en: netmask
+    input_type: input
+    choise:
+      default: 255.255.255.0
+  dns0:
+    display:
+      zh: dns0
+      en: dns0
+    input_type: input
+    choise:
+      default: 114.114.114.114
+  dns1:
+    display:
+      zh: dns1
+      en: dns1
+    input_type: input
+    choise:
+      default: 223.6.6.6
+  dhcp:
+    display:
+      zh: dhcp
+      en: dhcp
+    input_type: choise
+    choise:
+      default: disable
+      enable:
+        display:
+          zh: 使能
+          en: enable
+      disable:
+        display:
+          zh: 关闭
+          en: disable
+
+mmc_config: &mmc_config
+  display:
+    zh: SDMMC 配置
+    en: SDMMC configuration
+  type: configuration
+  interrupt_affinity:
+    display:
+      zh: 中断亲和性
+      en: interrupt affinity
+    input_type: choise
+    choise:
+      default: cpu0
+      cpu0:
+        display:
+          zh: cpu0
+          en: cpu0
+      cpu1:
+        display:
+          zh: cpu1
+          en: cpu1
+      cpu2:
+        display:
+          zh: cpu2
+          en: cpu2
+
+pwm_config: &pwm_config
+  display:
+    zh: PWM 配置
+    en: PWM configuration
+  type: configuration
+  interrupt_affinity:
+    display:
+      zh: 中断亲和性
+      en: interrupt affinity
+    input_type: choise
+    choise:
+      default: cpu0
+      cpu0:
+        display:
+          zh: cpu0
+          en: cpu0
+      cpu1:
+        display:
+          zh: cpu1
+          en: cpu1
+      cpu2:
+        display:
+          zh: cpu2
+          en: cpu2
+
+wdt_config: &wdt_config
+  display:
+    zh: WATCHDOG 配置
+    en: WATCHDOG configuration
+  type: configuration
+  interrupt_affinity:
+    display:
+      zh: 中断亲和性
+      en: interrupt affinity
+    input_type: choise
+    choise:
+      default: cpu0
+      cpu0:
+        display:
+          zh: cpu0
+          en: cpu0
+      cpu1:
+        display:
+          zh: cpu1
+          en: cpu1
+      cpu2:
+        display:
+          zh: cpu2
+          en: cpu2
+
+kernel_config: &kernel_config
+  display:
+    zh: 内核配置
+    en: kernel configuration
+  type: configuration
+  console-name:
+    display:
+      zh: 控制台设备选择
+      en: console device select
+    input_type: input
+    choise:
+      default: fiq_debugger
+
+periperal:
+  display:
+    zh: 外设配置
+    en: peripheral
+  type: periperal
+
+  kernel:
+    display:
+      zh: 内核配置
+      en: kernel configuration
+    all_config: *kernel_config
+    console:
+      display:
+        zh: 控制台
+        en: console
+      config:
+        - console-name
+      status: enable
+
+  uart:
+    display:
+      zh: 串口
+      en: UART
+    all_config: *uart_config
+    uart1:
+      display:
+        zh: UART1
+        en: UART1
+      status: disable
+      config:
+        # - baudrate
+        # - data_bits
+        # - stop_bits
+        # - parity
+        - interrupt_affinity
+      pin:
+        UART1_TX:
+          display:
+            zh: UART1_TX
+            en: UART1_TX
+          mux: UART1_TX
+        UART0_RX:
+          display:
+            zh: UART1_RX
+            en: UART1_RX
+          mux: UART1_RX
+    uart2:
+      display:
+        zh: UART2
+        en: UART2
+      status: disable
+      config:
+        # - baudrate
+        # - data_bits
+        # - stop_bits
+        # - parity
+        # - clock
+        - interrupt_affinity
+      pin:
+        UART2_TX:
+          display:
+            zh: UART2_TX
+            en: UART2_TX
+          mux: UART2_TX
+        UART2_RX:
+          display:
+            zh: UART2_RX
+            en: UART2_RX
+          mux: UART2_RX
+    uart3:
+      display:
+        zh: UART3
+        en: UART3
+      status: enable
+      config:
+        # - baudrate
+        # - data_bits
+        # - stop_bits
+        # - parity
+        # - clock
+        - interrupt_affinity
+      pin:
+        UART3_TX:
+          display:
+            zh: UART3_TX
+            en: UART3_TX
+          mux: UART3_TX
+        UART3_RX:
+          display:
+            zh: UART3_RX
+            en: UART3_RX
+          mux: UART3_RX
+        UART3_CTSN:
+          display:
+            zh: UART3_CTSN
+            en: UART3_CTSN
+          mux: UART3_CTSN
+        UART3_RTSN:
+          display:
+            zh: UART3_RTSN
+            en: UART3_RTSN
+          mux: UART3_RTSN
+    uart4:
+      display:
+        zh: UART4
+        en: UART4
+      status: disable
+      config:
+        # - baudrate
+        # - data_bits
+        # - stop_bits
+        # - parity
+        # - clock
+        - interrupt_affinity
+      pin:
+        UART4_TX:
+          display:
+            zh: UART4_TX
+            en: UART4_TX
+          mux: UART4_TX
+        UART4_RX:
+          display:
+            zh: UART4_RX
+            en: UART4_RX
+          mux: UART4_RX
+    uart5:
+      display:
+        zh: UART5
+        en: UART5
+      status: enable
+      config:
+        # - baudrate
+        # - data_bits
+        # - stop_bits
+        # - parity
+        # - clock
+        - interrupt_affinity
+      pin:
+        UART5_TX:
+          display:
+            zh: UART5_TX_M1
+            en: UART5_TX_M1
+          mux: UART5_TX_M1
+        UART5_RX:
+          display:
+            zh: UART5_RX_M1
+            en: UART5_RX_M1
+          mux: UART5_RX_M1
+
+  i2c:
+    display:
+      zh: I2C
+      en: I2C
+    all_config: *i2c_config
+    i2c0:
+      display:
+        zh: I2C0
+        en: I2C0
+      status: enable
+      config:
+        # - speed
+        # - clock
+        - interrupt_affinity
+      pin:
+        I2C0_SCL:
+          display:
+            zh: I2C0_SCL
+            en: I2C0_SCL
+          mux: I2C0_SCL
+        I2C0_SDA:
+          display:
+            zh: I2C0_SDA
+            en: I2C0_SDA
+          mux: I2C0_SDA
+    i2c1:
+      display:
+        zh: I2C1
+        en: I2C1
+      status: enable
+      config:
+        # - speed
+        # - clock
+        - interrupt_affinity
+      pin:
+        I2C1_SCL:
+          display:
+            zh: I2C1_SCL
+            en: I2C1_SCL
+          mux: I2C1_SCL
+        I2C1_SDA:
+          display:
+            zh: I2C1_SDA
+            en: I2C1_SDA
+          mux: I2C1_SDA
+    i2c2:
+      display:
+        zh: I2C2
+        en: I2C2
+      status: disable
+      config:
+        # - speed
+        # - clock
+        - interrupt_affinity
+      pin:
+        I2C2_SCL:
+          display:
+            zh: I2C2_SCL
+            en: I2C2_SCL
+          mux: I2C2_SCL
+        I2C2_SDA:
+          display:
+            zh: I2C2_SDA
+            en: I2C2_SDA
+          mux: I2C2_SDA
+
+  can:
+    display:
+      zh: CAN
+      en: CAN
+    all_config: *can_config
+    can0:
+      display:
+        zh: CAN0
+        en: CAN0
+      status: enable
+      config:
+        - interrupt_affinity
+      pin:
+        CAN0_TX:
+          display:
+            zh: CAN0_TX
+            en: CAN0_TX
+          mux: CAN0_TX
+        CAN0_RX:
+          display:
+            zh: CAN0_RX
+            en: CAN0_RX
+          mux: CAN0_RX
+    can1:
+      display:
+        zh: CAN1
+        en: CAN1
+      status: disable
+      config:
+        - interrupt_affinity
+      pin:
+        CAN1_TX:
+          display:
+            zh: CAN1_TX
+            en: CAN1_TX
+          mux: CAN1_TX
+        CAN1_RX:
+          display:
+            zh: CAN1_RX
+            en: CAN1_RX
+          mux: CAN1_RX
+
+  spi:
+    display:
+      zh: SPI
+      en: SPI
+    all_config: *spi_config
+    spi0:
+      display:
+        zh: SPI0
+        en: SPI0
+      status: enable
+      config:
+        - interrupt_affinity
+      pin:
+        SPI0_CLK:
+          display:
+            zh: SPI0_CLK
+            en: SPI0_CLK
+          mux: SPI0_CLK
+        SPI0_MOSI:
+          display:
+            zh: SPI0_MOSI
+            en: SPI0_MOSI
+          mux: SPI0_MOSI
+        SPI0_MISO:
+          display:
+            zh: SPI0_MISO
+            en: SPI0_MISO
+          mux: SPI0_MISO
+    spi1:
+      display:
+        zh: SPI1
+        en: SPI1
+      status: disable
+      config:
+        - interrupt_affinity
+      pin:
+        SPI1_CLK:
+          display:
+            zh: SPI1_CLK
+            en: SPI1_CLK
+          mux: SPI1_CLK
+        SPI1_MOSI:
+          display:
+            zh: SPI1_MOSI
+            en: SPI1_MOSI
+          mux: SPI1_MOSI
+        SPI1_MISO:
+          display:
+            zh: SPI1_MISO
+            en: SPI1_MISO
+          mux: SPI1_MISO
+
+  gmac:
+    display:
+      zh: GMAC
+      en: GMAC
+    all_config: *gmac_config
+    gmac0:
+      display:
+        zh: GMAC0
+        en: GMAC0
+      status: enable
+      config:
+        - mac-addr0
+        - dhcp
+        - static-ip-addr0
+        - gateway0
+        - netmask0
+        - interrupt_affinity
+      pin:
+        ETH_RMII0_RXDVCRS:
+          display:
+            zh: ETH_RMII0_RXDVCRS
+            en: ETH_RMII0_RXDVCRS
+          mux: ETH_RMII0_RXDVCRS
+        ETH_RMII0_RXD0:
+          display:
+            zh: ETH_RMII0_RXD0
+            en: ETH_RMII0_RXD0
+          mux: ETH_RMII0_RXD0
+        ETH_RMII0_RXD1:
+          display:
+            zh: ETH_RMII0_RXD1
+            en: ETH_RMII0_RXD1
+          mux: ETH_RMII0_RXD1
+        ETH_RMII0_TXD0:
+          display:
+            zh: ETH_RMII0_TXD0
+            en: ETH_RMII0_TXD0
+          mux: ETH_RMII0_TXD0
+        ETH_RMII0_TXD1:
+          display:
+            zh: ETH_RMII0_TXD1
+            en: ETH_RMII0_TXD1
+          mux: ETH_RMII0_TXD1
+        ETH_RMII0_TXEN:
+          display:
+            zh: ETH_RMII0_TXEN
+            en: ETH_RMII0_TXEN
+          mux: ETH_RMII0_TXEN
+        ETH_RMII0_CLK:
+          display:
+            zh: ETH_RMII0_CLK
+            en: ETH_RMII0_CLK
+          mux: ETH_RMII0_CLK
+        ETH_RMII0_MDIO:
+          display:
+            zh: ETH_RMII0_MDIO
+            en: ETH_RMII0_MDIO
+          mux: ETH_RMII0_MDIO
+        ETH_RMII0_MDC:
+          display:
+            zh: ETH_RMII0_MDC
+            en: ETH_RMII0_MDC
+          mux: ETH_RMII0_MDC
+    gmac1:
+      display:
+        zh: GMAC1
+        en: GMAC1
+      status: enable
+      config:
+        - mac-addr1
+        - dhcp
+        - static-ip-addr1
+        - gateway1
+        - netmask1
+        - interrupt_affinity
+      pin:
+        ETH_RMII1_RXDVCRS:
+          display:
+            zh: ETH_RMII1_RXDVCRS
+            en: ETH_RMII1_RXDVCRS
+          mux: ETH_RMII1_RXDVCRS
+        ETH_RMII1_RXD0:
+          display:
+            zh: ETH_RMII1_RXD0
+            en: ETH_RMII1_RXD0
+          mux: ETH_RMII1_RXD0
+        ETH_RMII1_RXD1:
+          display:
+            zh: ETH_RMII1_RXD1
+            en: ETH_RMII1_RXD1
+          mux: ETH_RMII1_RXD1
+        ETH_RMII1_TXD0:
+          display:
+            zh: ETH_RMII1_TXD0
+            en: ETH_RMII1_TXD0
+          mux: ETH_RMII1_TXD0
+        ETH_RMII1_TXD1:
+          display:
+            zh: ETH_RMII1_TXD1
+            en: ETH_RMII1_TXD1
+          mux: ETH_RMII1_TXD1
+        ETH_RMII1_TXEN:
+          display:
+            zh: ETH_RMII1_TXEN
+            en: ETH_RMII1_TXEN
+          mux: ETH_RMII1_TXEN
+        ETH_RMII1_CLK:
+          display:
+            zh: ETH_RMII1_CLK
+            en: ETH_RMII1_CLK
+          mux: ETH_RMII1_CLK
+        ETH_RMII1_MDIO:
+          display:
+            zh: ETH_RMII1_MDIO
+            en: ETH_RMII1_MDIO
+          mux: ETH_RMII1_MDIO
+        ETH_RMII1_MDC:
+          display:
+            zh: ETH_RMII1_MDC
+            en: ETH_RMII1_MDC
+          mux: ETH_RMII1_MDC
+    dns:
+      display:
+        zh: DNS 服务器
+        en: DNS Server
+      status: enable
+      config:
+        - dns0
+        - dns1
+
+  mmc:
+    display:
+      zh: MMC
+      en: MMC
+    all_config: *mmc_config
+    mmc:
+      display:
+        zh: SDMMC
+        en: SDMMC
+      status: enable
+      config:
+        - interrupt_affinity
+      pin:
+        SDMMC_CMD:
+          display:
+            zh: SDMMC_CMD
+            en: SDMMC_CMD
+          mux: SDMMC_CMD
+        SDMMC_CLK:
+          display:
+            zh: SDMMC_CLK
+            en: SDMMC_CLK
+          mux: SDMMC_CLK
+        SDMMC_D0:
+          display:
+            zh: SDMMC_D0
+            en: SDMMC_D0
+          mux: SDMMC_D0
+        SDMMC_D1:
+          display:
+            zh: SDMMC_D1
+            en: SDMMC_D1
+          mux: SDMMC_D1
+        SDMMC_D2:
+          display:
+            zh: SDMMC_D2
+            en: SDMMC_D2
+          mux: SDMMC_D2
+        SDMMC_D3:
+          display:
+            zh: SDMMC_D3
+            en: SDMMC_D3
+          mux: SDMMC_D3
+
+  pwm:
+    display:
+      zh: PWM
+      en: PWM
+    all_config: *pwm_config
+    pwm0_4ch_0:
+      config:
+      display:
+        zh: PWM0_4CH_0
+        en: PWM0_4CH_0
+      status: enable
+      pin:
+        PWM0_CH0:
+          display:
+            zh: PWM0_CH0
+            en: PWM0_CH0
+          mux: PWM0_CH0
+    pwm0_4ch_1:
+      config:
+      display:
+        zh: PWM0_4CH_1
+        en: PWM0_4CH_1
+      status: disable
+      pin:
+        PWM0_CH1:
+          display:
+            zh: PWM0_CH1
+            en: PWM0_CH1
+          mux: PWM0_CH1
+    pwm0_4ch_2:
+      config:
+      display:
+        zh: PWM0_4CH_2
+        en: PWM0_4CH_2
+      status: enable
+      pin:
+        PWM0_CH0:
+          display:
+            zh: PWM0_CH2
+            en: PWM0_CH2
+          mux: PWM0_CH2
+    pwm0_4ch_3:
+      config:
+      display:
+        zh: PWM0_4CH_3
+        en: PWM0_4CH_3
+      status: disable
+      pin:
+        PWM0_CH3:
+          display:
+            zh: PWM0_CH3
+            en: PWM0_CH3
+          mux: PWM0_CH3
+    pwm1_8ch_0:
+      config:
+      display:
+        zh: PWM1_8CH_0
+        en: PWM1_8CH_0
+      status: disable
+      pin:
+        PWM1_CH0:
+          display:
+            zh: PWM1_CH0
+            en: PWM1_CH0
+          mux: PWM1_CH0
+    pwm1_8ch_1:
+      config:
+      display:
+        zh: PWM1_8CH_1
+        en: PWM1_8CH_1
+      status: disable
+      pin:
+        PWM1_CH1:
+          display:
+            zh: PWM1_CH1
+            en: PWM1_CH1
+          mux: PWM1_CH1
+    pwm1_8ch_2:
+      config:
+      display:
+        zh: PWM1_8CH_2
+        en: PWM1_8CH_2
+      status: disable
+      pin:
+        PWM1_CH2:
+          display:
+            zh: PWM1_CH2
+            en: PWM1_CH2
+          mux: PWM1_CH2
+    pwm1_8ch_3:
+      config:
+      display:
+        zh: PWM1_8CH_3
+        en: PWM1_8CH_3
+      status: disable
+      pin:
+        PWM1_CH3:
+          display:
+            zh: PWM1_CH3
+            en: PWM1_CH3
+          mux: PWM1_CH3
+    pwm1_8ch_4:
+      config:
+      display:
+        zh: PWM1_8CH_4
+        en: PWM1_8CH_4
+      status: disable
+      pin:
+        PWM1_CH4:
+          display:
+            zh: PWM1_CH4
+            en: PWM1_CH4
+          mux: PWM1_CH4
+    pwm1_8ch_5:
+      config:
+      display:
+        zh: PWM1_8CH_5
+        en: PWM1_8CH_5
+      status: disable
+      pin:
+        PWM1_CH5:
+          display:
+            zh: PWM1_CH5
+            en: PWM1_CH5
+          mux: PWM1_CH5
+    pwm1_8ch_6:
+      config:
+      display:
+        zh: PWM1_8CH_6
+        en: PWM1_8CH_6
+      status: disable
+      pin:
+        PWM1_CH6:
+          display:
+            zh: PWM1_CH6
+            en: PWM1_CH6
+          mux: PWM1_CH6
+    pwm1_8ch_7:
+      config:
+      display:
+        zh: PWM1_8CH_7
+        en: PWM1_8CH_7
+      status: disable
+      pin:
+        PWM1_CH7:
+          display:
+            zh: PWM1_CH7
+            en: PWM1_CH7
+          mux: PWM1_CH7
+
+  wdt:
+    display:
+      zh: WATCHDOG
+      en: WATCHDOG
+    all_config: *wdt_config
+    wdt0:
+      display:
+        zh: WATCHDOG0
+        en: WATCHDOG0
+      config:
+      status: enable
+    wdt1:
+      display:
+        zh: WATCHDOG1
+        en: WATCHDOG1
+      config:
+      status: enable

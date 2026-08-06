@@ -39,6 +39,15 @@
 
 #define ECAT_SERVICE_SLAVE_CONFIG            (0x21)
 
+#define ECAT_SERVICE_FAULT_GET_CURRENT        (0x30)
+#define ECAT_SERVICE_FAULT_GET_HISTORY        (0x31)
+#define ECAT_SERVICE_FAULT_GET_SEQUENCE       (0x32)
+#define ECAT_SERVICE_FAULT_WAIT               (0x33)
+#define ECAT_SERVICE_FAULT_CLEAR              (0x34)
+#define ECAT_SERVICE_FAULT_CLEAR_ALL          (0x35)
+#define ECAT_SERVICE_FAULT_SET_POLICY         (0x36)
+#define ECAT_SERVICE_FAULT_GET_POLICY         (0x37)
+
 struct ecat_master_state_arg
 {
     ec_master_t *master;
@@ -132,6 +141,47 @@ struct ecat_slavecount_arg
 {
     ec_master_t *master;
     int count;
+};
+
+struct ecat_fault_current_arg
+{
+    ec_master_t *master;
+    ec_fault_record_t *record;
+};
+
+struct ecat_fault_history_arg
+{
+    ec_master_t *master;
+    uint32_t start_fault_id;
+    ec_fault_record_t *records;
+    uint32_t max_count;
+    uint32_t *actual_count;
+};
+
+struct ecat_fault_sequence_arg
+{
+    ec_master_t *master;
+    uint32_t *sequence;
+};
+
+struct ecat_fault_wait_arg
+{
+    ec_master_t *master;
+    uint32_t last_sequence;
+    uint32_t timeout_ms;
+    uint32_t *new_sequence;
+};
+
+struct ecat_fault_clear_arg
+{
+    ec_master_t *master;
+    uint32_t fault_id;
+};
+
+struct ecat_fault_policy_arg
+{
+    ec_master_t *master;
+    ec_fault_policy_t *policy;
 };
 
 #endif /* __ECAT_SERVICE_H__ */

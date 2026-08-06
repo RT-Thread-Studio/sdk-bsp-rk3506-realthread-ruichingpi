@@ -15,8 +15,7 @@
 #define KPI_DEFINED(symbol) __kpi_##symbol symbol
 #define KPI_EXTERN(symbol)  extern __kpi_##symbol symbol
 #define KPI_IMPORT(symbol, index)                                              \
-    (__kpi_##symbol)(                                                          \
-        *(rt_ubase_t *)(__kpi_start + ((index - 1) * sizeof(rt_ubase_t))));
+    (__kpi_##symbol)(__kpi_start[(index) - 1]);
 
 void kpi_init(void);
 

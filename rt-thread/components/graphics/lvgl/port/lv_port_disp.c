@@ -69,31 +69,50 @@ static void lvgl_flush_cb(lv_display_t *display, const lv_area_t *area,
     lv_display_flush_ready(display);
 }
 
-void lv_port_disp_init(void)
+rt_err_t lv_port_disp_init(void)
 {
     struct rt_device *device = RT_NULL;
     lv_display_t *display = RT_NULL;
     rt_uint8_t *framebuffer = RT_NULL;
     struct rt_device_graphic_info info;
     rt_uint32_t bright = 100;
+    rt_err_t ret = RT_EOK;
 
     device = rt_device_find("lcd");
     if (device == RT_NULL)
     {
         LOG_E("Can't find device lcd.");
+        ret = -RT_ENOENT;
         goto __fail;
     }
 
-    rt_device_init(device);
-    rt_device_open(device, RT_DEVICE_FLAG_RDWR);
+    ret = rt_device_init(device);
+    if (ret != RT_EOK)
+    {
+        LOG_E("Initialize device lcd failed: %d.", ret);
+        goto __fail;
+    }
 
-    rt_device_control(device, RTGRAPHIC_CTRL_GET_INFO, &info);
+    ret = rt_device_open(device, RT_DEVICE_FLAG_RDWR);
+    if (ret != RT_EOK)
+    {
+        LOG_E("Open device lcd failed: %d.", ret);
+        goto __fail;
+    }
+
+    ret = rt_device_control(device, RTGRAPHIC_CTRL_GET_INFO, &info);
+    if (ret != RT_EOK)
+    {
+        LOG_E("Get device lcd information failed: %d.", ret);
+        goto __fail;
+    }
     rt_device_control(device, RTGRAPHIC_CTRL_SET_BRIGHTNESS, &bright);
 
     framebuffer = rt_malloc(info.width * info.height * sizeof(lv_color_t));
     if (!framebuffer)
     {
         LOG_E("malloc fail");
+        ret = -RT_ENOMEM;
         goto __fail;
     }
 
@@ -101,6 +120,7 @@ void lv_port_disp_init(void)
     if (display == RT_NULL)
     {
         LOG_E("lvgl display create failed.");
+        ret = -RT_ENOMEM;
         goto __fail;
     }
 
@@ -113,7 +133,7 @@ void lv_port_disp_init(void)
 
     lv_display_set_flush_cb(display, lvgl_flush_cb);
 
-    return;
+    return ret;
 
 __fail:
     if (device)
@@ -130,4 +150,6 @@ __fail:
     {
         lv_display_delete(display);
     }
+
+    return ret;
 }
