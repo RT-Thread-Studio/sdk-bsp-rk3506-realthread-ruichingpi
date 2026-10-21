@@ -11,6 +11,7 @@
 #include <rtdevice.h>
 #include <bmp2bgr888.h>
 #include <rc_logo_4_3in_bmp.h>
+#include "display_subsystem.h"
 
 int main(void)
 {
@@ -23,6 +24,11 @@ int main(void)
 
     rt_kprintf("Hello, RT-Thread app\n");
     rt_kprintf("[APP] Tutorial: BMP to MIPI display workflow.\n");
+
+    if (mipi_display_start() != RT_EOK)
+    {
+        rt_kprintf("mipi display start failed\n");
+    }
 
     rt_kprintf("Step 1 - Prepare BMP data. ok!\n");
     bmp_data = logo_bmp_480_800_data;

@@ -8,6 +8,7 @@
  * found in the file LICENSE in this distribution.
  */
 #include <rtthread.h>
+#include "display_subsystem.h"
 
 extern int lvgl_thread_init(void);
 extern int ethercat_domain_init(void);
@@ -15,6 +16,11 @@ extern int ethercat_domain_init(void);
 int main(void)
 {
     rt_kprintf("Hello, RT-Thread app\n");
+
+    if (mipi_display_start() != RT_EOK)
+    {
+        rt_kprintf("mipi display start failed\n");
+    }
 
     lvgl_thread_init();
     ethercat_domain_init();

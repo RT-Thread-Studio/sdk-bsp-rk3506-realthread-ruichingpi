@@ -207,11 +207,10 @@ int uart_dma_test(int argc, char *argv[])
         rt_device_set_rx_indicate(_serial, RT_NULL);
     }
 
+    rt_device_control(_serial, RT_DEVICE_CTRL_CONFIG, &uart_cfg);
     /* 需要先设置回调再 open */
     rt_device_open(_serial, RT_DEVICE_OFLAG_RDWR | RT_DEVICE_FLAG_DMA_TX |
                     RT_DEVICE_FLAG_DMA_RX);
-
-    rt_device_control(_serial, RT_DEVICE_CTRL_CONFIG, &uart_cfg);
 
     /* DMA 轮询接收需要单独启用一个线程处理 DMA 接收的数据 */
     if (mode == UART_DMA_POLL)

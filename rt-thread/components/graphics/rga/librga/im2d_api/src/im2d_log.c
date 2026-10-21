@@ -39,7 +39,11 @@ using namespace std;
 static int rga_log_property_get(void);
 static int rga_log_level_property_get(void);
 
+#ifdef RT_THREAD
+char g_rga_err_str[IM_ERR_MSG_LEN] = "The current error message is empty!";
+#else
 __thread char g_rga_err_str[IM_ERR_MSG_LEN] = "The current error message is empty!";
+#endif
 
 #ifdef __cplusplus
 static atomic_int g_log_en = ATOMIC_VAR_INIT(rga_log_property_get());

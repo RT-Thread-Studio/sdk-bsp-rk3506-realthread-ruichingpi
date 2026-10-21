@@ -28,7 +28,7 @@ rt_err_t gpio_interrupt_example(void)
     rt_uint32_t count = 10;
 
     rt_pin_mode(OUTPUT_GPIO, PIN_MODE_OUTPUT);
-    rt_pin_mode(INPUT_GPIO, PIN_MODE_INPUT);
+    rt_pin_mode(INPUT_GPIO, PIN_MODE_INPUT_PULLUP);
 
     rt_pin_attach_irq(
         INPUT_GPIO, PIN_IRQ_MODE_RISING_FALLING, gpio_isr, RT_NULL);

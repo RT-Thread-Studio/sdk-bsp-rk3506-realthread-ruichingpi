@@ -144,6 +144,7 @@ KPI_DEFINED(rt_tick_get);
 KPI_DEFINED(rt_tick_set);
 KPI_DEFINED(rt_tick_from_millisecond);
 KPI_DEFINED(rt_tick_get_millisecond_r);
+KPI_DEFINED(rt_tick_sethook);
 KPI_DEFINED(rt_timer_init);
 KPI_DEFINED(rt_timer_detach);
 KPI_DEFINED(rt_timer_create);
@@ -690,6 +691,15 @@ KPI_DEFINED(rt_dma_prep_memcpy);
 KPI_DEFINED(rt_dma_chan_request);
 KPI_DEFINED(rt_dma_chan_release);
 
+typedef rt_err_t (*__kpi_mipi_display_start)(void);
+typedef rt_err_t (*__kpi_mipi_display_stop)(void);
+typedef rt_err_t (*__kpi_rgb_display_start)(void);
+typedef rt_err_t (*__kpi_rgb_display_stop)(void);
+KPI_DEFINED(mipi_display_start);
+KPI_DEFINED(mipi_display_stop);
+KPI_DEFINED(rgb_display_start);
+KPI_DEFINED(rgb_display_stop);
+
 /* kpi addr init */
 void kpi_init(void)
 {
@@ -801,6 +811,7 @@ void kpi_init(void)
     rt_timer_start = KPI_IMPORT(rt_timer_start, 163);
     rt_timer_stop = KPI_IMPORT(rt_timer_stop, 164);
     rt_timer_control = KPI_IMPORT(rt_timer_control, 165);
+    rt_tick_sethook = KPI_IMPORT(rt_tick_sethook, 166);
 
     rt_kprintf = KPI_IMPORT(rt_kprintf, 177);
     rt_kputs = KPI_IMPORT(rt_kputs, 178);
@@ -1372,4 +1383,9 @@ void kpi_init(void)
     rt_dma_prep_memcpy = KPI_IMPORT(rt_dma_prep_memcpy, 1783);
     rt_dma_chan_request = KPI_IMPORT(rt_dma_chan_request, 1784);
     rt_dma_chan_release = KPI_IMPORT(rt_dma_chan_release, 1785);
+
+    mipi_display_start = KPI_IMPORT(mipi_display_start, 1786);
+    mipi_display_stop = KPI_IMPORT(mipi_display_stop, 1787);
+    rgb_display_start = KPI_IMPORT(rgb_display_start, 1788);
+    rgb_display_stop = KPI_IMPORT(rgb_display_stop, 1789);
 }

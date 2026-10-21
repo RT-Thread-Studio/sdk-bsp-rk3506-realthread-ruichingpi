@@ -72,8 +72,13 @@ using namespace std;
 #undef imgaussianBlur
 #endif /* #ifdef __cplusplus */
 
+#ifdef RT_THREAD
+extern im_context_t g_im2d_context;
+extern char g_rga_err_str[IM_ERR_MSG_LEN];
+#else
 extern __thread im_context_t g_im2d_context;
 extern __thread char g_rga_err_str[IM_ERR_MSG_LEN];
+#endif
 
 IM_API const char* imStrError_t(IM_STATUS status) {
     const char *error_type[] = {
@@ -85,7 +90,11 @@ IM_API const char* imStrError_t(IM_STATUS status) {
         "Version verification failed",
         "No session",
     };
-    static __thread char error_str[IM_ERR_MSG_LEN] = "The current error message is empty!";
+#ifdef RT_THREAD
+    static char error_str[IM_ERR_MSG_LEN + 32] = "The current error message is empty!";
+#else
+    static __thread char error_str[IM_ERR_MSG_LEN + 32] = "The current error message is empty!";
+#endif
     const char *ptr = NULL;
 
     switch(status) {
@@ -127,7 +136,7 @@ IM_API const char* imStrError_t(IM_STATUS status) {
             return "unkown status";
     }
 
-    snprintf(error_str, IM_ERR_MSG_LEN, "%s: %s", ptr, g_rga_err_str);
+    snprintf(error_str, sizeof(error_str), "%s: %s", ptr, g_rga_err_str);
     rga_error_msg_set("No error message, it has been cleared.");
 
     return error_str;
@@ -837,14 +846,17 @@ IM_API IM_STATUS imsync(int fence_fd) {
 }
 
 IM_API IM_STATUS imconfig(IM_CONFIG_NAME name, uint64_t value) {
+    IM_STATUS ret_cfg = IM_STATUS_SUCCESS;
 
+    im2d_lock();
     switch (name) {
         case IM_CONFIG_SCHEDULER_CORE :
             if (value & IM_SCHEDULER_MASK) {
                 g_im2d_context.core = (IM_SCHEDULER_CORE)value;
             } else {
                 IM_LOGE("IM2D: It's not legal rga_core[0x%lx], it needs to be a 'IM_SCHEDULER_CORE'.", (unsigned long)value);
-                return IM_STATUS_ILLEGAL_PARAM;
+                ret_cfg = IM_STATUS_ILLEGAL_PARAM;
+                break;
             }
             break;
         case IM_CONFIG_PRIORITY :
@@ -852,7 +864,8 @@ IM_API IM_STATUS imconfig(IM_CONFIG_NAME name, uint64_t value) {
                 g_im2d_context.priority = (int)value;
             } else {
                 IM_LOGE("IM2D: It's not legal priority[0x%lx], it needs to be a 'int', and it should be in the range of 0~6.", (unsigned long)value);
-                return IM_STATUS_ILLEGAL_PARAM;
+                ret_cfg = IM_STATUS_ILLEGAL_PARAM;
+                break;
             }
             break;
         case IM_CONFIG_CHECK :
@@ -860,15 +873,18 @@ IM_API IM_STATUS imconfig(IM_CONFIG_NAME name, uint64_t value) {
                 g_im2d_context.check_mode = (bool)value;
             } else {
                 IM_LOGE("IM2D: It's not legal check config[0x%lx], it needs to be a 'bool'.", (unsigned long)value);
-                return IM_STATUS_ILLEGAL_PARAM;
+                ret_cfg = IM_STATUS_ILLEGAL_PARAM;
+                break;
             }
             break;
         default :
             IM_LOGE("IM2D: Unsupported config name!");
-            return IM_STATUS_NOT_SUPPORTED;
+            ret_cfg = IM_STATUS_NOT_SUPPORTED;
+            break;
     }
 
-    return IM_STATUS_SUCCESS;
+    im2d_unlock();
+    return ret_cfg;
 }
 
 /* Start single task api */

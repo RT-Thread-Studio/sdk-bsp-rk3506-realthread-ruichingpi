@@ -32,6 +32,9 @@
 #include "im2d_impl.h"
 
 #include "utils.h"
+#ifdef RT_THREAD
+#include <rtthread.h>
+#endif
 
 #ifdef LOG_TAG
 #undef LOG_TAG
@@ -103,12 +106,14 @@ static IM_STATUS rga_device_init(rga_session_t *session) {
 
     ret = rga_check_driver(session->driver_verison);
     if (ret == IM_STATUS_ERROR_VERSION)
+    {
+        rt_device_close(device);
         return (IM_STATUS)ret;
+    }
 
     set_driver_feature(session);
+    /* Keep device open; ioctl uses this handle later. */
     session->rga_dev_fd = device;
-
-    rt_device_close(device);
 
     return IM_STATUS_SUCCESS;
 }
@@ -216,12 +221,47 @@ static void rga_session_deinit(rga_session_t *session) {
     rga_device_exit(session);
 }
 
+#ifdef RT_THREAD
+static struct rt_mutex g_im2d_lock;
+static volatile int g_im2d_lock_inited;
+
+void im2d_lock(void)
+{
+    if (!g_im2d_lock_inited)
+    {
+        if (rt_mutex_init(&g_im2d_lock, "im2d", RT_IPC_FLAG_PRIO) == RT_EOK)
+        {
+            g_im2d_lock_inited = 1;
+        }
+    }
+    if (g_im2d_lock_inited)
+    {
+        rt_mutex_take(&g_im2d_lock, RT_WAITING_FOREVER);
+    }
+}
+
+void im2d_unlock(void)
+{
+    if (g_im2d_lock_inited)
+    {
+        rt_mutex_release(&g_im2d_lock);
+    }
+}
+#else
+void im2d_lock(void) {}
+void im2d_unlock(void) {}
+#endif
+
 rga_session_t *get_rga_session() {
     int ret;
     rga_session_t *session =  &g_rga_session;
 
     pthread_rwlock_rdlock(&session->rwlock);
+#ifdef RT_THREAD
+    if (session->rga_dev_fd != NULL) {
+#else
     if (session->rga_dev_fd > 0) {
+#endif
         pthread_rwlock_unlock(&session->rwlock);
         return session;
     }

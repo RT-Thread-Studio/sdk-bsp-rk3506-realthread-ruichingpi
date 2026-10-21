@@ -68,7 +68,12 @@ using namespace android;
 #endif
 #endif
 
+#ifdef RT_THREAD
+/* Avoid __thread: TLS access Data Aborts when kernel/app are not paired. */
+im_context_t g_im2d_context;
+#else
 __thread im_context_t g_im2d_context;
+#endif
 
 static IM_STATUS rga_support_info_merge_table(rga_info_table_entry *dst_table, rga_info_table_entry *merge_table) {
     if (dst_table == NULL || merge_table == NULL) {
@@ -1612,7 +1617,7 @@ IM_STATUS generate_gauss_coe(im_gauss_t *gauss, struct rga_gauss_config *config)
     return IM_STATUS_SUCCESS;
 }
 
-IM_STATUS rga_task_submit(im_job_handle_t job_handle, rga_buffer_t src, rga_buffer_t dst, rga_buffer_t pat,
+static IM_STATUS rga_task_submit_impl(im_job_handle_t job_handle, rga_buffer_t src, rga_buffer_t dst, rga_buffer_t pat,
                           im_rect srect, im_rect drect, im_rect prect,
                           int acquire_fence_fd, int *release_fence_fd,
                           im_opt_t *opt_ptr, int usage) {
@@ -2295,6 +2300,21 @@ release_resource:
         free(u64_to_ptr(req.gauss_config.coe_ptr));
 
     return (IM_STATUS)ret;
+}
+
+IM_STATUS rga_task_submit(im_job_handle_t job_handle, rga_buffer_t src, rga_buffer_t dst, rga_buffer_t pat,
+                          im_rect srect, im_rect drect, im_rect prect,
+                          int acquire_fence_fd, int *release_fence_fd,
+                          im_opt_t *opt_ptr, int usage)
+{
+    IM_STATUS status;
+
+    im2d_lock();
+    status = rga_task_submit_impl(job_handle, src, dst, pat, srect, drect, prect,
+        acquire_fence_fd, release_fence_fd, opt_ptr, usage);
+    im2d_unlock();
+
+    return status;
 }
 
 IM_STATUS rga_single_task_submit(rga_buffer_t src, rga_buffer_t dst, rga_buffer_t pat,

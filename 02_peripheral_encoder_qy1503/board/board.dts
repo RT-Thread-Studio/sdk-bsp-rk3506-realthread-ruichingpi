@@ -1,0 +1,37 @@
+/**
+ * RT-Thread RuiChing
+ *
+ * COPYRIGHT (C) 2024-2025 Shanghai Real-Thread Electronic Technology Co., Ltd.
+ * All rights reserved.
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution.
+ */
+/dts-v1/;
+#include "rc3506j.dtsi"
+
+&i2c1 {
+    status = "disabled";
+};
+
+/* PWM1_BIP_CNTR_A0 */
+&pwm1_8ch_0 {
+    pinctrl = <&gpio0_a0>;
+    status = "okay";
+};
+
+&gpio0_a0 {
+    mux = <0x07>;
+    rmio = <0x52>;
+};
+
+/* PWM1_BIP_CNTR_B0 */
+&pwm1_8ch_1 {
+    pinctrl = <&gpio0_a1>;
+    status = "okay";
+};
+
+&gpio0_a1 {
+    mux = <0x07>;
+    rmio = <0x58>;
+};
