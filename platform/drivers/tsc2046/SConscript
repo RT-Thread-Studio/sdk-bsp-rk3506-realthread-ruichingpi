@@ -1,0 +1,5 @@
+# -*- encoding: utf-8 -*-
+from building import *
+
+objs = DefineGroup('tsc2046', Glob('*.c'), depend=[], CPPPATH=[GetCurrentDir()])
+Return('objs')

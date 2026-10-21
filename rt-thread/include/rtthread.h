@@ -62,6 +62,7 @@ void rt_object_put_sethook(void (*hook)(struct rt_object *object));
 typedef rt_tick_t (*__kpi_rt_tick_get)(void);
 typedef void (*__kpi_rt_tick_set)(rt_tick_t tick);
 typedef rt_tick_t (*__kpi_rt_tick_from_millisecond)(rt_int32_t ms);
+typedef void (*__kpi_rt_tick_sethook)(void (*hook)(void));
 
 rt_tick_t rt_tick_get_millisecond(void);
 typedef rt_tick_t (*__kpi_rt_tick_get_millisecond_r)(void);
@@ -732,6 +733,7 @@ KPI_EXTERN(rt_tick_get);
 KPI_EXTERN(rt_tick_set);
 KPI_EXTERN(rt_tick_from_millisecond);
 KPI_EXTERN(rt_tick_get_millisecond_r);
+KPI_EXTERN(rt_tick_sethook);
 KPI_EXTERN(rt_timer_init);
 KPI_EXTERN(rt_timer_detach);
 KPI_EXTERN(rt_timer_create);

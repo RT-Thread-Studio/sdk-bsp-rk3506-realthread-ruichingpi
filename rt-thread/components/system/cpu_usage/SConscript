@@ -1,0 +1,21 @@
+#-*- encoding: utf-8 -*-
+#-------------------------------------------------------------------------------
+# RT-Thread RuiChing
+#
+# COPYRIGHT (C) 2024-2025 Shanghai Real-Thread Electronic Technology Co., Ltd.
+# All rights reserved.
+#
+# The license and distribution terms for this file may be
+# found in the file LICENSE in this distribution.
+#-------------------------------------------------------------------------------
+import os
+from building import *
+
+# CPU usage is a common system service available to every App by default.
+objs = DefineGroup(
+    name = 'cpu_usage',
+    src = Glob('*.c'),
+    depend = [],
+    CPPPATH = [os.path.join(GetCurrentDir(), '.')])
+
+Return('objs')

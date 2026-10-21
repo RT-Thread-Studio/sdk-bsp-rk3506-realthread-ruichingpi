@@ -85,4 +85,64 @@
 #define PWM_COUNTER_HIGH                       0x020C
 #define PWM_WAVE_MEM                           0x0400
 
+/* Common channel control fields. */
+#define PWM_ENABLE_CH0                        (1U << 0)
+#define PWM_ENABLE_CH1                        (1U << 1)
+#define PWM_ENABLE_WE(bit)                    (1U << ((bit) + 16))
+#define PWM_CTRL_MODE_MASK                    (3U << 0)
+#define PWM_CTRL_CAPTURE_SEL(x)               (((x) & 0x7U) << 6)
+#define PWM_CTRL_CAPTURE_EN                   (1U << 5)
+#define PWM_CTRL_WE(mask)                     ((mask) << 16)
+#define PWM_INT_CAPTURE_LPC                   (1U << 0)
+#define PWM_INT_CAPTURE_HPC                   (1U << 1)
+#define PWM_INT_CAPTURE_MASK                  (PWM_INT_CAPTURE_LPC | PWM_INT_CAPTURE_HPC)
+#define PWM_INT_WE(mask)                      ((mask) << 16)
+
+/* Biphasic counter CTRL0 fields and write-enable bits. */
+#define PWM_BIPHASIC_CTRL0_EN                 (1U << 0)
+#define PWM_BIPHASIC_CTRL0_CONTINUOUS         (1U << 1)
+#define PWM_BIPHASIC_CTRL0_CLK_SEL_OSC        (1U << 2)
+#define PWM_BIPHASIC_CTRL0_MODE(x)            (((x) & 0x7U) << 3)
+#define PWM_BIPHASIC_CTRL0_SYNC_EN            (1U << 7)
+#define PWM_BIPHASIC_CTRL0_CLK_FORCE          (1U << 8)
+#define PWM_BIPHASIC_CTRL0_EDGE_NEG           (1U << 9)
+#define PWM_BIPHASIC_CTRL0_WE(bit)            (1U << ((bit) + 16))
+
+/* Biphasic counter CTRL1 fields and write-enable bits. */
+#define PWM_BIPHASIC_CTRL1_FILTER_EN          (1U << 0)
+#define PWM_BIPHASIC_CTRL1_FILTER_NUM(x)      (((x) & 0x7FU) << 4)
+#define PWM_BIPHASIC_CTRL1_WE(bit)            (1U << ((bit) + 16))
+#define PWM_BIPHASIC_INT_STATUS               (1U << 9)
+#define PWM_BIPHASIC_INT_WE                   (1U << 25)
+
+#define PWM_CMD_SET_CAPTURE_CALLBACK          (RT_DEVICE_CTRL_BASE(PWM) + 13)
+#define PWM_CMD_BIPHASIC_CONFIG               (RT_DEVICE_CTRL_BASE(PWM) + 20)
+#define PWM_CMD_BIPHASIC_START                (RT_DEVICE_CTRL_BASE(PWM) + 21)
+#define PWM_CMD_BIPHASIC_GET_COUNT            (RT_DEVICE_CTRL_BASE(PWM) + 22)
+#define PWM_CMD_BIPHASIC_SET_CALLBACK         (RT_DEVICE_CTRL_BASE(PWM) + 23)
+
+#define PWM_BIPHASIC_MODE_1X                   2
+#define PWM_BIPHASIC_MODE_2X                   3
+#define PWM_BIPHASIC_MODE_4X                   4
+
+struct rt_pwm_biphasic_config
+{
+    rt_uint8_t mode;              /* 0..4, see RK3506 TRM */
+    rt_bool_t continuous;
+    rt_bool_t filter_enable;
+    rt_uint8_t filter_number;     /* 0..127 */
+    rt_uint32_t timer_value;
+};
+
+struct rt_pwm_biphasic_count
+{
+    rt_int32_t count;
+};
+
+struct rt_pwm_biphasic_callback
+{
+    void (*callback)(void *param, rt_int32_t count);
+    void *param;
+};
+
 #endif /* __DRV_ROCKCHIP_PWM_H__ */

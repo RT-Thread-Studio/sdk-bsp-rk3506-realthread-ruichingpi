@@ -68,4 +68,9 @@ int is_debug_en();
 
 rga_session_t *get_rga_session();
 
+
+void im2d_lock(void);
+void im2d_unlock(void);
+
+
 #endif /* #ifndef _im2d_context_h_ */
